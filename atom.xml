@@ -39,27 +39,6 @@
   </entry>
   
   <entry>
-    <title>Hello World</title>
-    <link href="http://yoursite.com/2018/02/13/hello-world/"/>
-    <id>http://yoursite.com/2018/02/13/hello-world/</id>
-    <published>2018-02-12T16:10:23.552Z</published>
-    <updated>2018-02-12T16:10:23.559Z</updated>
-    
-    <content type="html"><![CDATA[<script src="\assets\js\APlayer.min.js"> </script><p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p><h2><span id="quick-start">Quick Start</span></h2><h3><span id="create-a-new-post">Create a new post</span></h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p><h3><span id="run-server">Run server</span></h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p><h3><span id="generate-static-files">Generate static files</span></h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p><h3><span id="deploy-to-remote-sites">Deploy to remote sites</span></h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="noopener">Deployment</a></p>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;script src=&quot;\assets\js\APlayer.min.js&quot;&gt; &lt;/script&gt;&lt;p&gt;Welcome to &lt;a href=&quot;https://hexo.io/&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;Hexo&lt;/a&gt;! This is 
-      
-    
-    </summary>
-    
-    
-  </entry>
-  
-  <entry>
     <title>关于logrotate的额外补充</title>
     <link href="http://yoursite.com/2018/02/12/%E5%85%B3%E4%BA%8Elogrotate%E7%9A%84%E9%A2%9D%E5%A4%96%E8%A1%A5%E5%85%85/"/>
     <id>http://yoursite.com/2018/02/12/关于logrotate的额外补充/</id>
@@ -482,6 +461,30 @@
       <category term="django" scheme="http://yoursite.com/tags/django/"/>
     
       <category term="uwsgi" scheme="http://yoursite.com/tags/uwsgi/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>从excel的大单元格里快速提取内容</title>
+    <link href="http://yoursite.com/2018/02/01/%E4%BB%8Eexcel%E7%9A%84%E5%A4%A7%E5%8D%95%E5%85%83%E6%A0%BC%E9%87%8C%E5%BF%AB%E9%80%9F%E6%8F%90%E5%8F%96%E5%86%85%E5%AE%B9/"/>
+    <id>http://yoursite.com/2018/02/01/从excel的大单元格里快速提取内容/</id>
+    <published>2018-02-01T02:42:54.000Z</published>
+    <updated>2018-02-05T04:24:46.685Z</updated>
+    
+    <content type="html"><![CDATA[<script src="\assets\js\APlayer.min.js"> </script><p>我公司的服务器信息会保存在一份高加密的excel里，由于历史遗留问题，里面的格式节选一部分出来是这样的：<br><img src="/images/excel1.png" alt="抱光妹"></p><p>注意看，ip地址不分内网外网是放在一个大的单元格里，中间是用空格隔开的，造成了这样的视觉效果。</p><p>现在公司需要把所有的服务器重新更换到新的zookeeper，那么使用ansible在批量处理的时候，就需要提取这些服务器的内网ip地址录入到<code>/etc/hosts</code>文件里，但是由于服务器实在太多不可能一个一个手动从excel的单元格挑选出“内网IP地址”复制粘贴，那么就需要进行一下批量挑选内网IP地址的操作。</p><p>首先我们先把整个IP的单元列里的”（公）””（内）”的字样去掉，然后把整列全部拷贝，粘贴到<code>notepad</code>里，看到它们变成了这样的样子：<br><img src="/images/excel2.png" alt="抱光妹"></p><p>在<code>notepad</code>里，双引号之间的内容会被认为同一行，所以这里我们需要使用“替换”功能把所有的双引号去掉，让它变成下面这样：<br><img src="/images/excel3.png" alt="抱光妹"></p><p>这样就可以把上面的内容复制到一个新的excel去，发现每一个内容对应了一行，即一个小单元格：<br><img src="/images/excel4.png" alt="抱光妹"></p><p>然后我们把第一行染成黄色，第二行染成绿色，当然颜色你可以选择自己的口味，然后使用excel的“格式刷”功能，一拉到底，让他们变成条纹状：<br><img src="/images/excel5.png" alt="抱光妹"></p><p>然后在excel里找到“筛选”功能，先选择住这一条纹块，然后选择“按颜色筛选“，由于我们需要内网IP，那么我们就留下绿色内容即可，如图：<br><img src="/images/excel6.png" alt="抱光妹"></p><p>得到效果如下：<br><img src="/images/excel7.png" alt="抱光妹"></p><p>这样就可以把整个内容拷贝进ansible的hosts文件里，然后搭配ansible批处理这些内网IP，双管齐下，大大的提升了提取数据的效率。</p><p>如果遇到偶尔三行（即中间有空格行）的情况，那么就在notepad那一步的时候，把空格行干掉，不如下图的情况里，第五行和第八行是空格行，可能是当初记录人员复制的时候自带了空格：<br><img src="/images/excel8.png" alt="抱光妹"></p><p>如果是空格很多的情况，那么就需要批处理一次性的把所有空格都干掉。干掉的方法，还是使用notepad的“替换功能”，选择“正则表达式”，然后把<code>\n[\s|]*\r</code>替换成空值就可以了。<br><img src="/images/excel9.png" alt="抱光妹"></p>]]></content>
+    
+    <summary type="html">
+    
+      没想到我的这个博客里还需要写office的操作小技巧，真是太惊喜太意外了。
+    
+    </summary>
+    
+      <category term="工作与技术" scheme="http://yoursite.com/categories/%E5%B7%A5%E4%BD%9C%E4%B8%8E%E6%8A%80%E6%9C%AF/"/>
+    
+    
+      <category term="ansible" scheme="http://yoursite.com/tags/ansible/"/>
+    
+      <category term="excel" scheme="http://yoursite.com/tags/excel/"/>
     
   </entry>
   
