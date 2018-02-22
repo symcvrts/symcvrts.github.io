@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2018-02-13T04:26:08.912Z</updated>
+  <updated>2018-02-22T05:02:54.873Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -15,6 +15,30 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>回家过年</title>
+    <link href="http://yoursite.com/2018/02/21/%E5%9B%9E%E5%AE%B6/"/>
+    <id>http://yoursite.com/2018/02/21/回家/</id>
+    <published>2018-02-21T08:08:40.000Z</published>
+    <updated>2018-02-22T05:02:54.873Z</updated>
+    
+    <content type="html"><![CDATA[<script src="\assets\js\APlayer.min.js"> </script><p>我承认我是一个很恋家的人，但是我在3年之前还不是这样。</p><p>我记得我在哈尔滨上大学的时候，虽然坐火车也就一个半小时的时间，但是是“能不回家就不回家”，哪怕自己一个人蹲在寝室也是自由舒服，后来上班，我也是有很长的时间自己独住，只有周末才回去一次。那时候我奶不止一次的批评我“都快成一个客人了”。</p><p>真的应了那句传烂了的话“只有失去的才是美好的”，现在我人在他乡，天天忙成狗。最欢喜的事情第一个是涨工资，第二个是发工资，第三个是放假，第四个就是放假回家。当初我不觉得家庭的温暖，现在却倍感珍惜，唉，那几年真是简单的可笑。</p><p><img src="/images/jia5.jpg" alt="paradin"></p><p>这一次回家过年看到了许许多多亲人。大姨夫的精神状态也好了许多，不过他这次回来又害了一次发烧。小外甥和他那婴儿肥的脸蛋，在《守望先锋》里越死越勇。我那几个弟弟都瘦了也更精神了，从我妈和女票看我的眼神里，我觉得我的体重是应该好好管控一下了：体型太腐败。</p><p>短短的六天时间，吃完三姨家吃四姨家，吃完老叔家吃小舅家，各种亲戚连轴转。中途跟龙南数据班的几个老同事一起吃了顿“一口猪”，</p>]]></content>
+    
+    <summary type="html">
+    
+      最期盼的假期，已经余额不足了...
+    
+    </summary>
+    
+      <category term="坠乱花天" scheme="http://yoursite.com/categories/%E5%9D%A0%E4%B9%B1%E8%8A%B1%E5%A4%A9/"/>
+    
+    
+      <category term="春节" scheme="http://yoursite.com/tags/%E6%98%A5%E8%8A%82/"/>
+    
+      <category term="心情" scheme="http://yoursite.com/tags/%E5%BF%83%E6%83%85/"/>
+    
+  </entry>
   
   <entry>
     <title>中国梦，宪政梦</title>
@@ -461,30 +485,6 @@
       <category term="django" scheme="http://yoursite.com/tags/django/"/>
     
       <category term="uwsgi" scheme="http://yoursite.com/tags/uwsgi/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>从excel的大单元格里快速提取内容</title>
-    <link href="http://yoursite.com/2018/02/01/%E4%BB%8Eexcel%E7%9A%84%E5%A4%A7%E5%8D%95%E5%85%83%E6%A0%BC%E9%87%8C%E5%BF%AB%E9%80%9F%E6%8F%90%E5%8F%96%E5%86%85%E5%AE%B9/"/>
-    <id>http://yoursite.com/2018/02/01/从excel的大单元格里快速提取内容/</id>
-    <published>2018-02-01T02:42:54.000Z</published>
-    <updated>2018-02-05T04:24:46.685Z</updated>
-    
-    <content type="html"><![CDATA[<script src="\assets\js\APlayer.min.js"> </script><p>我公司的服务器信息会保存在一份高加密的excel里，由于历史遗留问题，里面的格式节选一部分出来是这样的：<br><img src="/images/excel1.png" alt="抱光妹"></p><p>注意看，ip地址不分内网外网是放在一个大的单元格里，中间是用空格隔开的，造成了这样的视觉效果。</p><p>现在公司需要把所有的服务器重新更换到新的zookeeper，那么使用ansible在批量处理的时候，就需要提取这些服务器的内网ip地址录入到<code>/etc/hosts</code>文件里，但是由于服务器实在太多不可能一个一个手动从excel的单元格挑选出“内网IP地址”复制粘贴，那么就需要进行一下批量挑选内网IP地址的操作。</p><p>首先我们先把整个IP的单元列里的”（公）””（内）”的字样去掉，然后把整列全部拷贝，粘贴到<code>notepad</code>里，看到它们变成了这样的样子：<br><img src="/images/excel2.png" alt="抱光妹"></p><p>在<code>notepad</code>里，双引号之间的内容会被认为同一行，所以这里我们需要使用“替换”功能把所有的双引号去掉，让它变成下面这样：<br><img src="/images/excel3.png" alt="抱光妹"></p><p>这样就可以把上面的内容复制到一个新的excel去，发现每一个内容对应了一行，即一个小单元格：<br><img src="/images/excel4.png" alt="抱光妹"></p><p>然后我们把第一行染成黄色，第二行染成绿色，当然颜色你可以选择自己的口味，然后使用excel的“格式刷”功能，一拉到底，让他们变成条纹状：<br><img src="/images/excel5.png" alt="抱光妹"></p><p>然后在excel里找到“筛选”功能，先选择住这一条纹块，然后选择“按颜色筛选“，由于我们需要内网IP，那么我们就留下绿色内容即可，如图：<br><img src="/images/excel6.png" alt="抱光妹"></p><p>得到效果如下：<br><img src="/images/excel7.png" alt="抱光妹"></p><p>这样就可以把整个内容拷贝进ansible的hosts文件里，然后搭配ansible批处理这些内网IP，双管齐下，大大的提升了提取数据的效率。</p><p>如果遇到偶尔三行（即中间有空格行）的情况，那么就在notepad那一步的时候，把空格行干掉，不如下图的情况里，第五行和第八行是空格行，可能是当初记录人员复制的时候自带了空格：<br><img src="/images/excel8.png" alt="抱光妹"></p><p>如果是空格很多的情况，那么就需要批处理一次性的把所有空格都干掉。干掉的方法，还是使用notepad的“替换功能”，选择“正则表达式”，然后把<code>\n[\s|]*\r</code>替换成空值就可以了。<br><img src="/images/excel9.png" alt="抱光妹"></p>]]></content>
-    
-    <summary type="html">
-    
-      没想到我的这个博客里还需要写office的操作小技巧，真是太惊喜太意外了。
-    
-    </summary>
-    
-      <category term="工作与技术" scheme="http://yoursite.com/categories/%E5%B7%A5%E4%BD%9C%E4%B8%8E%E6%8A%80%E6%9C%AF/"/>
-    
-    
-      <category term="ansible" scheme="http://yoursite.com/tags/ansible/"/>
-    
-      <category term="excel" scheme="http://yoursite.com/tags/excel/"/>
     
   </entry>
   
