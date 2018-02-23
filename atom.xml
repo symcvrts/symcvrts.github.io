@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2018-02-22T14:07:36.532Z</updated>
+  <updated>2018-02-23T13:01:26.083Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -15,6 +15,28 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>如何手动释放linux内存</title>
+    <link href="http://yoursite.com/2018/02/23/%E5%A6%82%E4%BD%95%E6%89%8B%E5%8A%A8%E9%87%8A%E6%94%BElinux%E5%86%85%E5%AD%98/"/>
+    <id>http://yoursite.com/2018/02/23/如何手动释放linux内存/</id>
+    <published>2018-02-23T12:57:35.000Z</published>
+    <updated>2018-02-23T13:01:26.083Z</updated>
+    
+    <content type="html"><![CDATA[<script src="\assets\js\APlayer.min.js"> </script><p>在生产过程中，一些java模块会比较残忍的吃系统内存，然后如果这个模块写的比较挫，产生的垃圾就会比较多，如果linux系统的内存释放也不会及时，然后恶性循环，最后就把进程卡死，但是服务器是不可以down机的，所以这个时候就需要我们运维出来，手动的释放内存。</p><p>首先，我们登陆一台服务器，<code>free -m</code>看一下目前的情况：<br><img src="/images/neixun1.jpg" alt="paradin"></p><p>然后<code>cat /proc/sys/vm/drop_caches</code>，会看到里面的值是0，0是不释放的意思。</p><p><code>sync</code>,将系统缓存区中的脏数据写入磁盘中，包括已修改的i-node、已延迟的块I/O和读写映射文件。</p><p><code>echo 3 &gt; /proc/sys/vm/drop_caches</code></p><p>为什么这里是<code>3</code>呢？这是因为<code>echo 1</code>的话代表“清理页面缓存”，<code>echo 2</code>的话代表“清理索引节点（inode）链接”，<code>echo 3</code>就是包括上面两者。</p><p><code>sysctl -p</code>,这样不用重启服务器也可以生效。出现下面的一连串文字之后，再<code>free -m</code>看一下：<br><img src="/images/neixun2.jpg" alt="paradin"></p><p>从112释放到2790，可见效果立竿见影。</p><p>上面整个过程的自动化脚本是这样的：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line">#Author:Chris Chan</span><br><span class="line">#E-mail:chen_shuo@dahuatech.com</span><br><span class="line">oldmemory=$(free -m|sed -n <span class="string">'2p'</span>|awk <span class="string">'&#123;printf $4&#125;'</span>)</span><br><span class="line">echo <span class="string">"开始的空余内存值："</span>$oldmemory</span><br><span class="line">sync</span><br><span class="line">echo <span class="number">3</span> &gt; <span class="regexp">/proc/</span>sys/vm/drop_caches</span><br><span class="line">sysctl -p</span><br><span class="line">correctmemory=$(free -m|sed -n <span class="string">'2p'</span>|awk <span class="string">'&#123;printf $4&#125;'</span>)</span><br><span class="line">echo <span class="string">"释放完后的空余内存值："</span>$correctmemory</span><br></pre></td></tr></table></figure></p>]]></content>
+    
+    <summary type="html">
+    
+      这里释放的内存主要是缓存的内存
+    
+    </summary>
+    
+      <category term="工作与技术" scheme="http://yoursite.com/categories/%E5%B7%A5%E4%BD%9C%E4%B8%8E%E6%8A%80%E6%9C%AF/"/>
+    
+    
+      <category term="linux" scheme="http://yoursite.com/tags/linux/"/>
+    
+  </entry>
   
   <entry>
     <title>回家过年</title>
@@ -104,9 +126,9 @@
       <category term="工作与技术" scheme="http://yoursite.com/categories/%E5%B7%A5%E4%BD%9C%E4%B8%8E%E6%8A%80%E6%9C%AF/"/>
     
     
-      <category term="linux" scheme="http://yoursite.com/tags/linux/"/>
-    
       <category term="运维技术" scheme="http://yoursite.com/tags/%E8%BF%90%E7%BB%B4%E6%8A%80%E6%9C%AF/"/>
+    
+      <category term="linux" scheme="http://yoursite.com/tags/linux/"/>
     
   </entry>
   
@@ -224,9 +246,9 @@
       <category term="工作与技术" scheme="http://yoursite.com/categories/%E5%B7%A5%E4%BD%9C%E4%B8%8E%E6%8A%80%E6%9C%AF/"/>
     
     
-      <category term="linux" scheme="http://yoursite.com/tags/linux/"/>
-    
       <category term="crontab" scheme="http://yoursite.com/tags/crontab/"/>
+    
+      <category term="linux" scheme="http://yoursite.com/tags/linux/"/>
     
   </entry>
   
@@ -459,32 +481,6 @@
       <category term="运维技术" scheme="http://yoursite.com/tags/%E8%BF%90%E7%BB%B4%E6%8A%80%E6%9C%AF/"/>
     
       <category term="zookeeper" scheme="http://yoursite.com/tags/zookeeper/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Uwsgi的安装和简单使用</title>
-    <link href="http://yoursite.com/2018/02/02/Uwsgi%E7%9A%84%E5%AE%89%E8%A3%85%E5%92%8C%E7%AE%80%E5%8D%95%E4%BD%BF%E7%94%A8/"/>
-    <id>http://yoursite.com/2018/02/02/Uwsgi的安装和简单使用/</id>
-    <published>2018-02-02T10:41:29.000Z</published>
-    <updated>2018-02-02T10:50:19.673Z</updated>
-    
-    <content type="html"><![CDATA[<script src="\assets\js\APlayer.min.js"> </script><h2><span id="正文">正文</span></h2><p>运维平台的搭建已经提上日程，而我选用了大家比较常用的<code>Uwsgi+nginx+django</code>的架构，这里先记录一下安装Uwsgi的过程。</p><p>这里解释一下<code>Uwsgi+nginx+django</code>，我们整个流程如下图：<br><img src="/images/uwsgi1.png" alt="paradin"></p><p>这里我们可以看出，web server是无法与我们的app（django等等）进行直接对话，他需要通过uwsgi这个桥梁，这个桥梁很重要，虽然我们使用django的<code>runserver</code>功能也会打开一个页面，但是这个页面是很脆弱的，小规模使用还好，要是放在网络上供很多人点击的话，根本就是脆不经风。</p><p>uwsgi是啥，请查看文末的参考资料，写的已经非常好了。我这里就简单说下：</p><blockquote><p>uwsgi 实际上也是一个http服务器，只不过它只面向python网络应用程序。虽然uwsgi也是http服务器，但是却不能直接使用它部署python web应用程序，否则会出错。</p><p>在本文中，uwsgi所扮演的的角色是后端http服务器，nginx扮演的角色是前端http服务器，<code>hello.py</code>是客户端应用程序。用户从网页浏览器中发出请求，nginx服务器收到请求后，会通过它的uwsgi模块将用户的请求转发给uwsgi服务器，uwsgi服务器处理完毕后将结果返回给 nginx，浏览器将最终的结果展现给用户。</p></blockquote><p>Uwsgi的安装比较简单，推荐使用<code>yum install Uwsgi</code>直接下载使用，而不推荐用<code>pip install uwsgi</code>，因为pip安装的话，虽然也能成功（如下图红框），是没有<code>uwsgi.ini</code>文件的，其实没有这个<code>uwsgi.ini</code>是无足轻重的，因为这个文件可以自己写，但是对于生手来说，没有这个文件可能会心里发毛，就无法按照攻略继续下去，所以我更推荐用yum安装，如图：<br><img src="/images/uwsgi2.png" alt="paradin"></p><p>为了纪念我们的金刚狼同志，我们就写一个叫<code>logan.py</code>，里面的内容是这样的：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">def application(env, start_response):</span><br><span class="line">       start_response(<span class="string">'200 OK'</span>, [(<span class="string">'Content-Type'</span>,<span class="string">'text/html'</span>)])</span><br><span class="line">       <span class="keyword">return</span> <span class="string">"good bye,Logan..."</span></span><br></pre></td></tr></table></figure></p><p>然后我们就可以启动这个<code>uwsgi</code>看看效果，使用<code>uwsgi --http :8001 --wsgi-file logan.py</code>，把端口设定为<code>8001</code>，同时指定协议是<code>http</code>，然后加载的文件就是<code>logan.py</code>，启动之后，如图：<br><img src="/images/uwsgi3.png" alt="paradin"></p><p>遇到这种情况，你就<code>yum install uwsgi-plugin-python</code>，然后把命令做一点点修改，改成：<code>uwsgi --plugin python --http-socket :8001 --wsgi-file logan.py</code>。</p><p>屏幕会出现一大堆文字，然后提示，uwsgi已经启动成功了。在浏览器输入<code>服务器外网地址:8001</code>看一下效果，如图：<br><img src="/images/uwsgi4.png" alt="paradin"></p><p>我们在root目录下再写一个测试的文件，这次我们写一个比较老实的python脚本来测试，这个脚本就叫<code>test.py</code>，里面的内容如下：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/usr/bin/python</span></span><br><span class="line">#coding=utf-8</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">import</span> sys</span><br><span class="line">def application(environ, start_response):</span><br><span class="line">       status = <span class="string">'200'</span></span><br><span class="line">       output = <span class="string">'this is a test for uwsgi,HOHO~'</span></span><br><span class="line">       response_headers = [(<span class="string">'Content-type'</span>, <span class="string">'text/plain'</span>),(<span class="string">'Content-Length'</span>, str(len(output)))]</span><br><span class="line">       start_response(status, response_headers)</span><br><span class="line">       <span class="keyword">return</span> output</span><br></pre></td></tr></table></figure></p><p>还是用刚才的方法，依旧可以打开网页，其实上面这个简单的<code>uWSGI</code>程序更好理解整个套路，只需要实现一个名为<code>application</code>的函数就可以了，该函数有两个参数，<code>environ</code>为包含有<code>http</code>请求的环境变量，<code>start_response</code>为一个函数，用来设置http头。在这个函数里，我们只需要调用一次<code>start_response</code>函数，设置一下<code>HTTP</code>返回头，再<code>return</code>一个<code>HTTP body</code>即可。</p><p>至此，整个uwsgi就安装成功了。</p><h2><span id="参考资料">参考资料</span></h2><p><a href="http://xiaorui.cc/2017/02/16/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3uwsgi%E5%92%8Cgunicorn%E7%BD%91%E7%BB%9C%E6%A8%A1%E5%9E%8B%E4%B8%8A/" target="_blank" rel="noopener">http://xiaorui.cc/2017/02/16/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3uwsgi%E5%92%8Cgunicorn%E7%BD%91%E7%BB%9C%E6%A8%A1%E5%9E%8B%E4%B8%8A/</a><br><a href="http://uwsgi-docs.readthedocs.io/en/latest/tutorials/Django_and_nginx.html" target="_blank" rel="noopener">http://uwsgi-docs.readthedocs.io/en/latest/tutorials/Django_and_nginx.html</a></p>]]></content>
-    
-    <summary type="html">
-    
-      Uwsgi+nginx+django，光搭建一个框架就要了我的老命...
-    
-    </summary>
-    
-      <category term="工作与技术" scheme="http://yoursite.com/categories/%E5%B7%A5%E4%BD%9C%E4%B8%8E%E6%8A%80%E6%9C%AF/"/>
-    
-    
-      <category term="python" scheme="http://yoursite.com/tags/python/"/>
-    
-      <category term="django" scheme="http://yoursite.com/tags/django/"/>
-    
-      <category term="uwsgi" scheme="http://yoursite.com/tags/uwsgi/"/>
     
   </entry>
   
