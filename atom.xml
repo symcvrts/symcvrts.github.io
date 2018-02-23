@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2018-02-23T13:13:55.869Z</updated>
+  <updated>2018-02-23T13:47:00.182Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -15,6 +15,34 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Atlas的几种常见故障解决方法</title>
+    <link href="http://yoursite.com/2018/02/23/Atlas%E7%9A%84%E5%87%A0%E7%A7%8D%E5%B8%B8%E8%A7%81%E6%95%85%E9%9A%9C%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95/"/>
+    <id>http://yoursite.com/2018/02/23/Atlas的几种常见故障解决方法/</id>
+    <published>2018-02-23T13:39:43.000Z</published>
+    <updated>2018-02-23T13:47:00.182Z</updated>
+    
+    <content type="html"><![CDATA[<script src="\assets\js\APlayer.min.js"> </script><ol><li><p><font color="red">使用atlas却发现“读库闲置，框架还是去主库读写数据”</font><br>配置完atlas之后，发现使用<code>jdbc</code>框架的话，读库和写库各司其职，但是使用<code>mybatis</code>框架之后，就发现框架的读写都去了主库，把读库放置一边，那么这种情况是因为<code>有事务存在的话，atlas就会强制走主库</code>，遇到这种情况就检查一下是否有事务的存在，比如<code>@Transactional</code>，如果要解决的话，就加上<code>@Transactional(propagation=Propagation.NOT_SUPPORTED)</code>即可。<br><img src="/images/atlas13.png" alt="paradin"></p></li><li><p><font color="red">自动读写分离挺好，但有时候我写完马上就想读，万一主从同步延迟怎么办?</font><br>SQL语句前增加 <code>/*master*/</code> 就可以将读请求强制发往主库。在mysql命令行测试该功能时，需要加<code>-c</code>选项，以防mysql客户端过滤掉注释信息。不过这不能从本质上解决问题，使用Atlas需要考虑到这点，提高主机的IO性能，加大memory可以缓解延迟症状，但依旧不能避免延迟的出现，尤其是读多写少的应用。</p></li></ol><ol><li><p><font color="red"><code>resource limit</code>的问题</font><br>atlas有自己的连接池，会吃掉很多CPU, <code>php</code>应用端改用短链接来连接atlas, 这时候atlas对<code>php</code>发送来的sql只负责验证和转发的操作，后端DB的连接由atlas自己管理,未使用的连接线程进行剔除操作(DB的wait_timeout和interactive_timeout设置为300s,超时亦退出)。</p> <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">2014</span><span class="number">-04</span><span class="number">-12</span> <span class="number">20</span>:<span class="number">56</span>:<span class="number">29</span>: (warning) (libevent) event_del: event has no event_base set.</span><br><span class="line"><span class="number">2014</span><span class="number">-04</span><span class="number">-12</span> <span class="number">20</span>:<span class="number">56</span>:<span class="number">29</span>: (critical) last message repeated <span class="number">5</span> times</span><br><span class="line"><span class="number">2014</span><span class="number">-04</span><span class="number">-12</span> <span class="number">20</span>:<span class="number">56</span>:<span class="number">29</span>: (critical) network-conn-pool-lua.c<span class="number">.144</span>: socket() failed: Too many open files (<span class="number">24</span>)</span><br><span class="line"><span class="number">2014</span><span class="number">-04</span><span class="number">-12</span> <span class="number">20</span>:<span class="number">56</span>:<span class="number">29</span>: (warning) (libevent) event_del: event has no event_base set.</span><br><span class="line"><span class="number">2014</span><span class="number">-04</span><span class="number">-12</span> <span class="number">20</span>:<span class="number">56</span>:<span class="number">30</span>: (debug) chassis-unix-daemon.c:<span class="number">168</span>: <span class="number">12951</span> returned: <span class="number">12951</span></span><br><span class="line"><span class="number">2014</span><span class="number">-04</span><span class="number">-12</span> <span class="number">20</span>:<span class="number">56</span>:<span class="number">30</span>: (critical) chassis-unix-daemon.c:<span class="number">196</span>: [angel] PID=<span class="number">12951</span> died on signal=<span class="number">11</span> (it used <span class="number">16</span> kBytes max) ... waiting <span class="number">3</span>min before restart</span><br></pre></td></tr></table></figure></li></ol><p>如果MySQL后端的连接数也满了可能会报以下错误:</p><pre><code><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">2014</span><span class="number">-11</span><span class="number">-13</span> <span class="number">12</span>:<span class="number">21</span>:<span class="number">07</span>: (critical) network_mysqld_proto_password_scramble: assertion <span class="string">`20 == challenge_len' failed</span></span><br><span class="line"><span class="string">2014-11-13 12:21:07: (warning) (libevent) event_del: event has no event_base set.</span></span><br><span class="line"><span class="string">2014-11-13 12:21:07: (critical)</span></span><br></pre></td></tr></table></figure></code></pre><p>可以临时增加MySQL connection数量:</p><pre><code><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">echo -n “Max processes=SOFT_LIMIT:HARD_LIMIT” &gt; <span class="regexp">/proc/</span><span class="string">`pidof mysqld`</span>/limits</span><br></pre></td></tr></table></figure></code></pre><ol><li><font color="red">出现<code>Too many open files</code>的错误，怎么办？</font><br>关于<code>Too many open files</code>错误，可能由两种情况引起:<br>一、php长连接连接到atlas后，每个线程占用一个FD,直到超出系统资源限制而出现too many错误;<br>二、php应用端发送到atlas的sql过多，大量并发的情况下,linevent维护的队列过多，每个event吃一个FD，超出系统资源限制引起<code>Too many open files</code>错误;</li></ol><p>避免<code>Too many open files</code>错误,增加用户的ulimit值加大<code>FD</code>的使用量,可增加系统ulimit资源到 <code>~/.bash_profile</code>文件或<code>/etc/security/limits.conf</code>文件:</p><pre><code><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"># cat .bash_profile </span><br><span class="line"># .bash_profile</span><br><span class="line">...</span><br><span class="line">...</span><br><span class="line"><span class="keyword">export</span> PATH</span><br><span class="line">ulimit -n <span class="number">16384</span></span><br></pre></td></tr></table></figure></code></pre>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;script src=&quot;\assets\js\APlayer.min.js&quot;&gt; &lt;/script&gt;&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;&lt;font color=&quot;red&quot;&gt;使用atlas却发现“读库闲置，框架还是去主库读写数据”&lt;/font&gt;&lt;br&gt;配置完atlas之后，发现使用&lt;code&gt;
+      
+    
+    </summary>
+    
+      <category term="工作与技术" scheme="http://yoursite.com/categories/%E5%B7%A5%E4%BD%9C%E4%B8%8E%E6%8A%80%E6%9C%AF/"/>
+    
+    
+      <category term="atlas" scheme="http://yoursite.com/tags/atlas/"/>
+    
+      <category term="mysql" scheme="http://yoursite.com/tags/mysql/"/>
+    
+  </entry>
   
   <entry>
     <title>如何手动释放linux内存</title>
@@ -126,9 +154,9 @@
       <category term="工作与技术" scheme="http://yoursite.com/categories/%E5%B7%A5%E4%BD%9C%E4%B8%8E%E6%8A%80%E6%9C%AF/"/>
     
     
-      <category term="运维技术" scheme="http://yoursite.com/tags/%E8%BF%90%E7%BB%B4%E6%8A%80%E6%9C%AF/"/>
-    
       <category term="linux" scheme="http://yoursite.com/tags/linux/"/>
+    
+      <category term="运维技术" scheme="http://yoursite.com/tags/%E8%BF%90%E7%BB%B4%E6%8A%80%E6%9C%AF/"/>
     
   </entry>
   
@@ -246,9 +274,9 @@
       <category term="工作与技术" scheme="http://yoursite.com/categories/%E5%B7%A5%E4%BD%9C%E4%B8%8E%E6%8A%80%E6%9C%AF/"/>
     
     
-      <category term="crontab" scheme="http://yoursite.com/tags/crontab/"/>
-    
       <category term="linux" scheme="http://yoursite.com/tags/linux/"/>
+    
+      <category term="crontab" scheme="http://yoursite.com/tags/crontab/"/>
     
   </entry>
   
@@ -457,30 +485,6 @@
       <category term="Jenkins" scheme="http://yoursite.com/tags/Jenkins/"/>
     
       <category term="持续集成" scheme="http://yoursite.com/tags/%E6%8C%81%E7%BB%AD%E9%9B%86%E6%88%90/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Zookeeper集群的搭建与配置</title>
-    <link href="http://yoursite.com/2018/02/05/Zookeeper%E9%9B%86%E7%BE%A4%E7%9A%84%E6%90%AD%E5%BB%BA%E4%B8%8E%E9%85%8D%E7%BD%AE/"/>
-    <id>http://yoursite.com/2018/02/05/Zookeeper集群的搭建与配置/</id>
-    <published>2018-02-05T02:15:21.000Z</published>
-    <updated>2018-02-05T02:59:42.207Z</updated>
-    
-    <content type="html"><![CDATA[<script src="\assets\js\APlayer.min.js"> </script><p>Zookeeper的下载地址：<code>https://github.com/apache/zookeeper/archive/master.zip</code><br>zkclient的下载地址：<code>https://github.com/sgroschupf/zkclient</code></p><p>至于zookeeper的作用和原理我这里就不多赘述了，大家有兴趣可以去查查，这里主要就是动手操作。</p><h2><span id="搭建集群">搭建集群</span></h2><p>首先先看一下本次zk实验服务器的名称和IP情况，这里我们选择了三台服务器作zkserver，因为三台是标配，一台的话就只有leader没有follower，不是很稳定的结构，当然啦如果你的公司土豪的话是可以玩三十台：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">dvl-mrszk<span class="number">-001</span><span class="number">10.117</span><span class="number">.0</span><span class="number">.125</span></span><br><span class="line">dvl-mrszk<span class="number">-002</span><span class="number">10.117</span><span class="number">.1</span><span class="number">.158</span></span><br><span class="line">dvl-mrszk<span class="number">-003</span><span class="number">10.168</span><span class="number">.152</span><span class="number">.227</span></span><br></pre></td></tr></table></figure></p><p>对这三台服务器都要进行如下的步骤:</p><p>1)先把zookeeper.zip传到linux里，然后解压到<code>/usr</code>文件夹下；</p><p>2)进入<code>/usr/zookeeper/conf</code>文件夹，<code>vim zoo.cfg</code>，在最下面补充上面的三个zkserver，见图：<br><img src="/images/zook1.png" alt="paradin"></p><p>3)再来到<code>/usr/zookeeper/data</code>文件夹，如果里面有文件就清空所有文件，如果是1号zkserver就<code>echo 1 &gt; myid</code>，如果当前机器是2号zkserver就<code>echo 2 &gt; myid</code>，依次类推，这里一定要注意，不可以都写一样。</p><p>4)<code>vim /etc/hosts</code>，还要把这三台机器的ip地址和名字都写进去，如下：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span> localhost</span><br><span class="line">::<span class="number">1</span>         localhost localhost.localdomain localhost6 localhost6.localdomain6</span><br><span class="line"><span class="number">10.117</span><span class="number">.0</span><span class="number">.125</span> dvl-mrszk<span class="number">-001</span></span><br><span class="line"><span class="number">10.117</span><span class="number">.1</span><span class="number">.158</span> dvl-mrszk<span class="number">-002</span></span><br><span class="line"><span class="number">10.168</span><span class="number">.152</span><span class="number">.227</span> dvl-mrszk<span class="number">-003</span></span><br></pre></td></tr></table></figure></p><p>5)再来<code>/usr/zookeeper/bin</code>文件夹，<code>./zkServer.sh start</code>启动zk，然后再<code>./zkServer.sh status</code>查看进程情况，如图看见第一台和第三台zkserver的身份是<code>follower</code>，第二台是<code>leader</code>：<br><img src="/images/zook2.png" alt="paradin"></p><p><img src="/images/zook3.png" alt="paradin"></p><p><img src="/images/zook4.png" alt="paradin"></p><p>至此整个zk集群就搭建并且启动完成了。</p><font color="red">注意：zookeeper集群时，zookeeper要求半数以上的机器可用，zookeeper才能提供服务。</font><p>如果这里有启动失败的情况，比如<code>Error contacting service. It is probably not running.</code>这样的字样，那么有这么几种可能：</p><p>1）data文件夹下的<code>myid</code>有数字重复或者是数字漏写的情况；</p><p>2）<code>zoo.cfg</code>里的指定日志文件夹没有手动创建；</p><p>3）<code>/etc/hosts</code>下的名字与zoo.cfg里的server字段不相符，注意一下，/etc/hosts里的127.0.0.1的名字不要与本ip后面的名字一模一样，不然zk也无法识别！</p><p>4）<code>/etc/hosts</code>名字使用了中文，java系对中文是很不友好的。</p><h2><span id="配置文件详解">配置文件详解</span></h2><p>1.<code>tickTime</code>：这个时间是作为 Zookeeper 服务器之间或客户端与服务器之间维持心跳的时间间隔，也就是每个 tickTime 时间就会发送一个心跳。<br>2.<code>dataDir</code>：顾名思义就是 Zookeeper 保存数据的目录，默认情况下，Zookeeper 将写数据的日志文件也保存在这个目录里。<br>3.<code>clientPort</code>：这个端口就是客户端连接 Zookeeper 服务器的端口，Zookeeper 会监听这个端口，接受客户端的访问请求。<br>4.<code>initLimit</code>：这个配置项是用来配置 Zookeeper 接受 客户端（这里所说的客户端不是用户连接 Zookeeper 服务器的客户端，而是 Zookeeper 服务器集群中连接到 Leader 的 Follower 服务器）初始化连接时最长能忍受多少个心跳时间间隔数。当已经超过 5个心跳的时间（也就是 tickTime）长度后 Zookeeper 服务器还没有收到客户端的返回信息，那么表明这个客户端连接失败。总的时间长度就是 5<em>2000=10秒。<br>5.<code>syncLimit</code>：这个配置项标识 Leader 与 Follower 之间发送消息，请求和应答时间长度，最长不能超过多少个 tickTime 的时间长度，总的时间长度就是2</em>2000=4秒。<br>6.<code>server.A=B：C：D</code>：其中 A 是一个数字，表示这个是第几号服务器；B 是这个服务器的 ip 地址；C 表示的是这个服务器与集群中的 Leader 服务器交换信息的端口；D 表示的是万一集群中的 Leader 服务器挂了，需要一个端口来重新进行选举，选出一个新的 Leader，而这个端口就是用来执行选举时服务器相互通信的端口。如果是伪集群的配置方式，由于 B 都是一样，所以不同的 Zookeeper 实例通信端口号不能一样，所以要给它们分配不同的端口号。</p><h2><span id="验证成果">验证成果</span></h2><p>Zookeeper的配置工具叫<code>Zooinspector</code>，下载地址是：<code>https://issues.apache.org/jira/secure/attachment/12436620/ZooInspector.zip</code>，下载完直接解压缩就可以在windows里使用。</p><p>我们实验的这三台服务器只有内网，但是如果要连接zooinspector，还是需要通过外网权限连接的，这里可以配一个iptables转发规则，配iptables的步骤在这里：<a href="http://chenx1242.blog.51cto.com/10430133/1875950" target="_blank" rel="noopener">http://chenx1242.blog.51cto.com/10430133/1875950</a> ，照葫芦画瓢即可，但是要注意，zk的端口是<code>2181</code>。</p><p>当然，如果不想费事的话，就直接给zkserver配一个外网IP，直接连接。</p><p>成功连接到<code>zooinspector</code>，就会看到这样的内容，这里的lcconfig是手动添加的，右击鼠标，选择<code>add node</code>，然后直接写上<code>lcconfig</code>就行，这个名字是根据实际需要填写的：</p><p><img src="/images/zook5.png" alt="paradin"></p><p>上面我们已经配置了zkserver集群而且还启动zkserver进程，现在还需要zkclient，zkclient就是请求发起的一方，然后我们可以在各个的模块服务器上部署zkclient服务，通过启动zkclient服务，来让这些模块统一从zooinspector里取值，这样就达到了批量配置，同时保证一致性的效果。</p><p>zk的模板文件是<code>_tpl.properties</code>为结尾的文件，我这里模块的名字叫mrs，那么在实验里这个模板文件就是<code>mrs_tpl.properties</code>，这个<code>mrs_tpl.properties</code>里有这样的一个字段，如图：</p><p><img src="/images/zook6.png" alt="paradin"></p><p>而我们在zooinspector里对应就这么填写：</p><p><img src="/images/zook7.png" alt="paradin"></p><p>保存zooinspector，然后从windows返回到linux，启动zkclient服务和对应的模块进程，如果配置都正常的话，那么程序就会正常启动，<code>ps -ef|grep java</code>就会看到一个叫<code>lczk.AppServerDaemon</code>的进程。这个时候在去看一下mrs的配置文件：</p><p><img src="/images/zook8.png" alt="paradin"></p><p>可以看到areaAk取得值就是zk里面<code>data_center</code>里面<code>access_key</code>里面的ak的值，其他的几个值也是同理。可见整个zk已经配置成功，模块都进行了统一配置，而且这些配置既然能被一个接受，同时也会被其他相同的模块服务器所接受。这样就达到了批量配置的效果。</p><h2><span id="拓展阅读">拓展阅读</span></h2><p><a href="http://ibruce.info/2014/10/23/zookeeper/" target="_blank" rel="noopener">http://ibruce.info/2014/10/23/zookeeper/</a></p>]]></content>
-    
-    <summary type="html">
-    
-      纵然你的身子骨是铁打的，我想你也需要了解一款“实现同步服务，配置维护和命名服务”的东西吧。
-    
-    </summary>
-    
-      <category term="工作与技术" scheme="http://yoursite.com/categories/%E5%B7%A5%E4%BD%9C%E4%B8%8E%E6%8A%80%E6%9C%AF/"/>
-    
-    
-      <category term="运维技术" scheme="http://yoursite.com/tags/%E8%BF%90%E7%BB%B4%E6%8A%80%E6%9C%AF/"/>
-    
-      <category term="zookeeper" scheme="http://yoursite.com/tags/zookeeper/"/>
     
   </entry>
   
