@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2018-02-23T14:04:53.152Z</updated>
+  <updated>2018-02-24T10:57:35.039Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -15,6 +15,30 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>阿里云获取DTS服务延迟的脚本</title>
+    <link href="http://yoursite.com/2018/02/24/%E9%98%BF%E9%87%8C%E4%BA%91%E8%8E%B7%E5%8F%96DTS%E6%9C%8D%E5%8A%A1%E5%BB%B6%E8%BF%9F%E7%9A%84%E8%84%9A%E6%9C%AC/"/>
+    <id>http://yoursite.com/2018/02/24/阿里云获取DTS服务延迟的脚本/</id>
+    <published>2018-02-24T08:49:31.000Z</published>
+    <updated>2018-02-24T10:57:35.039Z</updated>
+    
+    <content type="html"><![CDATA[<script src="\assets\js\APlayer.min.js"> </script><h2><span id="正文">正文</span></h2><p>春节“嗖”的一下就过完了，在年前领导交代另一个任务，想要每天统计一下在阿里云DTS（数据同步）服务的延迟情况，于是我就要使用阿里云的api去写一个脚本，每小时运行一次，然后将这24个数字输出出来给领导过目。</p><p>阿里云dts的sdk包在这里：<a href="https://help.aliyun.com/document_detail/57694.html?spm=a2c4g.11186623.6.675.W811bN" target="_blank" rel="noopener">https://help.aliyun.com/document_detail/57694.html?spm=a2c4g.11186623.6.675.W811bN</a> ，直接点击<code>Python</code>下载即可，不过这个地址经我测试使用非国内IP 地址是打不开的，需要使用国内IP地址下载。</p><p>下载完毕之后，上传到linux服务器并解压，解压后的样子如图：<br><img src="/images/dts1.jng" alt="paradin"></p><p>由于我们这次只是查看同步作业状态，所用的py就是<code>DescribeSynchronizationJobStatusRequest.py</code>，现在我们就可以写脚本，假设这个脚本叫<code>getDTS.py</code>,那么整个内容如下：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/usr/bin/env python</span></span><br><span class="line">#coding=utf-8</span><br><span class="line">#auther:ChrisChan@2018-2-24</span><br><span class="line">#这个脚本是用来获取DTS服务的延迟值</span><br><span class="line"><span class="keyword">from</span> aliyunsdkcore <span class="keyword">import</span> client</span><br><span class="line"><span class="keyword">from</span> aliyunsdkcore.acs_exception.exceptions <span class="keyword">import</span> ClientException</span><br><span class="line"><span class="keyword">from</span> aliyunsdkcore.acs_exception.exceptions <span class="keyword">import</span> ServerException</span><br><span class="line"><span class="keyword">import</span> json</span><br><span class="line">import sys#由于这个包不是通过pip install的方式安装,要调用其它路径的python脚本就要使用sys方法</span><br><span class="line">sys.path.append(<span class="string">'sdk压缩包的绝对路径'</span>)</span><br><span class="line"><span class="keyword">import</span> DescribeSynchronizationJobStatusRequest</span><br><span class="line"></span><br><span class="line"># 创建Client实例</span><br><span class="line">clt = client.AcsClient(<span class="string">'阿里云AK'</span>,<span class="string">'阿里云SK'</span>,<span class="string">'所属地域'</span>)</span><br><span class="line"></span><br><span class="line"># 创建request并设置参数</span><br><span class="line">request = DescribeSynchronizationJobStatusRequest.DescribeSynchronizationJobStatusRequest()</span><br><span class="line">request.set_accept_format(<span class="string">'json'</span>)</span><br><span class="line"></span><br><span class="line"># 写上对应的服务ID</span><br><span class="line">request.set_SynchronizationJobId(<span class="string">"这里写上DTS的ID"</span>)</span><br><span class="line"></span><br><span class="line">response = clt.do_action_with_exception(request)</span><br><span class="line">print response</span><br><span class="line">delay = json.loads(response)</span><br><span class="line">print <span class="string">"===================================================="</span></span><br><span class="line">print <span class="string">"当前延迟是："</span> + str(delay[<span class="string">"DataSynchronizationStatus"</span>][<span class="string">"Delay"</span>])</span><br></pre></td></tr></table></figure></p><p>整个脚本执行的效果如下：<br><img src="/images/dts1.png" alt="paradin"></p><h2><span id="补充">补充</span></h2><p><code>getDTS.py</code>这个脚本获取到的<code>response</code>是一个str字符串，这里我使用<code>json.loads</code>来将其转化成了<code>dict</code>模式。但是除了这个方法还有两个方法：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; user</span><br><span class="line"><span class="string">"&#123;'name' : 'jim', 'sex' : 'male', 'age': 18&#125;"</span></span><br><span class="line">&gt;&gt;&gt; b=<span class="built_in">eval</span>(user)</span><br><span class="line">&gt;&gt;&gt; b</span><br><span class="line">&#123;<span class="string">'age'</span>: <span class="number">18</span>, <span class="string">'name'</span>: <span class="string">'jim'</span>, <span class="string">'sex'</span>: <span class="string">'male'</span>&#125;</span><br><span class="line">&gt;&gt;&gt; print b[<span class="string">'sex'</span>]</span><br><span class="line">male</span><br><span class="line">&gt;&gt;&gt; exec(<span class="string">"c="</span>+user)</span><br><span class="line">&gt;&gt;&gt; c</span><br><span class="line">&#123;<span class="string">'age'</span>: <span class="number">18</span>, <span class="string">'name'</span>: <span class="string">'jim'</span>, <span class="string">'sex'</span>: <span class="string">'male'</span>&#125;</span><br><span class="line">&gt;&gt;&gt; print c[<span class="string">'name'</span>]</span><br><span class="line">jim</span><br></pre></td></tr></table></figure></p><font color="red">但是要注意！上面这两个方法有一定的安全隐患，而且只能全是字符串可用，如果有的value是<code>True</code>、<code>False</code>、<code>Null</code>这样的字眼的话，eval是不支持的，所以没法正确转换，就会爆这样的错：<code>NameError: name &#39;True&#39; is not defined</code>。</font><h2><span id="参考资料">参考资料</span></h2><p><a href="https://help.aliyun.com/document_detail/49453.html?spm=a2c4g.11186623.6.667.sRyVqY" target="_blank" rel="noopener">https://help.aliyun.com/document_detail/49453.html?spm=a2c4g.11186623.6.667.sRyVqY</a><br><a href="https://segmentfault.com/q/1010000000174694" target="_blank" rel="noopener">https://segmentfault.com/q/1010000000174694</a><br><a href="https://www.crifan.com/resolved_in_python_using_eval_to_force_variable_to_convert_a_string_to_a_dictionary_when_the_error_nameerror_name_39null39_is_not_defined/" target="_blank" rel="noopener">https://www.crifan.com/resolved_in_python_using_eval_to_force_variable_to_convert_a_string_to_a_dictionary_when_the_error_nameerror_name_39null39_is_not_defined/</a><br><a href="https://segmentfault.com/q/1010000000345915" target="_blank" rel="noopener">https://segmentfault.com/q/1010000000345915</a></p>]]></content>
+    
+    <summary type="html">
+    
+      先获取到值，然后做出来一个图。
+    
+    </summary>
+    
+      <category term="工作与技术" scheme="http://yoursite.com/categories/%E5%B7%A5%E4%BD%9C%E4%B8%8E%E6%8A%80%E6%9C%AF/"/>
+    
+    
+      <category term="python" scheme="http://yoursite.com/tags/python/"/>
+    
+      <category term="阿里云" scheme="http://yoursite.com/tags/%E9%98%BF%E9%87%8C%E4%BA%91/"/>
+    
+  </entry>
   
   <entry>
     <title>Atlas的几种常见故障解决方法</title>
@@ -448,30 +472,6 @@
     <summary type="html">
     
       这样就与Github紧密相连了
-    
-    </summary>
-    
-      <category term="工作与技术" scheme="http://yoursite.com/categories/%E5%B7%A5%E4%BD%9C%E4%B8%8E%E6%8A%80%E6%9C%AF/"/>
-    
-    
-      <category term="Jenkins" scheme="http://yoursite.com/tags/Jenkins/"/>
-    
-      <category term="持续集成" scheme="http://yoursite.com/tags/%E6%8C%81%E7%BB%AD%E9%9B%86%E6%88%90/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Jenkins的安装与创建简单任务</title>
-    <link href="http://yoursite.com/2018/02/05/Jenkins%E5%AE%89%E8%A3%85%E4%B8%8E%E5%88%9B%E5%BB%BA%E7%AE%80%E5%8D%95%E4%BB%BB%E5%8A%A1/"/>
-    <id>http://yoursite.com/2018/02/05/Jenkins安装与创建简单任务/</id>
-    <published>2018-02-05T03:23:04.000Z</published>
-    <updated>2018-02-05T09:31:07.519Z</updated>
-    
-    <content type="html"><![CDATA[<script src="\assets\js\APlayer.min.js"> </script><h2><span id="安装与启动">安装与启动</span></h2><p>环境：<code>CentOS 7.0</code> + <code>java 1.8</code></p><p>安装方式：<br>    <figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">yum install yum-fastestmirror -y  #安装自动选择最快源的插件</span><br><span class="line">#添加Jenkins源:</span><br><span class="line">sudo wget -O /etc/yum.repos.d/jenkins.repo http:<span class="comment">//jenkins-ci.org/redhat/jenkins.repo</span></span><br><span class="line">sudo rpm --<span class="keyword">import</span> http:<span class="comment">//pkg.jenkins-ci.org/redhat/jenkins-ci.org.key</span></span><br><span class="line">yum install jenkins               #安装jenkins</span><br></pre></td></tr></table></figure></p><p>启动方式：<code>sudo service jenkins start</code>，如果没有java是无法启动的。</p><p>Jenkins默认端口是<code>8080</code>，如果要更改端口，需要先<code>vim /etc/sysconfig/jenkins</code>，然后修改<code>JENKINS_PORT=&quot;8080&quot;</code>为自己想要的端口号即可。</p><p>访问方式：浏览器输入<code>http://your server ip:8080/</code>，然后会看到这样的一个界面，打开这个文件，输入里面的key就可以访问jenkins了。<br><img src="/images/jenkins1.png" alt="paradin"></p><p>然后就是让你安装插件，如果是新手的话，可以安装系统推荐的插件，如果插件安装失败不要怕，可以日后手动补上。<br><img src="/images/jenkins2.png" alt="paradin"></p><p>插件安装完毕之后，就是自己创建一个管理员账号和密码，输入之后，点击右下角<code>保存并完成</code>。<br><img src="/images/jenkins3.png" alt="paradin"></p><p>然后就可以看到Jenkins初始化的首页。<br><img src="/images/jenkins4.png" alt="paradin"></p><h2><span id="创建任务">创建任务</span></h2><p>假设现在要创建一个Job(任务)，这个任务就是输出当前服务器的外网IP地址，那么就点击首页里的<code>新建任务</code>，然后输入任务名，补充一句，生产环境里的Job名最好不用中文，不做死就不会死，然后选择<code>构建一个自由风格的软件项目</code>，如图：<br><img src="/images/jenkins5.png" alt="paradin"></p><p>在<code>源码管理</code>的地方，我们暂时选择<code>None</code>，待日后把jenkins与github相关联之后，就可以通过github来配置源码了。在<code>构建触发器</code>的地方，我们选择<code>Poll SCM</code>，这里说一下这几个触发器选项的意思：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Build after other projects are built：</span><br><span class="line">Build periodically ： 周期进行项目构建（它不关心源码是否发生变化），可以配置如下：<span class="number">0</span> <span class="number">2</span> * * *（每天<span class="number">2</span>:<span class="number">00</span> 必须build一次源码）</span><br><span class="line">Build when a change is pushed to GitHub： 只要github上有提交了，jenkins没有自动检测到并构建，这设置之后在github中也需要设置才能生效</span><br><span class="line">Poll SCM：定时检查源码变更（根据SCM软件的版本号），如果有更新就checkout最新code下来，然后执行构建动作。可以配置如下：*<span class="regexp">/10 * * * *  （每5分钟检查一次源码变化）</span></span><br></pre></td></tr></table></figure></p><p><img src="/images/jenkins6.png" alt="paradin"></p><p><code>构建步骤</code>这里有很多的选项，我们选择<code>Execute Shell</code>，里面可以写shell命令也可以写shell脚本，这里我就写入一个很简单的ifconfig命令去查看一下IP地址，如图：<br><img src="/images/jenkins7.png" alt="paradin"></p><p><code>构建后操作</code>这里也有很多的选项，这里我选择<code>E-mail Notification</code>，然后输入自己的邮箱地址，这样如果构建失败了，就可以发邮件提醒。如图：<br><img src="/images/jenkins8.png" alt="paradin"></p><p>配置完毕之后，点击左下角<code>保存</code>即可。</p><h2><span id="查看任务效果">查看任务效果</span></h2><p>返回到Jenkins的首页，我们看到多了那个刚才新建的任务，然后点击任务名旁边的小三角，选择<code>立即构建</code>，如图：<br><img src="/images/jenkins9.png" alt="paradin"></p><p>然后就会看到构建的历史，点击任意历史记录的<code>控制台输出</code>，就会看到效果，的确是操作了<code>ifconfig</code>命令的效果：<br><img src="/images/jenkins10.png" alt="paradin"><br><img src="/images/jenkins11.png" alt="paradin"></p>]]></content>
-    
-    <summary type="html">
-    
-      为了自动化部署和持续集成
     
     </summary>
     
