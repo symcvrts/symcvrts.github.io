@@ -2,7 +2,18 @@
 <search>
   <entry>
     <title><![CDATA[解决https证书在赛门铁克认证失败的问题]]></title>
-    <url>%2F2018%2F02%2F26%2F%E8%A7%A3%E5%86%B3%E8%AF%81%E4%B9%A6%E5%9C%A8%E8%B5%9B%E9%97%A8%E9%93%81%E5%85%8B%E8%AE%A4%E8%AF%81%E5%A4%B1%E8%B4%A5%E7%9A%84%E9%97%AE%E9%A2%98%2F</url>
+    <url>%2F2018%2F02%2F26%2F11%2F</url>
+    <content type="text"><![CDATA[问题描述今天电子商城的市场接到一个故障，说更换了.lechange.com整个https证书更换了（原有的到期了，新买了一个依旧还是.lehcange.com）之后，订单在支付宝支付的时候，提示支付失败，把request id提供给支付宝的客服请他们查看一下后台，他们说我们电商的https证书没有认证成功。于是我就登陆https://cryptoreport.websecurity.symantec.com/checker/ 去检查一下我们的域名，果不其然，反馈是错误的，如图： 但是登陆网站上显示却OK的，如图： 然后我用symantec的那个网站测试了一下开发环境的域名，发现也是OK的，如图： 这就郁闷了，到底哪里出问题了？ 问题排查首先先跟研发确认，开发环境与线上环境在涉及到证书的代码是否一致，得到研发的确认之后。就检查里面的nginx，发现服务器nginx的配置文件里是没有涉及到ssl的，无论是开发环境和线上环境整个商城都是通过阿里云slb配置的https证书。而且两者的证书指纹一模一样，如图： 既然都是用的一样的证书，为啥一个检验通过，另一个检验不通过呢？这个时候我想到线上环境与开发环境唯一的不同就是线上环境多了一个cdn，于是就登陆到cdn的控制页面，找到对应的https证书，发现cdn的https证书指纹也是跟上面的指纹一样，如图： 既然指纹一样，那证书也应该是一样的。场面又进入了一个僵局。 于是我就到一台服务器里使用curl -vv https://www.lechange.com，看到的结果如下： 提示“未配置签发者根证书”，我这时候想起来了，首先证书指纹一致不能说明证书是完全一致的，只能说明key文件是一样的！,其次这个https证书是中级机构证书，那么中级机构颁发的证书链规则是这样的： 12345678-----BEGIN CERTIFICATE----------END CERTIFICATE----------BEGIN CERTIFICATE----------END CERTIFICATE----- 那么我怀疑就是https证书链那部分可能在cdn配置错误了，或许在slb配置错误了，甚至两个都配置错误了！ 于是干脆干掉线上电商的https证书，重新导入cdn和slb的https证书，再次刷新，就OK了。 补充虽然这个问题解决了，但是我还是不明白，为什么在网页端查看证书是绿色OK的呢？在sf.gg上提问之后，一个叫Avro的朋友是这么回答我的： 以chrome为例，他信任了[所在平台的信任证书列表][1]，而这些平台集成了一系列信任的根证书，如iOS 11 中可用的受信任根证书列表可以找到你的根证书“04 00 00 00 00 01 15 4B 5A C3 94 ”(序列号)，因此验证过程中没有问题，而对于其他的工具，如果未使用这些平台根证书信任列表依然需要完整的证书链（这个证书链在ssl握手过程中被下发）进行校验。 参考资料https://openclub.alipay.com/read.php?tid=3451&amp;fid=57&amp;page=1https://www.jianshu.com/p/84af353f43c5https://help.aliyun.com/knowledge_detail/39468.html?spm=a2c4g.11186631.2.2.w2qcWT]]></content>
+      <categories>
+        <category>工作与技术</category>
+      </categories>
+      <tags>
+        <tag>https证书</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[解决https证书在赛门铁克认证失败的问题]]></title>
+    <url>%2F2018%2F02%2F26%2F%E8%A7%A3%E5%86%B3https%E8%AF%81%E4%B9%A6%E5%9C%A8%E8%B5%9B%E9%97%A8%E9%93%81%E5%85%8B%E8%AE%A4%E8%AF%81%E5%A4%B1%E8%B4%A5%E7%9A%84%E9%97%AE%E9%A2%98%2F</url>
     <content type="text"><![CDATA[问题描述今天电子商城的市场接到一个故障，说更换了.lechange.com整个https证书更换了（原有的到期了，新买了一个依旧还是.lehcange.com）之后，订单在支付宝支付的时候，提示支付失败，把request id提供给支付宝的客服请他们查看一下后台，他们说我们电商的https证书没有认证成功。于是我就登陆https://cryptoreport.websecurity.symantec.com/checker/ 去检查一下我们的域名，果不其然，反馈是错误的，如图： 但是登陆网站上显示却OK的，如图： 然后我用symantec的那个网站测试了一下开发环境的域名，发现也是OK的，如图： 这就郁闷了，到底哪里出问题了？ 问题排查首先先跟研发确认，开发环境与线上环境在涉及到证书的代码是否一致，得到研发的确认之后。就检查里面的nginx，发现服务器nginx的配置文件里是没有涉及到ssl的，无论是开发环境和线上环境整个商城都是通过阿里云slb配置的https证书。而且两者的证书指纹一模一样，如图： 既然都是用的一样的证书，为啥一个检验通过，另一个检验不通过呢？这个时候我想到线上环境与开发环境唯一的不同就是线上环境多了一个cdn，于是就登陆到cdn的控制页面，找到对应的https证书，发现cdn的https证书指纹也是跟上面的指纹一样，如图： 既然指纹一样，那证书也应该是一样的。场面又进入了一个僵局。 于是我就到一台服务器里使用curl -vv https://www.lechange.com，看到的结果如下： 提示“未配置签发者根证书”，我这时候想起来了，首先证书指纹一致不能说明证书是完全一致的，只能说明key文件是一样的！,其次这个https证书是中级机构证书，那么中级机构颁发的证书链规则是这样的： 12345678-----BEGIN CERTIFICATE----------END CERTIFICATE----------BEGIN CERTIFICATE----------END CERTIFICATE----- 那么我怀疑就是https证书链那部分可能在cdn配置错误了，或许在slb配置错误了，甚至两个都配置错误了！ 于是干脆干掉线上电商的https证书，重新导入cdn和slb的https证书，再次刷新，就OK了。 补充虽然这个问题解决了，但是我还是不明白，为什么在网页端查看证书是绿色OK的呢？在sf.gg上提问之后，一个叫Avro的朋友是这么回答我的： 以chrome为例，他信任了[所在平台的信任证书列表][1]，而这些平台集成了一系列信任的根证书，如iOS 11 中可用的受信任根证书列表可以找到你的根证书“04 00 00 00 00 01 15 4B 5A C3 94 ”(序列号)，因此验证过程中没有问题，而对于其他的工具，如果未使用这些平台根证书信任列表依然需要完整的证书链（这个证书链在ssl握手过程中被下发）进行校验。 参考资料https://openclub.alipay.com/read.php?tid=3451&amp;fid=57&amp;page=1https://www.jianshu.com/p/84af353f43c5https://help.aliyun.com/knowledge_detail/39468.html?spm=a2c4g.11186631.2.2.w2qcWT]]></content>
       <categories>
         <category>工作与技术</category>
@@ -693,8 +704,8 @@
         <category>工作与技术</category>
       </categories>
       <tags>
-        <tag>运维</tag>
         <tag>zabbix</tag>
+        <tag>运维</tag>
       </tags>
   </entry>
   <entry>
@@ -814,8 +825,8 @@
         <category>工作与技术</category>
       </categories>
       <tags>
-        <tag>运维技术</tag>
         <tag>nginx</tag>
+        <tag>运维技术</tag>
       </tags>
   </entry>
   <entry>
@@ -850,8 +861,8 @@
         <category>工作与技术</category>
       </categories>
       <tags>
-        <tag>运维</tag>
         <tag>zabbix</tag>
+        <tag>运维</tag>
       </tags>
   </entry>
   <entry>
@@ -875,8 +886,8 @@
         <category>工作与技术</category>
       </categories>
       <tags>
-        <tag>Nginx</tag>
         <tag>运维</tag>
+        <tag>Nginx</tag>
       </tags>
   </entry>
   <entry>
@@ -887,8 +898,8 @@
         <category>工作与技术</category>
       </categories>
       <tags>
-        <tag>Nginx</tag>
         <tag>运维</tag>
+        <tag>Nginx</tag>
       </tags>
   </entry>
   <entry>

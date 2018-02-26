@@ -18,8 +18,8 @@
   
   <entry>
     <title>解决https证书在赛门铁克认证失败的问题</title>
-    <link href="http://yoursite.com/2018/02/26/%E8%A7%A3%E5%86%B3%E8%AF%81%E4%B9%A6%E5%9C%A8%E8%B5%9B%E9%97%A8%E9%93%81%E5%85%8B%E8%AE%A4%E8%AF%81%E5%A4%B1%E8%B4%A5%E7%9A%84%E9%97%AE%E9%A2%98/"/>
-    <id>http://yoursite.com/2018/02/26/解决证书在赛门铁克认证失败的问题/</id>
+    <link href="http://yoursite.com/2018/02/26/11/"/>
+    <id>http://yoursite.com/2018/02/26/11/</id>
     <published>2018-02-26T14:40:03.000Z</published>
     <updated>2018-02-26T15:10:25.257Z</updated>
     
@@ -31,6 +31,28 @@
       
         &lt;script src=&quot;\assets\js\APlayer.min.js&quot;&gt; &lt;/script&gt;&lt;h2&gt;&lt;span id=&quot;问题描述&quot;&gt;问题描述&lt;/span&gt;&lt;/h2&gt;&lt;p&gt;今天电子商城的市场接到一个故障，说更换了&lt;em&gt;.lechange.com整个https证书更换了（原
       
+    
+    </summary>
+    
+      <category term="工作与技术" scheme="http://yoursite.com/categories/%E5%B7%A5%E4%BD%9C%E4%B8%8E%E6%8A%80%E6%9C%AF/"/>
+    
+    
+      <category term="https证书" scheme="http://yoursite.com/tags/https%E8%AF%81%E4%B9%A6/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>解决https证书在赛门铁克认证失败的问题</title>
+    <link href="http://yoursite.com/2018/02/26/%E8%A7%A3%E5%86%B3https%E8%AF%81%E4%B9%A6%E5%9C%A8%E8%B5%9B%E9%97%A8%E9%93%81%E5%85%8B%E8%AE%A4%E8%AF%81%E5%A4%B1%E8%B4%A5%E7%9A%84%E9%97%AE%E9%A2%98/"/>
+    <id>http://yoursite.com/2018/02/26/解决https证书在赛门铁克认证失败的问题/</id>
+    <published>2018-02-26T14:40:03.000Z</published>
+    <updated>2018-02-26T16:40:35.757Z</updated>
+    
+    <content type="html"><![CDATA[<script src="\assets\js\APlayer.min.js"> </script><h2><span id="问题描述">问题描述</span></h2><p>今天电子商城的市场接到一个故障，说更换了<em>.lechange.com整个https证书更换了（原有的到期了，新买了一个依旧还是</em>.lehcange.com）之后，订单在支付宝支付的时候，提示支付失败，把request id提供给支付宝的客服请他们查看一下后台，他们说我们电商的https证书没有认证成功。于是我就登陆<a href="https://cryptoreport.websecurity.symantec.com/checker/" target="_blank" rel="noopener">https://cryptoreport.websecurity.symantec.com/checker/</a> 去检查一下我们的域名，果不其然，反馈是错误的，如图：<br><img src="/images/saimentieke1.png" alt="paradin"></p><p>但是登陆网站上显示却OK的，如图：<br><img src="/images/saimentieke2.png" alt="paradin"></p><p>然后我用symantec的那个网站测试了一下开发环境的域名，发现也是OK的，如图：<br><img src="/images/saimentieke3.png" alt="paradin"></p><p>这就郁闷了，到底哪里出问题了？</p><h2><span id="问题排查">问题排查</span></h2><p>首先先跟研发确认，开发环境与线上环境在涉及到证书的代码是否一致，得到研发的确认之后。就检查里面的nginx，发现服务器nginx的配置文件里是没有涉及到ssl的，无论是开发环境和线上环境整个商城都是通过阿里云slb配置的https证书。而且两者的证书指纹一模一样，如图：<br><img src="/images/saimentieke4.png" alt="paradin"></p><p>既然都是用的一样的证书，为啥一个检验通过，另一个检验不通过呢？这个时候我想到线上环境与开发环境唯一的不同就是线上环境多了一个cdn，于是就登陆到cdn的控制页面，找到对应的https证书，发现cdn的https证书指纹也是跟上面的指纹一样，如图：<br><img src="/images/saimentieke5.png" alt="paradin"></p><p>既然指纹一样，那证书也应该是一样的。场面又进入了一个僵局。</p><p>于是我就到一台服务器里使用<code>curl -vv https://www.lechange.com</code>，看到的结果如下：<br><img src="/images/saimentieke6.png" alt="paradin"></p><p>提示“未配置签发者根证书”，我这时候想起来了，<font color="red">首先证书指纹一致不能说明证书是完全一致的，只能说明key文件是一样的！</font>,其次这个https证书是中级机构证书，那么中级机构颁发的证书链规则是这样的：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">-----BEGIN CERTIFICATE-----</span><br><span class="line"></span><br><span class="line">-----END CERTIFICATE-----</span><br><span class="line"></span><br><span class="line">-----BEGIN CERTIFICATE-----</span><br><span class="line"></span><br><span class="line">-----END CERTIFICATE-----</span><br></pre></td></tr></table></figure></p><p>那么我怀疑就是https证书链那部分可能在cdn配置错误了，或许在slb配置错误了，甚至两个都配置错误了！</p><p>于是干脆干掉线上电商的https证书，重新导入cdn和slb的https证书，再次刷新，就OK了。<br><img src="/images/saimentieke7.png" alt="paradin"></p><h2><span id="补充">补充</span></h2><p>虽然这个问题解决了，但是我还是不明白，为什么在网页端查看证书是绿色OK的呢？在<code>sf.gg</code>上提问之后，一个叫Avro的朋友是这么回答我的：</p><blockquote><p>以chrome为例，他信任了[所在平台的信任证书列表][1]，而这些平台集成了一系列信任的根证书，如iOS 11 中可用的受信任根证书列表可以找到你的根证书“04 00 00 00 00 01 15 4B 5A C3 94 ”(序列号)，因此验证过程中没有问题，而对于其他的工具，如果未使用这些平台根证书信任列表依然需要完整的证书链（这个证书链在ssl握手过程中被下发）进行校验。</p></blockquote><h2><span id="参考资料">参考资料</span></h2><p><a href="https://openclub.alipay.com/read.php?tid=3451&amp;fid=57&amp;page=1" target="_blank" rel="noopener">https://openclub.alipay.com/read.php?tid=3451&amp;fid=57&amp;page=1</a><br><a href="https://www.jianshu.com/p/84af353f43c5" target="_blank" rel="noopener">https://www.jianshu.com/p/84af353f43c5</a><br><a href="https://help.aliyun.com/knowledge_detail/39468.html?spm=a2c4g.11186631.2.2.w2qcWT" target="_blank" rel="noopener">https://help.aliyun.com/knowledge_detail/39468.html?spm=a2c4g.11186631.2.2.w2qcWT</a></p>]]></content>
+    
+    <summary type="html">
+    
+      搞了半天其实就是证书没弄对...
     
     </summary>
     
@@ -460,30 +482,6 @@
     
     
       <category term="NBA" scheme="http://yoursite.com/tags/NBA/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>记录Uwsgi与Django成功勾搭的始末</title>
-    <link href="http://yoursite.com/2018/02/07/%E8%AE%B0%E5%BD%95Uwsgi%E4%B8%8EDjango%E6%88%90%E5%8A%9F%E5%8B%BE%E6%90%AD%E7%9A%84%E5%A7%8B%E6%9C%AB/"/>
-    <id>http://yoursite.com/2018/02/07/记录Uwsgi与Django成功勾搭的始末/</id>
-    <published>2018-02-07T02:15:09.000Z</published>
-    <updated>2018-02-07T02:37:09.169Z</updated>
-    
-    <content type="html"><![CDATA[<script src="\assets\js\APlayer.min.js"> </script><h2><span id="环境说明">环境说明</span></h2><p>Uwsgi版本：<code>2.0.14</code>(yum install安装）<br>django版本：<code>1.10.6</code>（pip install安装）<br>python版本：<code>2.7.5</code>(阿里云 centos 7自带）<br>nginx版本：<code>1.10.2</code>（yum install安装）</p><h2><span id="正文">正文</span></h2><p>在<code>https://rorschachchan.github.io/2018/02/02/Uwsgi的安装和简单使用/</code>里面，我们已经实现了网页打开出现”good bye,logan”的效果，可见<code>Web Client &lt;===&gt; uWSGI &lt;===&gt; Python</code>是通畅的，现在我们要调整看看django与uwsgi是否是通畅的。</p><p>首先，我们在/django这个目录下，<code>django-admin.py startproject logan</code>，建立了一个叫logan的project，然后在/django/logan/logan里会有一个自动生成的<code>wsgi.py</code>，打开一看，里面的内容如下：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">""</span><span class="string">"</span></span><br><span class="line"><span class="string">WSGI config for logan project.</span></span><br><span class="line"><span class="string">It exposes the WSGI callable as a module-level variable named ``application``.</span></span><br><span class="line"><span class="string">For more information on this file, see</span></span><br><span class="line"><span class="string">https://docs.djangoproject.com/en/1.10/howto/deployment/wsgi/</span></span><br><span class="line"><span class="string">"</span><span class="string">""</span></span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">from</span> django.core.wsgi <span class="keyword">import</span> get_wsgi_application</span><br><span class="line">os.environ.setdefault(<span class="string">"DJANGO_SETTINGS_MODULE"</span>, <span class="string">"logan.settings"</span>)</span><br><span class="line">application = get_wsgi_application()</span><br></pre></td></tr></table></figure></p><p>我们原来的目标就是测试django跟uwsgi的链接是否正常，那么返回到/django/logan，使用<code>python manage.py runserver 0.0.0.0:8000</code>启动django，然后打开浏览器，在地址栏里输入<code>外网ip:8000</code>，看到了如下的界面：<br><img src="/images/ud1.png" alt="paradin"></p><p>可见django已经启动成功，但是前面说过了，这种方法只能测试环境里小规模的玩玩，完全不推荐拿去生产化境里。所以现在我们用uwsgi在8000来启动一下django。</p><p>首先，先停止了原来我们启动的django。</p><p>然后，使用命令<code>uwsgi --http :8000 --wsgi-file logan.py</code>,反馈错误信息如下：<br><img src="/images/ud2.png" alt="paradin"></p><p>出现这个错误，那就<code>yum install uwsgi-plugin-python</code>，同时使用<code>uwsgi --plugin python --http-socket :8001 --wsgi-file /django/logan/logan/wsgi.py</code>，这样却又出了一个新错误：<br><img src="/images/ud3.png" alt="paradin"></p><p>提示说：<code>ImportError: No module named logan.settings</code>。可是当我使用python客户端单独测试的时候，这个语句是可以使用的，如图：<br><img src="/images/ud4.png" alt="paradin"></p><p>很多人都卡在了这种情况，这个时候我们需要换一个命令：<code>uwsgi --plugin python --http-socket :8001 --chdir /django/logan/ --wsgi-file /django/logan/logan/wsgi.py</code>。然后我们在浏览器地址栏里输入<code>外网地址：8001</code>就可以看到如下网页：<br><img src="/images/ud5.png" alt="paradin"></p><p>可见，我们已经通过uwsgi启动了原本已经关闭了的django，这样就达到了<code>Web Client &lt;===&gt; uWSGI &lt;===&gt; Django</code>的目的。</p><p>如果过程中出现了端口被占用的情况，比如8002端口已经被使用了：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">probably another instance <span class="keyword">of</span> uWSGI is running on the same address (:<span class="number">8002</span>).</span><br><span class="line">bind(): Address already <span class="keyword">in</span> use [core/socket.c line <span class="number">764</span>]</span><br></pre></td></tr></table></figure></p><p>那么就可以使用<code>lsof -i:8002</code>，然后把对应的进程干掉就好了。</p><p>最后附赠python脚本一个，这个脚本可以显示python的path，内容如下：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> os</span><br><span class="line">print <span class="string">'===== sys.path / PYTHONPATH ====='</span></span><br><span class="line"><span class="keyword">for</span> k <span class="keyword">in</span> sorted(os.environ.keys()):</span><br><span class="line">    v = os.environ[k]</span><br><span class="line">    print (<span class="string">'%-30s %s'</span> % (k,v[:<span class="number">70</span>]))</span><br></pre></td></tr></table></figure></p><h2><span id="参考资料">参考资料</span></h2><p><a href="http://www.python88.com/topic/101/" target="_blank" rel="noopener">http://www.python88.com/topic/101/</a><br><a href="http://www.nowamagic.net/academy/detail/1330334" target="_blank" rel="noopener">http://www.nowamagic.net/academy/detail/1330334</a></p>]]></content>
-    
-    <summary type="html">
-    
-      这一步是搭建框架的import key，在这里面你能感受到python版本的恶心...
-    
-    </summary>
-    
-      <category term="工作与技术" scheme="http://yoursite.com/categories/%E5%B7%A5%E4%BD%9C%E4%B8%8E%E6%8A%80%E6%9C%AF/"/>
-    
-    
-      <category term="python" scheme="http://yoursite.com/tags/python/"/>
-    
-      <category term="uwsgi" scheme="http://yoursite.com/tags/uwsgi/"/>
     
   </entry>
   
