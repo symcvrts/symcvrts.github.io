@@ -317,6 +317,225 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/02/26/解决证书在赛门铁克认证失败的问题/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Chris Chan">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Chris Chan's BLOG">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/02/26/解决证书在赛门铁克认证失败的问题/" itemprop="url">解决https证书在赛门铁克认证失败的问题</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-02-26T22:40:03+08:00">
+                2018-02-26
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/工作与技术/" itemprop="url" rel="index">
+                    <span itemprop="name">工作与技术</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            <!--noindex-->
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/02/26/解决证书在赛门铁克认证失败的问题/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count hc-comment-count" data-xid="2018/02/26/解决证书在赛门铁克认证失败的问题/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+              <!--/noindex-->
+            
+          
+
+          
+          
+             <span id="/2018/02/26/解决证书在赛门铁克认证失败的问题/" class="leancloud_visitors" data-flag-title="解决https证书在赛门铁克认证失败的问题">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">热度&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+				 <span>℃</spam>
+             </span>
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  863
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  3
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <script src="\assets\js\APlayer.min.js"> </script><h2><span id="问题描述">问题描述</span></h2><p>今天电子商城的市场接到一个故障，说更换了<em>.lechange.com整个https证书更换了（原有的到期了，新买了一个依旧还是</em>.lehcange.com）之后，订单在支付宝支付的时候，提示支付失败，把request id提供给支付宝的客服请他们查看一下后台，他们说我们电商的https证书没有认证成功。于是我就登陆<a href="https://cryptoreport.websecurity.symantec.com/checker/" target="_blank" rel="noopener">https://cryptoreport.websecurity.symantec.com/checker/</a> 去检查一下我们的域名，果不其然，反馈是错误的，如图：<br><img src="/images/saimentieke1.png" alt="paradin"></p>
+<p>但是登陆网站上显示却OK的，如图：<br><img src="/images/saimentieke2.png" alt="paradin"></p>
+<p>然后我用symantec的那个网站测试了一下开发环境的域名，发现也是OK的，如图：<br><img src="/images/saimentieke3.png" alt="paradin"></p>
+<p>这就郁闷了，到底哪里出问题了？</p>
+<h2><span id="问题排查">问题排查</span></h2><p>首先先跟研发确认，开发环境与线上环境在涉及到证书的代码是否一致，得到研发的确认之后。就检查里面的nginx，发现服务器nginx的配置文件里是没有涉及到ssl的，无论是开发环境和线上环境整个商城都是通过阿里云slb配置的https证书。而且两者的证书指纹一模一样，如图：<br><img src="/images/saimentieke4.png" alt="paradin"></p>
+<p>既然都是用的一样的证书，为啥一个检验通过，另一个检验不通过呢？这个时候我想到线上环境与开发环境唯一的不同就是线上环境多了一个cdn，于是就登陆到cdn的控制页面，找到对应的https证书，发现cdn的https证书指纹也是跟上面的指纹一样，如图：<br><img src="/images/saimentieke5.png" alt="paradin"></p>
+<p>既然指纹一样，那证书也应该是一样的。场面又进入了一个僵局。</p>
+<p>于是我就到一台服务器里使用<code>curl -vv https://www.lechange.com</code>，看到的结果如下：<br><img src="/images/saimentieke6.png" alt="paradin"></p>
+<p>提示“未配置签发者根证书”，我这时候想起来了，<font color="red">首先证书指纹一致不能说明证书是完全一致的，只能说明key文件是一样的！</font>,其次这个https证书是中级机构证书，那么中级机构颁发的证书链规则是这样的：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">-----BEGIN CERTIFICATE-----</span><br><span class="line"></span><br><span class="line">-----END CERTIFICATE-----</span><br><span class="line"></span><br><span class="line">-----BEGIN CERTIFICATE-----</span><br><span class="line"></span><br><span class="line">-----END CERTIFICATE-----</span><br></pre></td></tr></table></figure></p>
+<p>那么我怀疑就是https证书链那部分可能在cdn配置错误了，或许在slb配置错误了，甚至两个都配置错误了！</p>
+<p>于是干脆干掉线上电商的https证书，重新导入cdn和slb的https证书，再次刷新，就OK了。<br><img src="/images/saimentieke7.png" alt="paradin"></p>
+<h2><span id="补充">补充</span></h2><p>虽然这个问题解决了，但是我还是不明白，为什么在网页端查看证书是绿色OK的呢？在<code>sf.gg</code>上提问之后，一个叫Avro的朋友是这么回答我的：</p>
+<blockquote>
+<p>以chrome为例，他信任了[所在平台的信任证书列表][1]，而这些平台集成了一系列信任的根证书，如iOS 11 中可用的受信任根证书列表可以找到你的根证书“04 00 00 00 00 01 15 4B 5A C3 94 ”(序列号)，因此验证过程中没有问题，而对于其他的工具，如果未使用这些平台根证书信任列表依然需要完整的证书链（这个证书链在ssl握手过程中被下发）进行校验。</p>
+</blockquote>
+<h2><span id="参考资料">参考资料</span></h2><p><a href="https://openclub.alipay.com/read.php?tid=3451&amp;fid=57&amp;page=1" target="_blank" rel="noopener">https://openclub.alipay.com/read.php?tid=3451&amp;fid=57&amp;page=1</a><br><a href="https://www.jianshu.com/p/84af353f43c5" target="_blank" rel="noopener">https://www.jianshu.com/p/84af353f43c5</a><br><a href="https://help.aliyun.com/knowledge_detail/39468.html?spm=a2c4g.11186631.2.2.w2qcWT" target="_blank" rel="noopener">https://help.aliyun.com/knowledge_detail/39468.html?spm=a2c4g.11186631.2.2.w2qcWT</a></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+	
+	
+	
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+		   
+		<div>    
+			
+		</div>
+	
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/02/25/记录Apache-Storm的部署始末/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2176,214 +2395,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/02/12/日志文件管理者：Logrotate/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Chris Chan">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Chris Chan's BLOG">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/02/12/日志文件管理者：Logrotate/" itemprop="url">日志文件管理者：Logrotate</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-02-12T19:57:18+08:00">
-                2018-02-12
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/工作与技术/" itemprop="url" rel="index">
-                    <span itemprop="name">工作与技术</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            <!--noindex-->
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2018/02/12/日志文件管理者：Logrotate/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count hc-comment-count" data-xid="2018/02/12/日志文件管理者：Logrotate/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-              <!--/noindex-->
-            
-          
-
-          
-          
-             <span id="/2018/02/12/日志文件管理者：Logrotate/" class="leancloud_visitors" data-flag-title="日志文件管理者：Logrotate">
-               <span class="post-meta-divider">|</span>
-               <span class="post-meta-item-icon">
-                 <i class="fa fa-eye"></i>
-               </span>
-               
-                 <span class="post-meta-item-text">热度&#58;</span>
-               
-                 <span class="leancloud-visitors-count"></span>
-				 <span>℃</spam>
-             </span>
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  1,025
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">
-                  4
-                </span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          rotate是“轮转、交替、转动、试转动”的意思
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2018/02/12/日志文件管理者：Logrotate/">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-	
-	
-	
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-		   
-		<div>    
-			
-		</div>
-	
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2440,7 +2451,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">81</span>
+                  <span class="site-state-item-count">82</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -2462,7 +2473,7 @@
               
               <div class="site-state-item site-state-tags">
                 
-                  <span class="site-state-item-count">83</span>
+                  <span class="site-state-item-count">84</span>
                   <span class="site-state-item-name">标签</span>
                 
               </div>
@@ -2639,7 +2650,7 @@ show_date_time();
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">博客全站共82.6k字</span>
+  <span class="post-count">博客全站共83.5k字</span>
 </div>
         
 
