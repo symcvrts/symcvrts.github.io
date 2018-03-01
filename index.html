@@ -317,6 +317,221 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/03/01/Linux运维工程师笔试题第十五套/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Chris Chan">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Chris Chan's BLOG">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/03/01/Linux运维工程师笔试题第十五套/" itemprop="url">Linux运维工程师笔试题第十五套</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-01T13:50:16+08:00">
+                2018-03-01
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/工作与技术/" itemprop="url" rel="index">
+                    <span itemprop="name">工作与技术</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            <!--noindex-->
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/03/01/Linux运维工程师笔试题第十五套/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count hc-comment-count" data-xid="2018/03/01/Linux运维工程师笔试题第十五套/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+              <!--/noindex-->
+            
+          
+
+          
+          
+             <span id="/2018/03/01/Linux运维工程师笔试题第十五套/" class="leancloud_visitors" data-flag-title="Linux运维工程师笔试题第十五套">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">热度&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+				 <span>℃</spam>
+             </span>
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  1,191
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  4
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <script src="\assets\js\APlayer.min.js"> </script><h2><span id="正文">正文</span></h2><p>1.粘包是什么意思？T<code>CP</code>和<code>UDP</code>是否会出现粘包？出现了粘包如何处理？<br>[我的答案]粘包就是当客户端连续不断的往服务端发送数据包的时候，服务端接收的数据会出现两个数据包粘在一起的情况；UDP（非面向连接）是不会出现粘包的，因为UDP协议是基于报文的，UDP首部采用了16bit来指示UDP数据报文的长度，因此在应用层能很好的将不同的数据报文区分开，从而避免粘包和拆包的问题。而TCP（面向连接）是基于字节流的，它无法识别包的长度，所以会出现粘包的现象。</p>
+<p>解决办法主要有以下三种：<br>1）发送端给每个数据包添加包首部，首部中应该至少包含数据包的长度，这样接收端在接收到数据后，通过读取包首部的长度字段，便知道每一个数据包的实际长度了，有较高的效率而且少冗余，但是编程较复杂；<br>2）发送端将每个数据包封装为固定长度（不够的可以通过补0填充），这样接收端每次从接收缓冲区中读取固定长度的数据就自然而然的把每个数据包拆分开来，编程简单但是效率一般甚至很低；<br>3）可以在数据包之间设置边界，如添加特殊符号，这样，接收端通过这个边界就可以将不同的数据包拆分开；</p>
+<p>2.<code>time_wait</code>是什么情况？如果出现了过多的<code>close_wait</code>可能是什么原因？<br>[我的答案]<code>TIME_WAIT</code>是主动关闭连接的一方保持的状态，在保持这个状态2MSL<code>max segment lifetime</code>时间之后，彻底关闭回收资源。遇到<code>TIME_WAIT</code>数过大导致的服务器异常，很容易解决，修改下<code>/etc/sysctl.conf</code>就ok了。</p>
+<p>如果一直保持在CLOSE_WAIT状态，那么只有一种情况，就是在对方关闭连接之后服务器程序自己没有进一步发出ack信号。换句话说，就是在对方连接关闭之后，程序里没有检测到，或者程序压根就忘记了这个时候需要关闭连接，于是这个资源就一直被程序占着。这个情况多半是代码的问题，在服务器端是无能为力的，要检查代码。</p>
+<p>3.<code>epoll</code>和<code>select</code>的区别？边缘触发和水平触发的区别？</p>
+<p>4.<code>varchar</code>和<code>char</code>的区别是什么？utf8字符集下<code>varchar</code>最多存多少个字符？<br>[我的答案]前面那个问题去看<a href="http://blog.51cto.com/chenx1242/1742467，这里说后面那个。" target="_blank" rel="noopener">http://blog.51cto.com/chenx1242/1742467，这里说后面那个。</a><br>在utf-8状态下的varchar，最大只能到 <code>(65535 - 2) / 3 = 21844 余 1</code>。<br>在gbk状态下的varchar, 最大只能到 <code>(65535 - 2) / 2 = 32766 余 1</code>。</p>
+<p>5.<code>primary key</code>和<code>unique</code>的区别？<br>[我的答案]首先先说明<code>primary key = unique +  not null</code>，其次Unique Key可以可以是空，可以在一个表里的一个或多个字段定义，也就是爱有几个有几个，同时存在也可以；但是Primary Key不能为空不能重复，而其一个表里只能有一个Primary Key</p>
+<p>6.外键的原理，是否应该使用外键，外键已经需要索引么？</p>
+<p>7.索引的原理和用途，设计索引有什么注意的？</p>
+<p>8.<code>redis</code>满了会怎么样？<br>[我的答案]默认情况下redis满了就不会存储新的数据了，不过这个可以调整，redis在达到指定内存的时候可以通过设定的策略来做不同的动作，常见策略如下：<br>1）noeviction:返回错误当内存限制达到并且客户端尝试执行会让更多内存被使用的命令（大部分的写入指令，但DEL和几个例外）<br>2）allkeys-lru: 尝试回收最少使用的键（LRU），使得新添加的数据有空间存放。<br>3）volatile-lru: 尝试回收最少使用的键（LRU），但仅限于在过期集合的键,使得新添加的数据有空间存放。<br>4）allkeys-random: 回收随机的键使得新添加的数据有空间存放。<br>5）volatile-random: 回收随机的键使得新添加的数据有空间存放，但仅限于在过期集合的键。<br>6）volatile-ttl: 回收在过期集合的键，并且优先回收存活时间（TTL）较短的键,使得新添加的数据有空间存放。</p>
+<p>9.什么场合用<code>redis</code>不用<code>mysql</code>？</p>
+<h2><span id="参考资料">参考资料</span></h2><p><a href="https://blog.insanecoder.top/tcp-packet-splice-and-split-issue/" target="_blank" rel="noopener">https://blog.insanecoder.top/tcp-packet-splice-and-split-issue/</a><br><a href="http://blog.csdn.net/tiandijun/article/details/41961785" target="_blank" rel="noopener">http://blog.csdn.net/tiandijun/article/details/41961785</a><br><a href="http://www.redis.cn/topics/lru-cache.html" target="_blank" rel="noopener">http://www.redis.cn/topics/lru-cache.html</a><br><a href="http://blog.csdn.net/d_guco/article/details/53166722" target="_blank" rel="noopener">http://blog.csdn.net/d_guco/article/details/53166722</a></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+	
+	
+	
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+		   
+		<div>    
+			
+		</div>
+	
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/02/28/调用阿里云api获取阿里云数据同步服务（DTS）并且作图发送邮件的整个流程/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2176,214 +2391,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/02/23/如何手动释放linux内存/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Chris Chan">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Chris Chan's BLOG">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/02/23/如何手动释放linux内存/" itemprop="url">如何手动释放linux内存</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-02-23T20:57:35+08:00">
-                2018-02-23
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/工作与技术/" itemprop="url" rel="index">
-                    <span itemprop="name">工作与技术</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            <!--noindex-->
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2018/02/23/如何手动释放linux内存/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count hc-comment-count" data-xid="2018/02/23/如何手动释放linux内存/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-              <!--/noindex-->
-            
-          
-
-          
-          
-             <span id="/2018/02/23/如何手动释放linux内存/" class="leancloud_visitors" data-flag-title="如何手动释放linux内存">
-               <span class="post-meta-divider">|</span>
-               <span class="post-meta-item-icon">
-                 <i class="fa fa-eye"></i>
-               </span>
-               
-                 <span class="post-meta-item-text">热度&#58;</span>
-               
-                 <span class="leancloud-visitors-count"></span>
-				 <span>℃</spam>
-             </span>
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  379
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">
-                  2
-                </span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          这里释放的内存主要是缓存的内存
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2018/02/23/如何手动释放linux内存/">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-	
-	
-	
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-		   
-		<div>    
-			
-		</div>
-	
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2440,7 +2447,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">85</span>
+                  <span class="site-state-item-count">86</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -2462,7 +2469,7 @@
               
               <div class="site-state-item site-state-tags">
                 
-                  <span class="site-state-item-count">84</span>
+                  <span class="site-state-item-count">85</span>
                   <span class="site-state-item-name">标签</span>
                 
               </div>
@@ -2639,7 +2646,7 @@ show_date_time();
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">博客全站共87.5k字</span>
+  <span class="post-count">博客全站共88.7k字</span>
 </div>
         
 

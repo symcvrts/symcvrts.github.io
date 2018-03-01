@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2018-02-28T15:27:54.743Z</updated>
+  <updated>2018-03-01T14:10:27.887Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -15,6 +15,33 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Linux运维工程师笔试题第十五套</title>
+    <link href="http://yoursite.com/2018/03/01/Linux%E8%BF%90%E7%BB%B4%E5%B7%A5%E7%A8%8B%E5%B8%88%E7%AC%94%E8%AF%95%E9%A2%98%E7%AC%AC%E5%8D%81%E4%BA%94%E5%A5%97/"/>
+    <id>http://yoursite.com/2018/03/01/Linux运维工程师笔试题第十五套/</id>
+    <published>2018-03-01T05:50:16.000Z</published>
+    <updated>2018-03-01T14:10:27.887Z</updated>
+    
+    <content type="html"><![CDATA[<script src="\assets\js\APlayer.min.js"> </script><h2><span id="正文">正文</span></h2><p>1.粘包是什么意思？T<code>CP</code>和<code>UDP</code>是否会出现粘包？出现了粘包如何处理？<br>[我的答案]粘包就是当客户端连续不断的往服务端发送数据包的时候，服务端接收的数据会出现两个数据包粘在一起的情况；UDP（非面向连接）是不会出现粘包的，因为UDP协议是基于报文的，UDP首部采用了16bit来指示UDP数据报文的长度，因此在应用层能很好的将不同的数据报文区分开，从而避免粘包和拆包的问题。而TCP（面向连接）是基于字节流的，它无法识别包的长度，所以会出现粘包的现象。</p><p>解决办法主要有以下三种：<br>1）发送端给每个数据包添加包首部，首部中应该至少包含数据包的长度，这样接收端在接收到数据后，通过读取包首部的长度字段，便知道每一个数据包的实际长度了，有较高的效率而且少冗余，但是编程较复杂；<br>2）发送端将每个数据包封装为固定长度（不够的可以通过补0填充），这样接收端每次从接收缓冲区中读取固定长度的数据就自然而然的把每个数据包拆分开来，编程简单但是效率一般甚至很低；<br>3）可以在数据包之间设置边界，如添加特殊符号，这样，接收端通过这个边界就可以将不同的数据包拆分开；</p><p>2.<code>time_wait</code>是什么情况？如果出现了过多的<code>close_wait</code>可能是什么原因？<br>[我的答案]<code>TIME_WAIT</code>是主动关闭连接的一方保持的状态，在保持这个状态2MSL<code>max segment lifetime</code>时间之后，彻底关闭回收资源。遇到<code>TIME_WAIT</code>数过大导致的服务器异常，很容易解决，修改下<code>/etc/sysctl.conf</code>就ok了。</p><p>如果一直保持在CLOSE_WAIT状态，那么只有一种情况，就是在对方关闭连接之后服务器程序自己没有进一步发出ack信号。换句话说，就是在对方连接关闭之后，程序里没有检测到，或者程序压根就忘记了这个时候需要关闭连接，于是这个资源就一直被程序占着。这个情况多半是代码的问题，在服务器端是无能为力的，要检查代码。</p><p>3.<code>epoll</code>和<code>select</code>的区别？边缘触发和水平触发的区别？</p><p>4.<code>varchar</code>和<code>char</code>的区别是什么？utf8字符集下<code>varchar</code>最多存多少个字符？<br>[我的答案]前面那个问题去看<a href="http://blog.51cto.com/chenx1242/1742467，这里说后面那个。" target="_blank" rel="noopener">http://blog.51cto.com/chenx1242/1742467，这里说后面那个。</a><br>在utf-8状态下的varchar，最大只能到 <code>(65535 - 2) / 3 = 21844 余 1</code>。<br>在gbk状态下的varchar, 最大只能到 <code>(65535 - 2) / 2 = 32766 余 1</code>。</p><p>5.<code>primary key</code>和<code>unique</code>的区别？<br>[我的答案]首先先说明<code>primary key = unique +  not null</code>，其次Unique Key可以可以是空，可以在一个表里的一个或多个字段定义，也就是爱有几个有几个，同时存在也可以；但是Primary Key不能为空不能重复，而其一个表里只能有一个Primary Key</p><p>6.外键的原理，是否应该使用外键，外键已经需要索引么？</p><p>7.索引的原理和用途，设计索引有什么注意的？</p><p>8.<code>redis</code>满了会怎么样？<br>[我的答案]默认情况下redis满了就不会存储新的数据了，不过这个可以调整，redis在达到指定内存的时候可以通过设定的策略来做不同的动作，常见策略如下：<br>1）noeviction:返回错误当内存限制达到并且客户端尝试执行会让更多内存被使用的命令（大部分的写入指令，但DEL和几个例外）<br>2）allkeys-lru: 尝试回收最少使用的键（LRU），使得新添加的数据有空间存放。<br>3）volatile-lru: 尝试回收最少使用的键（LRU），但仅限于在过期集合的键,使得新添加的数据有空间存放。<br>4）allkeys-random: 回收随机的键使得新添加的数据有空间存放。<br>5）volatile-random: 回收随机的键使得新添加的数据有空间存放，但仅限于在过期集合的键。<br>6）volatile-ttl: 回收在过期集合的键，并且优先回收存活时间（TTL）较短的键,使得新添加的数据有空间存放。</p><p>9.什么场合用<code>redis</code>不用<code>mysql</code>？</p><h2><span id="参考资料">参考资料</span></h2><p><a href="https://blog.insanecoder.top/tcp-packet-splice-and-split-issue/" target="_blank" rel="noopener">https://blog.insanecoder.top/tcp-packet-splice-and-split-issue/</a><br><a href="http://blog.csdn.net/tiandijun/article/details/41961785" target="_blank" rel="noopener">http://blog.csdn.net/tiandijun/article/details/41961785</a><br><a href="http://www.redis.cn/topics/lru-cache.html" target="_blank" rel="noopener">http://www.redis.cn/topics/lru-cache.html</a><br><a href="http://blog.csdn.net/d_guco/article/details/53166722" target="_blank" rel="noopener">http://blog.csdn.net/d_guco/article/details/53166722</a></p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;script src=&quot;\assets\js\APlayer.min.js&quot;&gt; &lt;/script&gt;&lt;h2&gt;&lt;span id=&quot;正文&quot;&gt;正文&lt;/span&gt;&lt;/h2&gt;&lt;p&gt;1.粘包是什么意思？T&lt;code&gt;CP&lt;/code&gt;和&lt;code&gt;UDP&lt;/code&gt;是否会出现粘包？出现了粘
+      
+    
+    </summary>
+    
+      <category term="工作与技术" scheme="http://yoursite.com/categories/%E5%B7%A5%E4%BD%9C%E4%B8%8E%E6%8A%80%E6%9C%AF/"/>
+    
+    
+      <category term="面试经验" scheme="http://yoursite.com/tags/%E9%9D%A2%E8%AF%95%E7%BB%8F%E9%AA%8C/"/>
+    
+      <category term="大牛之路" scheme="http://yoursite.com/tags/%E5%A4%A7%E7%89%9B%E4%B9%8B%E8%B7%AF/"/>
+    
+  </entry>
   
   <entry>
     <title>调用阿里云api获取阿里云数据同步服务（DTS）并且作图发送邮件的整个流程</title>
@@ -455,28 +482,6 @@
       <category term="linux" scheme="http://yoursite.com/tags/linux/"/>
     
       <category term="crontab" scheme="http://yoursite.com/tags/crontab/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>在百花之中干掉一个杂草连接...</title>
-    <link href="http://yoursite.com/2018/02/08/%E5%9C%A8%E7%99%BE%E8%8A%B1%E4%B9%8B%E4%B8%AD%E5%B9%B2%E6%8E%89%E4%B8%80%E4%B8%AA%E6%9D%82%E8%8D%89%E8%BF%9E%E6%8E%A5/"/>
-    <id>http://yoursite.com/2018/02/08/在百花之中干掉一个杂草连接/</id>
-    <published>2018-02-08T12:43:12.000Z</published>
-    <updated>2018-02-08T12:59:06.757Z</updated>
-    
-    <content type="html"><![CDATA[<script src="\assets\js\APlayer.min.js"> </script><h2><span id="正文">正文</span></h2><p>早上接到阿里云的服务器报警，说有一台服务器的流量超标，这个服务器的外网带宽是5M，但是登陆进去使用<code>iftop -i eth1</code>发现里面的流量已经几乎跑满，如图：<br><img src="/images/tcpkill1.png" alt="paradin"></p><p>我这个服务器的名称叫online-mts-001，为啥会有一个mail25.u.tsender.com，这个是什么鬼？莫非是通过我的服务器去连接这个“邮箱”域名？于是我就ping了一下这个mail25.u.tsender.com，结果如图：<br><img src="/images/tcpkill2.png" alt="paradin"></p><p>看到这个域名对应的ip地址是115.29.177.8，嗯，115.29.177.8，哎？这个ip地址好熟悉啊，卧槽，这特么不是这个<code>online-mts-001</code>的外网ip么？<br><img src="/images/tcpkill3.png" alt="paradin"></p><p>也就是说我这个机器在我不知道的情况下被人绑定了一个域名！但是我这个服务器不是网页服务器，上面那个tsender.com的域名打不开，我检查了服务器一番，发现这个机器没有被人入侵的痕迹，只能说是被人有意/无意（无意的可能性更大，比如看错了阿拉伯数字）绑定了域名。</p><p>被人绑定了域名就好比被人起了外号一样，一旦非本人操作就不太好往下摘了，查了很多资料都没有办法，毕竟主动权不在我这里了。</p><p>但是回头过来，我们的重心是要解决那个占据了3M带宽的连接，<code>netstat</code>看了一下，发现这个连接的具体信息如下：<br><img src="/images/tcpkill4.png" alt="paradin"></p><p>仅仅是干掉连接的话，方法有很多，关闭网卡再重开或者关闭相应的服务都可以，但是现在的问题是这台服务器是生产环境的服务器，它主要是给用户提供视频拉流，通过抓包分析得知，这位183.228.128.188的用户合法通过外网连接到了这台视频服务器，而且拉取的是高清视频，所以才占据了这么大的带宽。不过我们还是决定先断开这位用户的连接同时不动其他用户的连接，这位183.228.128.188的用户在客户端虽然会发觉视频断开，但是有缓存和人为刷新的客观因素，实际的体验不会差太多，至少不会投诉400…</p><p>那么如何干掉一个established连接同时保证其他连接呢？请使用<code>tcpkill</code>。</p><p>tcpkill的下载比较有说法，下面是安装步骤：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">wget http:<span class="comment">//rpm.repo.onapp.com/ramdisk-hv/centos6/dsniff/libnids-1.24-1.el6.x86_64.rpm</span></span><br><span class="line">wget http:<span class="comment">//rpm.repo.onapp.com/ramdisk-hv/centos6/dsniff/libnet-1.1.5-1.el6.x86_64.rpm</span></span><br><span class="line">wget http:<span class="comment">//rpm.repo.onapp.com/ramdisk-hv/centos6/dsniff/dsniff-2.4-0.14.b1.el6.x86_64.rpm</span></span><br><span class="line">yum install libICE libSM libXmu -y</span><br><span class="line">rpm -ivh libnet<span class="number">-1.1</span><span class="number">.5</span><span class="number">-1.</span>el6.x86_64.rpm</span><br><span class="line">rpm -ivh libnids<span class="number">-1.24</span><span class="number">-1.</span>el6.x86_64.rpm </span><br><span class="line">rpm -ivh  dsniff<span class="number">-2.4</span><span class="number">-0.14</span>.b1.el6.x86_64.rpm</span><br></pre></td></tr></table></figure></p><p>请按顺序操作，不然的话dsniff就会报错：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">warning: dsniff<span class="number">-2.4</span><span class="number">-0.14</span>.b1.el6.x86_64.rpm: Header V3 RSA/SHA256 Signature, key ID <span class="number">0608</span>b895: NOKEY</span><br><span class="line">error: Failed dependencies:</span><br><span class="line">libnet.so<span class="number">.1</span>()(<span class="number">64</span>bit) is needed by dsniff<span class="number">-2.4</span><span class="number">-0.14</span>.b1.el6.x86_64</span><br><span class="line">libnids.so<span class="number">.1</span><span class="number">.24</span>()(<span class="number">64</span>bit) is needed by dsniff<span class="number">-2.4</span><span class="number">-0.14</span>.b1.el6.x86_64</span><br></pre></td></tr></table></figure></p><p>安装完毕之后，就会生成<code>tcpkill</code>命令，如图：<br><img src="/images/tcpkill5.png" alt="paradin"></p><p>然后断开上面那个大带宽连接的命令是：<code>./tcpkill -i eth0 src port 9132 and dst port 9595 and src host 115.29.177.8 dst host 183.228.128.188</code>或者<code>./tcpkill -s 115.29.177.8:9132 -d 183.228.128.188:9595</code>。</p><p>但是要注意一下！<font color="red">tcpkill一定要运行在能接收到应答包的主机上在，最好运行在连接或半连接存在的一端主机上，因为tcpkill会发现这个连接里有数据传输进而感知并且干掉</font>。而且tcpkill默认情况下是只能干掉established状态的连接，对于假死连接（连接在，但是数据不传输）或者半连接（由于tcp keeplive没打开而又没有数据向对端发送，导致一直无法感知次连接其实已经断开）是无法断开的。</p><p>如果遇到上述所说的假死连接和半连接就需要手动更改tcpkill的源码，更改原理在<code>https://yq.aliyun.com/articles/59308</code>。</p><p>如果使用的系统是ubuntu or debian，还可以使用cutter命令，<code>apt-get install cutter</code>下载即可。使用方法：<code>http://www.cyberciti.biz/tips/cutting-the-tcpip-network-connection-with-cutter.html</code>。</p><p>至于第一个问题，怎么把这台服务器上的域名撤除，我倒要好好想想了…</p><h2><span id="参考资料">参考资料</span></h2><p><a href="http://www.cyberciti.biz/howto/question/linux/kill-tcp-connection-using-linux-netstat.php" target="_blank" rel="noopener">http://www.cyberciti.biz/howto/question/linux/kill-tcp-connection-using-linux-netstat.php</a><br><a href="http://www.gnutoolbox.com/tcpkill-command/" target="_blank" rel="noopener">http://www.gnutoolbox.com/tcpkill-command/</a></p>]]></content>
-    
-    <summary type="html">
-    
-      记得这篇文章是在《人民的名义》热播的时候写的
-    
-    </summary>
-    
-      <category term="工作与技术" scheme="http://yoursite.com/categories/%E5%B7%A5%E4%BD%9C%E4%B8%8E%E6%8A%80%E6%9C%AF/"/>
-    
-    
-      <category term="运维" scheme="http://yoursite.com/tags/%E8%BF%90%E7%BB%B4/"/>
     
   </entry>
   
