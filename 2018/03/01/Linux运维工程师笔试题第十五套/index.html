@@ -88,18 +88,18 @@
 
 
 
-<meta name="description" content="正文1.粘包是什么意思？TCP和UDP是否会出现粘包？出现了粘包如何处理？[我的答案]粘包就是当客户端连续不断的往服务端发送数据包的时候，服务端接收的数据会出现两个数据包粘在一起的情况；UDP（非面向连接）是不会出现粘包的，因为UDP协议是基于报文的，UDP首部采用了16bit来指示UDP数据报文的长度，因此在应用层能很好的将不同的数据报文区分开，从而避免粘包和拆包的问题。而TCP（面向连接）是">
+<meta name="description" content="大牛之路，如此辛苦">
 <meta name="keywords" content="面试经验,大牛之路">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Linux运维工程师笔试题第十五套">
 <meta property="og:url" content="http://yoursite.com/2018/03/01/Linux运维工程师笔试题第十五套/index.html">
 <meta property="og:site_name" content="Chris Chan&#39;s BLOG">
-<meta property="og:description" content="正文1.粘包是什么意思？TCP和UDP是否会出现粘包？出现了粘包如何处理？[我的答案]粘包就是当客户端连续不断的往服务端发送数据包的时候，服务端接收的数据会出现两个数据包粘在一起的情况；UDP（非面向连接）是不会出现粘包的，因为UDP协议是基于报文的，UDP首部采用了16bit来指示UDP数据报文的长度，因此在应用层能很好的将不同的数据报文区分开，从而避免粘包和拆包的问题。而TCP（面向连接）是">
+<meta property="og:description" content="大牛之路，如此辛苦">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-03-01T14:10:27.887Z">
+<meta property="og:updated_time" content="2018-03-01T15:30:02.296Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Linux运维工程师笔试题第十五套">
-<meta name="twitter:description" content="正文1.粘包是什么意思？TCP和UDP是否会出现粘包？出现了粘包如何处理？[我的答案]粘包就是当客户端连续不断的往服务端发送数据包的时候，服务端接收的数据会出现两个数据包粘在一起的情况；UDP（非面向连接）是不会出现粘包的，因为UDP协议是基于报文的，UDP首部采用了16bit来指示UDP数据报文的长度，因此在应用层能很好的将不同的数据报文区分开，从而避免粘包和拆包的问题。而TCP（面向连接）是">
+<meta name="twitter:description" content="大牛之路，如此辛苦">
 
 
 
@@ -448,6 +448,10 @@
           
 
           
+              <div class="post-description">
+                  大牛之路，如此辛苦
+              </div>
+          
 
         </div>
       </header>
@@ -462,7 +466,7 @@
       
 
       
-        <script src="\assets\js\APlayer.min.js"> </script><h2><span id="正文">正文</span></h2><p>1.粘包是什么意思？T<code>CP</code>和<code>UDP</code>是否会出现粘包？出现了粘包如何处理？<br>[我的答案]粘包就是当客户端连续不断的往服务端发送数据包的时候，服务端接收的数据会出现两个数据包粘在一起的情况；UDP（非面向连接）是不会出现粘包的，因为UDP协议是基于报文的，UDP首部采用了16bit来指示UDP数据报文的长度，因此在应用层能很好的将不同的数据报文区分开，从而避免粘包和拆包的问题。而TCP（面向连接）是基于字节流的，它无法识别包的长度，所以会出现粘包的现象。</p>
+        <script src="\assets\js\APlayer.min.js"> </script><h2><span id="正文">正文</span></h2><p>1.粘包是什么意思？<code>TCP</code>和<code>UDP</code>是否会出现粘包？出现了粘包如何处理？<br>[我的答案]粘包就是当客户端连续不断的往服务端发送数据包的时候，服务端接收的数据会出现两个数据包粘在一起的情况；UDP（非面向连接）是不会出现粘包的，因为UDP协议是基于报文的，UDP首部采用了16bit来指示UDP数据报文的长度，因此在应用层能很好的将不同的数据报文区分开，从而避免粘包和拆包的问题。而TCP（面向连接）是基于字节流的，它无法识别包的长度，所以会出现粘包的现象。</p>
 <p>解决办法主要有以下三种：<br>1）发送端给每个数据包添加包首部，首部中应该至少包含数据包的长度，这样接收端在接收到数据后，通过读取包首部的长度字段，便知道每一个数据包的实际长度了，有较高的效率而且少冗余，但是编程较复杂；<br>2）发送端将每个数据包封装为固定长度（不够的可以通过补0填充），这样接收端每次从接收缓冲区中读取固定长度的数据就自然而然的把每个数据包拆分开来，编程简单但是效率一般甚至很低；<br>3）可以在数据包之间设置边界，如添加特殊符号，这样，接收端通过这个边界就可以将不同的数据包拆分开；</p>
 <p>2.<code>time_wait</code>是什么情况？如果出现了过多的<code>close_wait</code>可能是什么原因？<br>[我的答案]<code>TIME_WAIT</code>是主动关闭连接的一方保持的状态，在保持这个状态2MSL<code>max segment lifetime</code>时间之后，彻底关闭回收资源。遇到<code>TIME_WAIT</code>数过大导致的服务器异常，很容易解决，修改下<code>/etc/sysctl.conf</code>就ok了。</p>
 <p>如果一直保持在CLOSE_WAIT状态，那么只有一种情况，就是在对方关闭连接之后服务器程序自己没有进一步发出ack信号。换句话说，就是在对方连接关闭之后，程序里没有检测到，或者程序压根就忘记了这个时候需要关闭连接，于是这个资源就一直被程序占着。这个情况多半是代码的问题，在服务器端是无能为力的，要检查代码。</p>
