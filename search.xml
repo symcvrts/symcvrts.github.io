@@ -1,6 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[韩国民主电影三部曲]]></title>
+    <url>%2F2018%2F03%2F04%2F%E9%9F%A9%E5%9B%BD%E6%B0%91%E4%B8%BB%E7%94%B5%E5%BD%B1%E4%B8%89%E9%83%A8%E6%9B%B2%2F</url>
+    <content type="text"><![CDATA[这个周末周五晚上看了《出租车司机》，周六下午看了《1987：黎明到来的那一天》，再加上之间就在B站看过的《辩护人》，韩国民主运动三部曲都看完了。 还有一部《华丽的假期》，这个片子是2007年公映的，也是讲全斗焕压迫韩国民主人士的故事，但是这部片从电影叙事的角度上比如上面这三者，虽然内容差不多，但是影响力相对有限。 一直以来，我对韩国的政治采取一种“黑”的态度，因为他们的总统基本没有好下场，哪怕是我个人比较喜欢的卢武铉总统也是以自杀结束了自己的一生。而且他们的演艺圈也是以各种“黑”和“潜规则”更出名。但是我不得不佩服韩国正直电影人的精神以及韩国正直记者们的精神，他们坚持了自己的操守而且履行了自己的职责。 最后补充一句，各位都知道《辩护人》里宋康昊的原型是卢武铉总统，据说那部片里宋康昊的parter的原型就是韩国现在的总统—文在寅。]]></content>
+      <categories>
+        <category>坠乱花天</category>
+      </categories>
+      <tags>
+        <tag>政治</tag>
+        <tag>亚洲民主</tag>
+        <tag>影评</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[动手做一个网络简历并且保存成PDF]]></title>
     <url>%2F2018%2F03%2F02%2F%E5%8A%A8%E6%89%8B%E5%81%9A%E4%B8%80%E4%B8%AA%E7%BD%91%E7%BB%9C%E7%AE%80%E5%8E%86%E5%B9%B6%E4%B8%94%E4%BF%9D%E5%AD%98%E6%88%90PDF%2F</url>
     <content type="text"><![CDATA[环境说明服务器:nginx浏览器:firefox 制作网页简历过程首先先下载简历的模板文件，过程如下： 1234wget http://labfile.oss.aliyuncs.com/courses/624/cv-template.zipunzip cv-templatemv cv-template/* .rm -rf cv-template* __MACOSX* 然后在浏览器里的地址栏里输入服务器外网IP，就可看到下面的界面，如图： 我们发现这个界面是可以编辑的，于是就在前人的基础上修改即可，这里感谢前人栽树！！！ 但是修改了并不是就保存了，如果你刷新这个界面发现又变成了初始的界面。所以这个时候我们要把修改过的网页的前端代码拷贝下来。 在firefox浏览器的配置里选择WEB开发者，如图： 然后选择查看器： 这个时候在页面就出现了整个网页的代码，选择复制—HTML外面： 然后把这个html代码拷贝到nginx服务器里的index.html里覆盖原有的内容，再重新刷新浏览器，就会成为已经保存过的界面了！ 将网页保存成PDF在浏览器里的配置里选择打印，然后现在页面设置里的勾选打印背景（颜色和图片）再修改一下页眉和页脚。再点击打印，默认情况就会保存成PDF文件了。 参考资料https://segmentfault.com/a/1190000006820290]]></content>
@@ -737,8 +750,8 @@
         <category>工作与技术</category>
       </categories>
       <tags>
-        <tag>运维</tag>
         <tag>zabbix</tag>
+        <tag>运维</tag>
       </tags>
   </entry>
   <entry>
@@ -894,8 +907,8 @@
         <category>工作与技术</category>
       </categories>
       <tags>
-        <tag>运维</tag>
         <tag>zabbix</tag>
+        <tag>运维</tag>
       </tags>
   </entry>
   <entry>

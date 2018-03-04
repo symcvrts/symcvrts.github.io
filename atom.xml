@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2018-03-02T17:43:57.745Z</updated>
+  <updated>2018-03-04T13:38:39.706Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -15,6 +15,32 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>韩国民主电影三部曲</title>
+    <link href="http://yoursite.com/2018/03/04/%E9%9F%A9%E5%9B%BD%E6%B0%91%E4%B8%BB%E7%94%B5%E5%BD%B1%E4%B8%89%E9%83%A8%E6%9B%B2/"/>
+    <id>http://yoursite.com/2018/03/04/韩国民主电影三部曲/</id>
+    <published>2018-03-04T13:07:08.000Z</published>
+    <updated>2018-03-04T13:38:39.706Z</updated>
+    
+    <content type="html"><![CDATA[<script src="\assets\js\APlayer.min.js"> </script><p>这个周末周五晚上看了《出租车司机》，周六下午看了《1987：黎明到来的那一天》，再加上之间就在B站看过的《辩护人》，韩国民主运动三部曲都看完了。</p><p>还有一部《华丽的假期》，这个片子是2007年公映的，也是讲全斗焕压迫韩国民主人士的故事，但是这部片从电影叙事的角度上比如上面这三者，虽然内容差不多，但是影响力相对有限。</p><p>一直以来，我对韩国的政治采取一种“黑”的态度，因为他们的总统基本没有好下场，哪怕是我个人比较喜欢的卢武铉总统也是以自杀结束了自己的一生。而且他们的演艺圈也是以各种“黑”和“潜规则”更出名。但是我不得不佩服韩国正直电影人的精神以及韩国正直记者们的精神，他们坚持了自己的操守而且履行了自己的职责。</p><p>最后补充一句，各位都知道《辩护人》里宋康昊的原型是卢武铉总统，据说那部片里宋康昊的parter的原型就是韩国现在的总统—文在寅。</p><p><img src="/images/koeraD.jpg" alt="paradin"></p>]]></content>
+    
+    <summary type="html">
+    
+      这个假期在各种电影中度过...
+    
+    </summary>
+    
+      <category term="坠乱花天" scheme="http://yoursite.com/categories/%E5%9D%A0%E4%B9%B1%E8%8A%B1%E5%A4%A9/"/>
+    
+    
+      <category term="政治" scheme="http://yoursite.com/tags/%E6%94%BF%E6%B2%BB/"/>
+    
+      <category term="亚洲民主" scheme="http://yoursite.com/tags/%E4%BA%9A%E6%B4%B2%E6%B0%91%E4%B8%BB/"/>
+    
+      <category term="影评" scheme="http://yoursite.com/tags/%E5%BD%B1%E8%AF%84/"/>
+    
+  </entry>
   
   <entry>
     <title>动手做一个网络简历并且保存成PDF</title>
@@ -453,30 +479,6 @@
       <category term="mysql" scheme="http://yoursite.com/tags/mysql/"/>
     
       <category term="读写分离中间件" scheme="http://yoursite.com/tags/%E8%AF%BB%E5%86%99%E5%88%86%E7%A6%BB%E4%B8%AD%E9%97%B4%E4%BB%B6/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>脚本里添加crontab的方法</title>
-    <link href="http://yoursite.com/2018/02/08/%E8%84%9A%E6%9C%AC%E9%87%8C%E6%B7%BB%E5%8A%A0crontab%E7%9A%84%E6%96%B9%E6%B3%95/"/>
-    <id>http://yoursite.com/2018/02/08/脚本里添加crontab的方法/</id>
-    <published>2018-02-08T13:48:37.000Z</published>
-    <updated>2018-02-08T13:55:55.951Z</updated>
-    
-    <content type="html"><![CDATA[<script src="\assets\js\APlayer.min.js"> </script><p>一般来说，增加计划任务都是<code>crontab -e</code>，然后在里面添加内容。但是在一些脚本里，需要自动添加，那么这种情况怎么办？</p><h2><span id="第一种方法">第一种方法</span></h2><p>重定向crontab到其他文件：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">crontab -l &gt; crontab.bak</span><br><span class="line">echo <span class="string">"*/1 * * * * ./yourscript  &gt; /dev/null 2&gt;&amp;1"</span> &gt;&gt; crontab.bak</span><br><span class="line">crontab crontab.bak</span><br></pre></td></tr></table></figure></p><p>如果想删除某个计划任务，就进去<code>crontab -e</code>删除就好，<code>crontab.bak</code>不用管，不用担心内容会自动变成<code>crontab.bak</code>的样子。</p><h2><span id="第二种方法">第二种方法</span></h2><p>如果你觉得使用<code>crontab 文件</code>这种方法心里没有底的话，就选择最妥善的方式，也就是下面这样：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">echo <span class="string">"*/1 * * * * ./yourscript &gt; /dev/null 2&gt;&amp;1"</span> &gt;&gt; <span class="regexp">/var/</span>spool/cron/root</span><br></pre></td></tr></table></figure></p><p>当crontab突然失效时，可以尝试<code>/etc/init.d/crond restart</code>解决问题。或者查看日志看某个job有没有执行/报错<code>tail -f /var/log/cron</code>。<br><img src="/images/vc15.jpg" alt="paradin" title="半人半神！"></p>]]></content>
-    
-    <summary type="html">
-    
-      把脚本作的尽善尽美
-    
-    </summary>
-    
-      <category term="工作与技术" scheme="http://yoursite.com/categories/%E5%B7%A5%E4%BD%9C%E4%B8%8E%E6%8A%80%E6%9C%AF/"/>
-    
-    
-      <category term="linux" scheme="http://yoursite.com/tags/linux/"/>
-    
-      <category term="crontab" scheme="http://yoursite.com/tags/crontab/"/>
     
   </entry>
   
