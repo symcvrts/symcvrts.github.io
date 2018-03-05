@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2018-03-04T15:51:39.772Z</updated>
+  <updated>2018-03-05T16:38:51.584Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -15,6 +15,30 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Zookeeper的选举原理</title>
+    <link href="http://yoursite.com/2018/03/05/Zookeeper%E7%9A%84%E9%80%89%E4%B8%BE%E5%8E%9F%E7%90%86/"/>
+    <id>http://yoursite.com/2018/03/05/Zookeeper的选举原理/</id>
+    <published>2018-03-05T13:30:10.000Z</published>
+    <updated>2018-03-05T16:38:51.584Z</updated>
+    
+    <content type="html"><![CDATA[<script src="\assets\js\APlayer.min.js"> </script><h2><span id="前言">前言</span></h2><p><code>Zookeeper</code>是一款比较常见的式应用程序协调服务软件，如果配置了多台<code>zookeeper</code>自然要选择一个头头，这个头头就是<code>leader</code>，很明显不能所有的<code>zookeeper</code>都是<code>leader</code>，那样就失控了；也不能所有的<code>zookeeper</code>都是<code>follower</code>，那就群龙无首无法协调。</p><p>插播一句，这种<code>一老大N跟班</code>的模式是过去分布式软件里很常见的工作模式，而最近比较火热的区块链不同，它是一种<code>去中心化</code>的工作模式，大家人人都当节点，然后放在一起整合，有点原始社会的意思。所以说，算法有时候来自于人类学，也会在一定程度反过来上影响人类。</p><p>选举<code>leader</code>的方式是一种叫<code>FastLeaderELection</code>的算法，以<code>3.4.6</code>版本为例，它被保存在<code>/usr/zookeeper/src/java/main/org/apache/zookeeper/server/quorum/</code>这个文件夹下。</p><h2><span id="选举的中心思想">选举的中心思想</span></h2><p>实际上<code>FastLeaderELection</code>说的中心思想无外乎以下几个关键点：</p><ol><li><p>全天下我最牛！在我没有发现比我牛的推荐人的情况下，我就一直推举我当<code>leader</code>，第一次投票那必须推举我自己当<code>leader</code>。</p></li><li><p>每当我接收到其它的被推举者，我都要回馈一个信息，表明我还是不是推举我自己。如果被推举者没我大，我就一直推举我当<code>leader</code>，是我是我还是我！</p></li><li><p>我有一个票箱， 和我属于同一轮的投票情况都在这个票箱里面。一人一票重复的或者过期的票，我都不接受。</p></li><li><p>一旦我不再推举我自己了（这时我发现别人推举的人比我推荐的更牛），我就把我的票箱清空，重新发起一轮投票（这时我的票箱一定有两票了，都是选的我认为最牛的人）。</p></li><li><p>一旦我发现收到的推举信息中投票轮要高于我的投票轮，我也要清空我的票箱。并且还是投当初我觉得最牛的那个人（除非当前的人比我最初的推荐牛，我就顺带更新我的推荐）。</p></li><li><p>不断的重复上面的过程，不断的告诉别人“我的投票是第几轮”、“我推举的人是谁”。直到我的票箱中“我推举的最牛的人”收到了不少于<code>N/2 + 1</code>的推举投票。这也回答了为什么<code>zookeeper</code>在少于<code>N/2 + 1</code>的节点处于工作状态的情况下会崩溃了。因为，无论怎么选也没有任何节点能够获得<code>N/2 + 1</code>的票数。</p></li><li><p>这时我就可以决定我是<code>flower</code>还是<code>leader</code>了（如果至始至终都是我最牛，那我就是<code>leader</code>咯，其它情况就是<code>follower</code>咯）。并且不论随后收到谁的投票，都向它直接反馈“我的结果”。</p></li></ol><h2><span id="判断依据">判断依据</span></h2><p>上面第二步里说了，如果接收到其他被推举者的消息，而且判断出这个被推举者比我牛，我就要推举他，那么判断依据是啥呢？答案是依次比较<code>epoch</code>、<code>zxid</code>、<code>serverid</code>。</p><p>先说说啥是<code>epoch</code>、<code>zxid</code>、<code>serverid</code>：</p><ul><li><code>epoch</code>: 表示选举轮数。</li><li><code>zxid</code>: 事务zxid包含了本地数据的最后更新时间相关的信息。</li><li><code>serverid</code>: 当前<code>server</code>的 ID, 通过配置文件指定(<code>echo &#39;1&#39; &gt; myid</code>)。</li></ul><p>具体的判断过程是：接收到的消息中，有<code>epoch</code>比我大的，则选<code>epoch</code>大的消息中确定的<code>server</code>；如果<code>epoch</code>相等，则选<code>zxid</code>最大的<code>server</code>；如果<code>zxid</code>也相等，则选<code>serverid</code>最大的<code>server</code>(有的节点生来就是当<code>leader</code>的）。</p><p>为什么要有<code>epoch</code>呢？这样是为了防止中途有选举者掉线，他们错过了选举，再次连上来的时候，他们发现自己的投票轮已经小于现有的投票轮了，那么他们比如要清空自己的投票箱然后无条件的改为推荐接收到的最新选举中大家推荐的最牛的那个人（如果没有人比我牛，那还是推荐我自己）。由于有最后一条<code>serverid</code>大的最后压阵，而且<code>serverid</code>又不能重复，所以基本上都能最后选出一台作为<code>leader</code>。</p><h2><span id="参考资料">参考资料</span></h2><p><a href="http://blog.csdn.net/yinwenjie/article/details/47613309" target="_blank" rel="noopener">http://blog.csdn.net/yinwenjie/article/details/47613309</a><br><a href="https://mozillazg.com/2017/03/zookeeper-fastleader-elect-leader.html" target="_blank" rel="noopener">https://mozillazg.com/2017/03/zookeeper-fastleader-elect-leader.html</a></p><p><img src="/images/messifreekick.gif" alt="paradin" title="八倍镜狙击模式开启"></p>]]></content>
+    
+    <summary type="html">
+    
+      zookeeper的选举是没有“仲裁者”的，就是看投票
+    
+    </summary>
+    
+      <category term="工作与技术" scheme="http://yoursite.com/categories/%E5%B7%A5%E4%BD%9C%E4%B8%8E%E6%8A%80%E6%9C%AF/"/>
+    
+    
+      <category term="运维技术" scheme="http://yoursite.com/tags/%E8%BF%90%E7%BB%B4%E6%8A%80%E6%9C%AF/"/>
+    
+      <category term="zookeeper" scheme="http://yoursite.com/tags/zookeeper/"/>
+    
+  </entry>
   
   <entry>
     <title>从韩国民主电影三部曲浅谈我对民主的认识</title>
@@ -455,30 +479,6 @@
       <category term="elk" scheme="http://yoursite.com/tags/elk/"/>
     
       <category term="大数据分析" scheme="http://yoursite.com/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Mysql-Atlas从库始终没有建立连接怎么办</title>
-    <link href="http://yoursite.com/2018/02/09/Mysql-Atlas%E4%BB%8E%E5%BA%93%E5%A7%8B%E7%BB%88%E6%B2%A1%E6%9C%89%E5%BB%BA%E7%AB%8B%E8%BF%9E%E6%8E%A5%E6%80%8E%E4%B9%88%E5%8A%9E/"/>
-    <id>http://yoursite.com/2018/02/09/Mysql-Atlas从库始终没有建立连接怎么办/</id>
-    <published>2018-02-09T05:45:56.000Z</published>
-    <updated>2018-02-09T09:29:50.262Z</updated>
-    
-    <content type="html"><![CDATA[<script src="\assets\js\APlayer.min.js"> </script><p>最近发现阿里云线上环境有一台hls模块的数据库从库一直没有连接，而主库却一直连接不断。在阿里云控制后台看到连接情况如下图：<br><img src="/images/atlas1.png" alt="paradin"></p><p><img src="/images/atlas2.png" alt="paradin"><br>上图是主库的，下面那个是从库的，两者差距很大，可见这样的配置是错误的，因为读库根本没有使用，也就是说读库的那份钱是在浪费！</p><p>来到对应的atlas服务器查看配置，看到atlas 的配置里规定管理接口的用户名和密码是默认的原始套餐，端口被改成了2346，如下面，<br><img src="/images/atlas3.png" alt="paradin"></p><p><img src="/images/atlas4.png" alt="paradin"><br>于是我们就在模块服务器（也就是图里的online-hls-001)上登录这个atlas服务器的管理端口，看一下效果：<br><img src="/images/atlas6.png" alt="paradin"></p><p>发现mysql根本没有反应，可当我们telnet去atlas的2346端口的时候，发现端口是通的：<br><img src="/images/atlas7.png" alt="paradin"></p><p>于是我们返回到atlas 的配置文件，把这台hls模块服务器的ip地址添加到<code>clients-ips</code>这个字段里。<br><img src="/images/atlas8.png" alt="paradin"></p><p>然后再用hls服务器去测试一下atlas的管理端口，<code>mysql -hatlas服务器ip地址 -uuser -ppwd</code>，然后使用<code>select * from backends;</code>,发现里面的两个库一个连接成功，另一个是失败的：<br><img src="/images/atlas9.png" alt="paradin"></p><p>两个库都可以ping通，state却有这样的差别。由此可见这台atlas根本没有连接到从库，导致从库的连接数始终为0。这个时候我们就要检查从库配置的账号密码是否正确，而且在阿里云控制后台给从库开启这个atlas的白名单，然后重新启动这个mysql-proxy进程，再登录atlas管理端口查看，发现从库由down转up了：<br><img src="/images/atlas10.png" alt="paradin"></p><p>但是此时的atlas日志里却出现了很多forbidden的warning的提示：<br><img src="/images/atlas11.png" alt="paradin"></p><p>这时候我们返回atlas的配置文件，把之前的修改过的<code>client-ips</code>这个字段注释掉，让所有合法ip都连接，然后重启atlas，这样这种forbidden ip的警告日志就会消失。</p><p>稍等一会，就会看到从库上也会出现连接数了，至此一切恢复到正常状态，故障排除！<br><img src="/images/atlas12.png" alt="paradin"></p><p>本次故障排除感谢<code>https://highdb.com/?s=atlas</code>这位大神的帮助！</p><h2><span id="文末补充">文末补充</span></h2><p>数据库访问使用了事务的话，从库也会建立连接，只是连接量要小于“非事务访问”，而不是一点连接都没有。</p><p>一般来说，在atlas配置文件里，主库写一个，而从库最好把主库和从库都写进去，如果希望从库承担读的任务多一点的话，可以把权重调高，比如我想从库与主库的读任务比是2：1，那么就可以这么写：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">#Atlas后端连接的MySQL主库的IP和端口，可设置多项，用逗号分隔</span><br><span class="line">proxy-backend-addresses = 主库地址:<span class="number">3306</span></span><br><span class="line">#Atlas后端连接的MySQL从库的IP和端口，@后面的数字代表权重，用来作负载均衡，若省略则默认为1，可设置多项，用逗号分隔</span><br><span class="line">proxy-read-only-backend-addresses = 从库地址:<span class="number">3306</span>@<span class="number">2</span>,主库地址:<span class="number">3306</span>@<span class="number">1</span></span><br></pre></td></tr></table></figure></p>]]></content>
-    
-    <summary type="html">
-    
-      心已经向家里飞去
-    
-    </summary>
-    
-      <category term="工作与技术" scheme="http://yoursite.com/categories/%E5%B7%A5%E4%BD%9C%E4%B8%8E%E6%8A%80%E6%9C%AF/"/>
-    
-    
-      <category term="mysql" scheme="http://yoursite.com/tags/mysql/"/>
-    
-      <category term="读写分离中间件" scheme="http://yoursite.com/tags/%E8%AF%BB%E5%86%99%E5%88%86%E7%A6%BB%E4%B8%AD%E9%97%B4%E4%BB%B6/"/>
     
   </entry>
   
