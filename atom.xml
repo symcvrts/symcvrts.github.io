@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2018-03-07T06:39:19.510Z</updated>
+  <updated>2018-03-07T08:17:00.090Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -15,6 +15,28 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>孤儿进程和僵尸进程</title>
+    <link href="http://yoursite.com/2018/03/07/%E5%AD%A4%E5%84%BF%E8%BF%9B%E7%A8%8B%E5%92%8C%E5%83%B5%E5%B0%B8%E8%BF%9B%E7%A8%8B/"/>
+    <id>http://yoursite.com/2018/03/07/孤儿进程和僵尸进程/</id>
+    <published>2018-03-07T08:07:35.000Z</published>
+    <updated>2018-03-07T08:17:00.090Z</updated>
+    
+    <content type="html"><![CDATA[<script src="\assets\js\APlayer.min.js"> </script><h2><span id="原理与定义">原理与定义</span></h2><p>首先要知道，<code>linux</code>有父进程和子进程这样的说法。那父进程如何创建子进程呢？<code>fork</code>。</p><p>子进程的进行和父进程的进行是异步的，但是父进程就像父母一样对自己的小孩也有一定的控制欲，这个控制欲就表现在如果子进程如果结束了，它释放了之前占用的资源、内存、文件等等，但是它还保留了一点信息：进程号PID、退出状态、运行时间等等。而这些残留信息是父进程通过<code>wait/waitpid</code>来获取，如果父进程一直不获取，那么子进程就会一直保留这些信息直到海枯石烂。</p><p><strong>孤儿进程</strong>：父进程退出，子进程继续进行，那么此时子进程就是孤儿进程。这个时候<code>init</code>进程（进程号为1）来作为子进程的监护人，发出<code>wait/waitpid</code>来完成状态收集工作；</p><p><strong>僵尸进程</strong>：父进程没有退出，但是它迟迟不发出<code>wait/waitpid</code>来回收子进程的资源。就好比儿子死了，当爹的不给收尸，这个儿子就成了孤魂野鬼成了僵尸。</p><h2><span id="影响与危害">影响与危害</span></h2><p>孤儿进程是没有什么大的危害，虽然他虽然没有了亲生父亲，但是也有<code>init</code>进程来通过循环的<code>wait()</code>来处理它的善后工作，所以迟早会把占用的资源释放掉。</p><p>甚至有的用户可以把进程弄成孤儿进程，以使之与用户会话脱钩，并转至后台运行。这一做法常应用于启动需要长时间运行的进程，也即守护进程。另外，<code>nohup</code>命令也可以完成这一操作。</p><p>但是僵尸进程不一样，要是父进程对子进程一直不使用<code>wait/waitpid</code>，那么<code>pid</code>就会不回收，可是系统内的pid总是是有限的，这样久而久之就是对pid的一个霸占，新的进程也无法生成，这就是僵尸进程的危害。</p><h2><span id="如何处理僵尸进程">如何处理僵尸进程</span></h2><p>僵尸进程是杀不死的，怎么办？杀他爹，把父进程杀掉了，那么这些僵尸就成了孤儿进程，然后再由init收养，最后入土为安。</p><p>查看当前服务器僵尸进程的方法：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ps -A -o stat,ppid,pid,cmd | grep -e <span class="string">'^[Zz]'</span></span><br></pre></td></tr></table></figure></p><p>如果服务器上的僵尸进程不是出自一个父进程之手，那么就用下面这个命令批量解决：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ps -A -o stat,ppid,pid,cmd | grep -e <span class="string">'^[Zz]'</span> | awk <span class="string">'&#123;print $2&#125;'</span> | xargs kill <span class="number">-9</span></span><br></pre></td></tr></table></figure></p><p>但是如果父进程是init进程，那么这样的僵尸进程怎么办？答案，不用刻意管他，相信<code>init</code>的能力，它迟早会被<code>init</code>回收的，成为僵尸进程也是暂时的。</p><h2><span id="参考资料">参考资料</span></h2><p><a href="https://zh.wikipedia.org/wiki/%E5%83%B5%E5%B0%B8%E8%BF%9B%E7%A8%8B" target="_blank" rel="noopener">https://zh.wikipedia.org/wiki/%E5%83%B5%E5%B0%B8%E8%BF%9B%E7%A8%8B</a><br><a href="https://zh.wikipedia.org/wiki/%E5%AD%A4%E5%84%BF%E8%BF%9B%E7%A8%8B" target="_blank" rel="noopener">https://zh.wikipedia.org/wiki/%E5%AD%A4%E5%84%BF%E8%BF%9B%E7%A8%8B</a><br><a href="http://blog.csdn.net/YuZhiHui_No1/article/details/53011390" target="_blank" rel="noopener">http://blog.csdn.net/YuZhiHui_No1/article/details/53011390</a></p>]]></content>
+    
+    <summary type="html">
+    
+      面试的时候，我在回答“僵尸进程和孤儿进程”的时候回答的很不好，于是下午就赶紧拿出来这块的资料来看，认真总结一下。
+    
+    </summary>
+    
+      <category term="工作与技术" scheme="http://yoursite.com/categories/%E5%B7%A5%E4%BD%9C%E4%B8%8E%E6%8A%80%E6%9C%AF/"/>
+    
+    
+      <category term="linux" scheme="http://yoursite.com/tags/linux/"/>
+    
+  </entry>
   
   <entry>
     <title>蚂蚁金服运维面试全纪录</title>
@@ -453,30 +475,6 @@
       <category term="linux" scheme="http://yoursite.com/tags/linux/"/>
     
       <category term="运维技术" scheme="http://yoursite.com/tags/%E8%BF%90%E7%BB%B4%E6%8A%80%E6%9C%AF/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>一个暗藏杀机的脚本</title>
-    <link href="http://yoursite.com/2018/02/11/%E4%B8%80%E4%B8%AA%E6%9A%97%E8%97%8F%E6%9D%80%E6%9C%BA%E7%9A%84%E8%84%9A%E6%9C%AC/"/>
-    <id>http://yoursite.com/2018/02/11/一个暗藏杀机的脚本/</id>
-    <published>2018-02-11T07:13:54.000Z</published>
-    <updated>2018-02-11T07:19:46.610Z</updated>
-    
-    <content type="html"><![CDATA[<script src="\assets\js\APlayer.min.js"> </script><h2><span id="脚本背景">脚本背景</span></h2><p>老总最近总是发现某台relay服务器的CPU值会突然彪很高，于是勒令几位工程师检查问题，但是工程师一时半会也想不到究竟是什么程序这么耗费CPU，于是就委托运维写一个脚本，具体要求是这样的：每隔一秒钟输出一下top命令的前十二行情况（其实就是配置总览和耗费cpu前五名程序情况），将这些情况保存到一个文件里，如果这个文件大于500MB，就把这个文件删除（为啥要删除？我也不知道），重新再生成一个文件用来保存top命令结果。</p><h2><span id="分析">分析</span></h2><p>由于脚本无法自己跳出运行并检查自己的大小，所以这个任务需要两个脚本，一个是单纯的把top命令重定向到一个文件（recordTOP.sh），另一个脚本就是一个if判断大小（checksize.sh）。再加上crontab每一天一检查（其实完全没必要，500MB足够top这个命令跑5天的），应该可以满足开发人员的需求。</p><h2><span id="脚本内容">脚本内容</span></h2><p>获取<code>top.txt</code>的脚本<code>recordTOP.sh</code>如下：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line">#written by ChenShuo @2016-8-15</span><br><span class="line">#Desription:每一秒钟记录一次top命令里占用cpu前五程序</span><br><span class="line"></span><br><span class="line"><span class="keyword">while</span> <span class="literal">true</span></span><br><span class="line">        <span class="keyword">do</span></span><br><span class="line">                $(top -bn <span class="number">1</span> | head <span class="number">-12</span> &gt;&gt; <span class="regexp">/root/</span>top.txt)</span><br><span class="line">                echo <span class="string">"------------------------------------------------"</span> &gt;&gt; <span class="regexp">/root/</span>top.txt</span><br><span class="line">                sleep <span class="number">1</span></span><br><span class="line">        done</span><br></pre></td></tr></table></figure></p><p>判断<code>top.txt</code>大小的脚本<code>checksize.sh</code>如下：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line">#written by ChenShuo @2016-8-15</span><br><span class="line">#Desription:当recordTOP.sh文件大小超过500MB的时候将会重新覆盖</span><br><span class="line">size=$(ls -l | grep top.txt |cut -d <span class="string">" "</span> -f <span class="number">5</span>)</span><br><span class="line"><span class="keyword">if</span> [[ $size -ge <span class="number">536870912</span> ]]</span><br><span class="line">        then</span><br><span class="line">                $(ps -ef|grep recordTOP.sh|grep -v grep|awk <span class="string">'&#123;print $2&#125;'</span>|xargs kill <span class="number">-9</span>)</span><br><span class="line">                $(rm -rf /root/top.txt)</span><br><span class="line">                bash /root/recordTOP.sh &amp;</span><br><span class="line">        fi</span><br></pre></td></tr></table></figure></p><p><code>crontab</code>这一步我就略掉不写了。</p><h2><span id="补充说明">补充说明</span></h2><p>1）top不可以直接重定向，如果是<code>top &gt; 123.txt</code>，它将会不断的导入，因为top就是一个实时更新的命令，所以这里要用<code>top -bn 1|head 12 &gt;&gt; /top.txt</code>；</p><p>2）shell脚本里调用shell，不能采用<code>$()</code>的方法了，因为<code>$()</code>是一个返回值，而.sh是一个不断进行的脚本，所以要用<code>bash +脚本名</code>的方式；</p><p>3）recordTOP.sh这个脚本是可以同时存在多个的，但是如果不小心后台启动多个，用checksize脚本ps -ef语句就会报错，因为获得到的不是一个数字，而是多个数字，没法一波kill掉。同理，直接调用checksize也会报错，因为没有ps -ef的值；</p><p>4）因为是要先关闭原来的top重定向脚本，所以才用了保守的ps -ef，然后kill的方式，这里不可以使用pkill，因为pkill是干掉整个类型程序，比如<code>pkill -9 java</code>，就是干掉所有java的进程。而在linux里，千万不可以<code>pkill -9 sh</code>，可以想象一下，这个命令的结果就是会从ssh上跳出，同时无法登陆，因为整个sh都被你杀死了。那么真的出现了这个结果怎么办？答曰：重启，重启能救命。</p><p>整个执行效果如下，可见top.txt文件是在不断的扩大，由于是测试，我把文件大小调整为20000字节，即大于20000字节就覆盖原文件，当文件大于20000字节的时候，就会把原来的top.txt删除，同时生成一个新的top.txt。<br><img src="/images/top5.png" alt="paradin"></p>]]></content>
-    
-    <summary type="html">
-    
-      shell里面调用shell，这是一个坑。
-    
-    </summary>
-    
-      <category term="工作与技术" scheme="http://yoursite.com/categories/%E5%B7%A5%E4%BD%9C%E4%B8%8E%E6%8A%80%E6%9C%AF/"/>
-    
-    
-      <category term="shell" scheme="http://yoursite.com/tags/shell/"/>
-    
-      <category term="top" scheme="http://yoursite.com/tags/top/"/>
     
   </entry>
   
