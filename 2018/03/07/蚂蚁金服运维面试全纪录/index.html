@@ -96,7 +96,7 @@
 <meta property="og:site_name" content="Chris Chan&#39;s BLOG">
 <meta property="og:description" content="呼~~不晓得会不会有下一轮...">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-03-07T06:17:38.488Z">
+<meta property="og:updated_time" content="2018-03-07T06:39:19.510Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="蚂蚁金服运维面试全纪录">
 <meta name="twitter:description" content="呼~~不晓得会不会有下一轮...">
@@ -425,7 +425,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  1,104
+                  1,121
                 </span>
               
 
@@ -472,9 +472,9 @@
 <p>2）VPC网络有哪些好处？<br>我就答出来更加安全…面试官说其他方面呢，我就不知道了。<br>【事后补充】VPC网路的灵活性更高，可以自由定义网段划分、IP地址和路由网络。</p>
 <p>3)一个vpc的服务器如何与外网交互？<br>我说可以改写路由或者通过<code>iptables</code>转发。</p>
 <p>4）iptables里PREROUTING和POSTROUTING都是啥？<br><code>PREROUTING</code>处理刚到达本机并在路由转发前的数据包；<code>POSTROUTING</code>处理即将离开本机的数据包。</p>
-<p>5）问：RDS在什么操作下会CPU飙升，任举一例？<br>答：在数据同步的时候会飙升。</p>
+<p>5）问：RDS在什么操作下会CPU飙升，任举一例？<br>答：在我实际工作中，比较明显的是在数据同步的时候会飙升。</p>
 <p>6）RDS为什么会在DTS的时候有飙升的现象？<br>这个我答的不好，有点东拉西扯…（尴尬）</p>
-<p>7）mysql备份的时候使用过什么参数？<br>答：<code>--skip-opt</code> 防止运行中的MYSQL锁库<br>加速数据备份的参数是什么？<br><code>-q</code> 提高导出性能<br><code>-e</code> 提高导入性能，使用包括几个VALUES列表的多行INSERT语法；<br><code>--max_allowed_packet=XXX</code> 客户端/服务器之间通信的缓存区的最大大小；<br><code>--net_buffer_length=XXX</code> TCP/IP和套接字通信缓冲区大小，创建长度达到<code>net_buffer_length</code>的行；</p>
+<p>7）mysql备份的时候使用过什么参数？<br>答：<code>--skip-opt</code> 防止运行中的MYSQL锁库<br>加速数据备份的参数是什么？<br><code>-q</code> 提高导出性能<br><code>-e</code> 提高导入性能，使用包括几个<code>VALUES</code>列表的多行<code>INSERT</code>语法；<br><code>--max_allowed_packet=XXX</code> 客户端/服务器之间通信的缓存区的最大大小；<br><code>--net_buffer_length=XXX</code> TCP/IP和套接字通信缓冲区大小，创建长度达到<code>net_buffer_length</code>的行；</p>
 <p>注意！<code>max_allowed_packet</code>和<code>net_buffer_length</code>在mysql里有参数值，不能超过参数值！<br>查看方法：<code>show variables like &#39;max_allowed_packet&#39;;</code></p>
 <p>8）cache和buffer有什么区别？<br><code>cache</code>是缓存，弥补高速设备与低速设备的鸿沟引入的中间层，达到数据快取的目的；<br><code>buffer</code>是缓冲区，用户流量整形，把大量的小的io整理一个平稳的大io，减少磁盘响应次数；</p>
 <p>9）他俩的调用有什么区别？<br>我问是要说“块读取”什么的么，面试官说是。我就蒙说cache是块读取，buffer我不清楚…（尴尬 again）<br>【事后补充】</p>
@@ -482,7 +482,7 @@
 <p>11）为什么time_wait需要等待两个msl?1.99行不行？2.01行不行？<br>我当时说防止上一次连接中的包，迷路后重新出现，影响新连接。面试官好像觉得不是很满意…（尴尬 again）<br>【事后补充】</p>
 <p>12）说出一个你使用过的python库。<br>我说我前两天用<code>matpoltlib</code>画图，就谈了谈这个画图的库。</p>
 <p>13）python装饰器了解么？<br>没怎么什么了解，没敢答，怕被问死。</p>
-<p>14）僵尸进程和孤儿进程，了解么？<br>马蛋，这个让我给说反了…(闹心啊啊啊啊啊啊啊)<br>孤儿进程：父进程退出，而它的一个或者多个子进程还在运行，这些子进程就叫孤儿进程，孤儿进程被init进程收养，由init进程对它们完成状态收集工作；<br>僵尸进程：一个进程用fork创建了子进程，然后这个子进程退出了，而父进程并没有调用wait或者waitpid去获取子进程的状态信息，那么这个子进程的进程描述符还在系统中，这种进程叫僵尸进程；</p>
+<p>14）僵尸进程和孤儿进程，了解么？<br>马蛋，这个让我给说反了…(闹心啊啊啊啊啊啊啊)<br>【事后补充】孤儿进程：父进程退出，而它的一个或者多个子进程还在运行，这些子进程就叫孤儿进程，孤儿进程被init进程收养，由init进程对它们完成状态收集工作；<br>僵尸进程：一个进程用fork创建了子进程，然后这个子进程退出了，而父进程并没有调用wait或者waitpid去获取子进程的状态信息，那么这个子进程的进程描述符还在系统中，这种进程叫僵尸进程；</p>
 <p>孤儿进程不怕，由于孤儿虽然没有父母，但是有民政局（init进程）收养，孤儿进程退出后也有init做一切善后工作；而僵尸进程会一直霸占其PID号，但是系统总共的PID是有限的，这样就会让可用的PID越来越少，所以僵尸进程是要避免的。</p>
 
       
