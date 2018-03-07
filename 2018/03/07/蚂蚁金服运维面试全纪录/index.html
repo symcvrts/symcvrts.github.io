@@ -75,7 +75,7 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="大牛之路," />
 
 
 
@@ -88,17 +88,18 @@
 
 
 
-<meta name="description" content="早上接到蚂蚁金服的运维面试电话，有点突然袭击，下面是整个的面试记录。 首先，面试官先向我讲述了一下他们平时运维的工作内容，然后结合我的简历开始提问。 1）都用过我们的什么产品？老老实实，正常回答工作中用到的阿里云产品 2）问：RDS在什么操作下会CPU飙升？答：在数据同步的时候会飙升 3）RDS连接池的问题 4）mysql备份的时候使用过什么参数？答：–skip-opt 防止运行中的MYSQL锁">
+<meta name="description" content="呼~~不晓得会不会有下一轮...">
+<meta name="keywords" content="大牛之路">
 <meta property="og:type" content="article">
 <meta property="og:title" content="蚂蚁金服运维面试全纪录">
 <meta property="og:url" content="http://yoursite.com/2018/03/07/蚂蚁金服运维面试全纪录/index.html">
 <meta property="og:site_name" content="Chris Chan&#39;s BLOG">
-<meta property="og:description" content="早上接到蚂蚁金服的运维面试电话，有点突然袭击，下面是整个的面试记录。 首先，面试官先向我讲述了一下他们平时运维的工作内容，然后结合我的简历开始提问。 1）都用过我们的什么产品？老老实实，正常回答工作中用到的阿里云产品 2）问：RDS在什么操作下会CPU飙升？答：在数据同步的时候会飙升 3）RDS连接池的问题 4）mysql备份的时候使用过什么参数？答：–skip-opt 防止运行中的MYSQL锁">
+<meta property="og:description" content="呼~~不晓得会不会有下一轮...">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-03-07T04:36:18.079Z">
+<meta property="og:updated_time" content="2018-03-07T04:46:32.854Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="蚂蚁金服运维面试全纪录">
-<meta name="twitter:description" content="早上接到蚂蚁金服的运维面试电话，有点突然袭击，下面是整个的面试记录。 首先，面试官先向我讲述了一下他们平时运维的工作内容，然后结合我的简历开始提问。 1）都用过我们的什么产品？老老实实，正常回答工作中用到的阿里云产品 2）问：RDS在什么操作下会CPU飙升？答：在数据同步的时候会飙升 3）RDS连接池的问题 4）mysql备份的时候使用过什么参数？答：–skip-opt 防止运行中的MYSQL锁">
+<meta name="twitter:description" content="呼~~不晓得会不会有下一轮...">
 
 
 
@@ -357,6 +358,28 @@
           </span>
 
           
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/工作与技术/" itemprop="url" rel="index">
+                    <span itemprop="name">工作与技术</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
 
           
             
@@ -402,7 +425,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  613
+                  669
                 </span>
               
 
@@ -425,6 +448,10 @@
           
 
           
+              <div class="post-description">
+                  呼~~不晓得会不会有下一轮...
+              </div>
+          
 
         </div>
       </header>
@@ -441,18 +468,18 @@
       
         <script src="\assets\js\APlayer.min.js"> </script><p>早上接到蚂蚁金服的运维面试电话，有点突然袭击，下面是整个的面试记录。</p>
 <p>首先，面试官先向我讲述了一下他们平时运维的工作内容，然后结合我的简历开始提问。</p>
-<p>1）都用过我们的什么产品？<br>老老实实，正常回答工作中用到的阿里云产品</p>
-<p>2）问：RDS在什么操作下会CPU飙升？<br>答：在数据同步的时候会飙升</p>
-<p>3）RDS连接池的问题</p>
-<p>4）mysql备份的时候使用过什么参数？<br>答：–skip-opt 防止运行中的MYSQL锁库<br>加速数据备份的参数是什么？<br>-q 提高导出性能<br>-e 提高导入性能，使用包括几个VALUES列表的多行INSERT语法；<br>–max_allowed_packet=XXX 客户端/服务器之间通信的缓存区的最大大小；<br>–net_buffer_length=XXX TCP/IP和套接字通信缓冲区大小，创建长度达到net_buffer_length的行；</p>
-<p>注意！max_allowed_packet和net_buffer_length在mysql里有参数值，不能超过参数值！<br>show variables like ‘max_allowed_packet’;</p>
-<p>5）cache和 buffer有什么区别？<br>cache是缓存，弥补高速设备与低速设备的鸿沟引入的中间层，达到数据快取的目的；<br>buffer是缓冲区，用户流量整形，把大量的小的io整理一个平稳的大io，减少磁盘响应次数；</p>
+<p>1）都用过我们的什么产品？<br>老老实实，正常回答工作中所用到的阿里云产品和使用情景。</p>
+<p>2）问：RDS在什么操作下会CPU飙升，任举一例？<br>答：在数据同步的时候会飙升。</p>
+<p>3）RDS为什么会在DTS的时候有飙升的现象？<br>这个我答的不好…</p>
+<p>4）mysql备份的时候使用过什么参数？<br>答：<code>--skip-opt</code> 防止运行中的MYSQL锁库<br>加速数据备份的参数是什么？<br><code>-q</code> 提高导出性能<br><code>-e</code> 提高导入性能，使用包括几个VALUES列表的多行INSERT语法；<br><code>--max_allowed_packet=XXX</code> 客户端/服务器之间通信的缓存区的最大大小；<br><code>--net_buffer_length=XXX</code> TCP/IP和套接字通信缓冲区大小，创建长度达到<code>net_buffer_length</code>的行；</p>
+<p>注意！<code>max_allowed_packet</code>和<code>net_buffer_length</code>在mysql里有参数值，不能超过参数值！<br>查看方法：<code>show variables like &#39;max_allowed_packet&#39;;</code></p>
+<p>5）cache和buffer有什么区别？<br><code>cache</code>是缓存，弥补高速设备与低速设备的鸿沟引入的中间层，达到数据快取的目的；<br><code>buffer</code>是缓冲区，用户流量整形，把大量的小的io整理一个平稳的大io，减少磁盘响应次数；</p>
 <p>6）他俩的调用有什么区别？<br>没答出来…</p>
-<p>7）谈一谈time_wait和close_wait，各自在什么情况下出现？<br>我说time_wait和close_wait都是出现在“四次挥手”的环节里，time_wait是服务器接收到客户端发来的断开TCP连接的请求，并且服务器发送确认断开的包给客户端，此时服务器处于time_wait状态，如果服务器等待两个msl的话，就会默认断开连接，如果想修改msl可以通过修改/etc/systl.conf文件；<br>close_wait是客户端已经发送了断开TCP请求，但是服务器端没有接收到，这个资源就一直被程序霸占，</p>
+<p>7）谈一谈time_wait和close_wait，各自在什么情况下出现？<br><code>time_wait</code>和<code>close_wai</code>t都是出现在“四次挥手”的环节里，<code>time_wait</code>是服务器接收到客户端发来的断开TCP连接的请求，并且服务器发送确认断开的包给客户端，此时服务器处于<code>time_wait</code>状态，如果服务器等待两个<code>msl</code>的话，就会默认断开连接，如果想修改<code>msl</code>可以通过修改<code>/etc/systl.conf</code>文件；<br><code>close_wait</code>是客户端已经发送了断开TCP请求，但是服务器端没有接收到，这个资源就一直被程序霸占，</p>
 <p>8）为什么time_wait需要等待两个msl?1.99行不行？2.01行不行？<br>我当时说防止上一次连接中的包，迷路后重新出现，影响新连接。面试官好像觉得不是很满意…</p>
-<p>9）说出一个你使用过的python库。</p>
+<p>9）说出一个你使用过的python库。<br>我说我前两天用matpoltlib画图，就谈了谈这个画图的库。</p>
 <p>10）python装饰器了解么？<br>没怎么什么了解，没敢答，怕被问死</p>
-<p>11）僵尸进程和孤儿进程，了解么？</p>
+<p>11）僵尸进程和孤儿进程，了解么？<br>马蛋，这个让我给说反了…</p>
 
       
     </div>
@@ -532,6 +559,12 @@
 			
 		</div>
 	
+      
+        <div class="post-tags">
+          
+            <a href="/tags/大牛之路/" rel="tag"><i class="fa fa-tag"></i> 大牛之路</a>
+          
+        </div>
       
 
       
@@ -867,7 +900,7 @@ show_date_time();
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">博客全站共93.7k字</span>
+  <span class="post-count">博客全站共93.8k字</span>
 </div>
         
 
