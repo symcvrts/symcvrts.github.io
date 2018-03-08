@@ -96,12 +96,13 @@
 <meta property="og:site_name" content="Chris Chan&#39;s BLOG">
 <meta property="og:description" content="面试的时候，我在回答“僵尸进程和孤儿进程”的时候回答的很不好，于是下午就赶紧拿出来这块的资料来看，认真总结一下。">
 <meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://yoursite.com/images/jiangshi.png">
 <meta property="og:image" content="http://yoursite.com/images/perfume.jpg">
-<meta property="og:updated_time" content="2018-03-07T11:26:22.589Z">
+<meta property="og:updated_time" content="2018-03-08T14:55:08.182Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="孤儿进程和僵尸进程">
 <meta name="twitter:description" content="面试的时候，我在回答“僵尸进程和孤儿进程”的时候回答的很不好，于是下午就赶紧拿出来这块的资料来看，认真总结一下。">
-<meta name="twitter:image" content="http://yoursite.com/images/perfume.jpg">
+<meta name="twitter:image" content="http://yoursite.com/images/jiangshi.png">
 
 
 
@@ -470,7 +471,7 @@
       
         <script src="\assets\js\APlayer.min.js"> </script><h2><span id="原理与定义">原理与定义</span></h2><p>首先要知道，<code>linux</code>有父进程和子进程这样的说法。那父进程如何创建子进程呢？<code>fork</code>。</p>
 <p>子进程的进行和父进程的进行是异步的，但是父进程就像父母一样对自己的小孩也有一定的控制欲，这个控制欲就表现在如果子进程如果结束了，它释放了之前占用的资源、内存、文件等等，但是它还保留了一点信息：进程号PID、退出状态、运行时间等等。而这些残留信息是父进程通过<code>wait/waitpid</code>来获取，如果父进程一直不获取，那么子进程就会一直保留这些信息直到海枯石烂。</p>
-<p><strong>孤儿进程</strong>：父进程退出，子进程继续进行，那么此时子进程就是孤儿进程。这个时候<code>init</code>进程（进程号为1）来作为子进程的监护人，发出<code>wait/waitpid</code>来完成状态收集工作；</p>
+<p><strong>孤儿进程</strong>：父进程退出，子进程继续进行，那么此时子进程就是孤儿进程。这个时候<code>init</code>进程（进程号为1）来作为子进程的监护人，发出<code>wait/waitpid</code>来完成状态收集工作；<br><img src="/images/jiangshi.png" alt="paradin" title="这个nginx的worker process就成了孤儿进程"></p>
 <p><strong>僵尸进程</strong>：父进程没有退出，但是它迟迟不发出<code>wait/waitpid</code>来回收子进程的资源。就好比儿子死了，当爹的不给收尸，这个儿子就成了孤魂野鬼成了僵尸。</p>
 <h2><span id="影响与危害">影响与危害</span></h2><p>孤儿进程是没有什么大的危害，虽然他虽然没有了亲生父亲，但是也有<code>init</code>进程来通过循环的<code>wait()</code>来处理它的善后工作，所以迟早会把占用的资源释放掉。</p>
 <p>甚至有的用户可以把进程弄成孤儿进程，以使之与用户会话脱钩，并转至后台运行。这一做法常应用于启动需要长时间运行的进程，也即守护进程。另外，<code>nohup</code>命令也可以完成这一操作。</p>
