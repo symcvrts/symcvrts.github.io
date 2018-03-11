@@ -96,7 +96,7 @@
 <meta property="og:site_name" content="Chris Chan&#39;s BLOG">
 <meta property="og:description" content="HTTP 是一个无状态协议，这意味着每个请求都是独立的，Keep-Alive 没能改变这个结果。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-03-11T05:48:13.807Z">
+<meta property="og:updated_time" content="2018-03-11T06:08:53.053Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="关于HTTP-Alive应该知道的事">
 <meta name="twitter:description" content="HTTP 是一个无状态协议，这意味着每个请求都是独立的，Keep-Alive 没能改变这个结果。">
@@ -425,7 +425,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  1,023
+                  1,042
                 </span>
               
 
@@ -472,7 +472,7 @@
 <p><code>Keep-alive</code>在<code>http 1.1</code>版本里是默认开启的，只有加入<code>Connection: close</code>才会关闭，现在大部分浏览器都是使用<code>http 1.1</code>协议，所以说在客户端已经是默认发起<code>keep-alive</code>的连接请求。但是能否会完成一个完整的<code>keep-alive</code>还要看服务器端的具体配置情况。</p>
 <p>使用长连接之后，客户端、服务端怎么知道本次传输结束呢？两部分：1. 判断传输数据是否达到了<code>Content-Length</code>指示的大小，这个是最简单的最傻瓜的，普遍应用于静态的图片或者页面；2. 往往动态生成的文件没有<code>Content-Length</code>，它是分块传输<code>（chunked）</code>，这时候怎么办呢？就要根据<code>chunked</code>编码来判断，<code>chunked</code>编码的数据在最后有一个空<code>chunked</code>块，表明本次传输数据结束，这种情况更多应用于动态的页面。</p>
 <h2><span id="进一步的说chunked">进一步的说chunked</span></h2><p>HTTP请求报文的格式是这样的：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;method&gt; &lt;request-URL&gt; &lt;version&gt;	#状态行</span><br><span class="line">&lt;headers&gt;	#请求头</span><br><span class="line"></span><br><span class="line">&lt;entity-body&gt;	#消息主体</span><br></pre></td></tr></table></figure></p>
-<p>其中在请求头的地方有一个叫<code>reansfer-encoding</code>的字段，它用来表示<code>http</code>报文的传输格式，这个字段的取值有很多，但是真正有意义的只有一个—-<code>chunked</code>。</p>
+<p>其中在请求头的地方有一个叫<code>Content-Length</code>的字段，如果没有这个字段那么就会有叫<code>Transfer-encoding</code>的字段，它用来表示<code>http</code>报文的传输格式，这个字段的取值有很多，但是真正有意义的只有一个—<code>chunked</code>。</p>
 <p>如果一个<code>HTTP</code>消息（请求消息或应答消息）的<code>Transfer-Encoding</code>消息头的值为<code>chunked</code>，那么，消息体由数量未定的块组成，并以最后一个大小为0的块为结束。</p>
 <p>每一个非空的块都以该块包含数据的字节数（字节数以十六进制表示）开始，跟随一个<code>CRLF</code>（回车及换行），然后是数据本身，最后块<code>CRLF</code>结束。在一些实现中，块大小和<code>CRLF</code>之间填充有白空格（0x20）。</p>
 <p>最后一块是单行，由块大小（0）、一些可选的填充白空格、以及<code>CRLF</code>组成。最后一块不再包含任何数据，但是可以发送可选的尾部，包括消息头字段。消息最后以<code>CRLF</code>结尾。</p>
