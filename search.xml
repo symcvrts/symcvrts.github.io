@@ -1,6 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[安装vim8.0的过程]]></title>
+    <url>%2F2018%2F03%2F14%2F%E5%AE%89%E8%A3%85vim8-0%E7%9A%84%E8%BF%87%E7%A8%8B%2F</url>
+    <content type="text"><![CDATA[1.先卸载老的vim 1yum remove vim-* -y 2.下载第三方yum源 1wget -P /etc/yum.repos.d/ https://copr.fedorainfracloud.org/coprs/mcepl/vim8/repo/epel-7/mcepl-vim8-epel-7.repo 3.安装vim 1yum -y install vim-enhanced 4.验证vim版本 12345rpm -qa |grep vimvim-enhanced-8.0.0704-1.1.26.el7.centos.x86_64vim-common-8.0.0704-1.1.26.el7.centos.x86_64vim-minimal-8.0.0704-1.1.26.el7.centos.x86_64vim-filesystem-8.0.0704-1.1.26.el7.centos.x86_64]]></content>
+      <categories>
+        <category>工作与技术</category>
+      </categories>
+      <tags>
+        <tag>运维技术</tag>
+        <tag>编辑器</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[使用expect来实现远程登录ssh]]></title>
     <url>%2F2018%2F03%2F14%2F%E4%BD%BF%E7%94%A8expect%E6%9D%A5%E5%AE%9E%E7%8E%B0%E8%BF%9C%E7%A8%8B%E7%99%BB%E5%BD%95ssh%2F</url>
     <content type="text"><![CDATA[先说说shebang我们在写一个shell脚本时，总是习惯在最前面加上一行#!/bin/bash,这个就是脚本的shebang,可以把它理解成是一种解释器。至于为什么叫这么个奇怪的名字，C语言和Unix的开发者Dennis Ritchie称它为可能是类似于”hash-bang”的英国风描述性文字； 贴一段wiki上的解释: 在计算机科学中，shebang是一个由井号和叹号构成的字符串行，其出现在文本文件的第一行的前两个字符。 在文件中存在shebang的情况下，类unix操作系统的程序载入器会分析shebang后的内容，将这些内容作为解释器指令，并调用该指令，并将载有shebang的文件路径作为该解释器的参数。 简单的说，它指示了此脚本运行时的解释器，所以，使用文件名直接执行shell脚本时，必须带上这个shebang; 此外，我们还可以在shebang后面直接附加选项，执行时默认使用选项执行； 比如test.sh的shebang为#!/bin/sh -x，那我们执行脚本时: 1./test.sh hello 相当于： 1bin/sh -x ./test.sh hello; 而expect编写的脚本，需要用到的shebang为/usr/bin/expect; 需要注意的是：在指定脚本解释器来执行脚本时，shebang会被指定的脚本解释器覆盖，即优先使用指定的脚本解释器来执行脚本（习惯性地用sh ./test.sh却提示command not found） 实例脚本expect的具体语法我这里就不说了，看一下下面的参考资料就好了。其实说来说去，就是根据命令栏上的反馈来输入对应的内容，举一个ssh登陆的例子。如图: 从这个我们非常熟悉的ssh登陆的过程就看到，在登陆的时候，页面会返回几个交互的问题，而我们就可以针对这几个问题的关键字来输入答案。最后也根据“Welcome”这个关键字认为我们已经登陆成功了，这样就直接在连接的服务器里操作命令。 于是根据这个思路，来写一个远程ssh到A机器上的脚本： 1234567891011121314151617#!/usr/bin/expect -fset timeout 30 #设定超时时间是30秒，如果是-1那就是永不超时spawn ssh root@A服务器IP地址 #这里开始ssh连接到目标服务器上expect &#123; "*(yes/no)?" &#123; #如果是第一次连接，那么命令栏里就会出现(yes/no)的字样 send "yes\r" #此时匹配yes expect "*password:" &#123;send "服务器密码\r"&#125; #如果命令栏出现了password的字样，直接填写密码 &#125; "*password:" &#123;send "服务器密码\r"&#125; #如果不是第一次连接，那么就会直接出现password，所以可以直接填写密码&#125;expect "*Welcome*" #连接成功就会出现welcome的字样send "echo '我就是你的爹地' &gt;&gt; /tmp/123321.txt\r" #此时执行第一个命令send "df -h\r" #执行第二个命令send "cp /tmp/123321.txt /tmp/123123.txt\r" #执行第三个命令interact #脚本fork的子进程会将操作权交给用户，允许用户与当前A服务器的shell进行交互 参考资料http://blog.sctux.com/?p=343http://www.zyy1217.com/2017/07/02/linux%20expect%E8%AF%A6%E8%A7%A3/https://github.com/jiangxianli/SSHAutoLoginhttps://peiqiang.net/2014/05/10/ssh-auto-login.htmlhttps://www.jianshu.com/p/9bee08dc3dca]]></content>
