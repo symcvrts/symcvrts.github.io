@@ -75,7 +75,7 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="运维技术,shell," />
 
 
 
@@ -88,18 +88,19 @@
 
 
 
-<meta name="description" content="zsh本体的安装先用chsh -l查看当前的bash情况，如下：    123456789   [root@zabbix ~]# chsh -l/bin/sh/bin/bash/sbin/nologin/bin/dash/bin/tcsh/bin/csh/usr/bin/tmux[root@zabbix ~]# 如果是centos的话，使用yum install -y zsh来安装zsh，装完了">
+<meta name="description" content="生命在于折腾...">
+<meta name="keywords" content="运维技术,shell">
 <meta property="og:type" content="article">
 <meta property="og:title" content="centos 7里安装zsh来提升shell的高逼格">
 <meta property="og:url" content="http://yoursite.com/2018/03/15/centos-7里安装zsh来提升shell的高逼格/index.html">
 <meta property="og:site_name" content="Chris Chan&#39;s BLOG">
-<meta property="og:description" content="zsh本体的安装先用chsh -l查看当前的bash情况，如下：    123456789   [root@zabbix ~]# chsh -l/bin/sh/bin/bash/sbin/nologin/bin/dash/bin/tcsh/bin/csh/usr/bin/tmux[root@zabbix ~]# 如果是centos的话，使用yum install -y zsh来安装zsh，装完了">
+<meta property="og:description" content="生命在于折腾...">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://yoursite.com/images/zshautojump.png">
-<meta property="og:updated_time" content="2018-03-15T13:58:26.897Z">
+<meta property="og:updated_time" content="2018-03-15T14:03:35.846Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="centos 7里安装zsh来提升shell的高逼格">
-<meta name="twitter:description" content="zsh本体的安装先用chsh -l查看当前的bash情况，如下：    123456789   [root@zabbix ~]# chsh -l/bin/sh/bin/bash/sbin/nologin/bin/dash/bin/tcsh/bin/csh/usr/bin/tmux[root@zabbix ~]# 如果是centos的话，使用yum install -y zsh来安装zsh，装完了">
+<meta name="twitter:description" content="生命在于折腾...">
 <meta name="twitter:image" content="http://yoursite.com/images/zshautojump.png">
 
 
@@ -359,6 +360,28 @@
           </span>
 
           
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/工作与技术/" itemprop="url" rel="index">
+                    <span itemprop="name">工作与技术</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
 
           
             
@@ -404,7 +427,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  826
+                  827
                 </span>
               
 
@@ -427,6 +450,10 @@
           
 
           
+              <div class="post-description">
+                  生命在于折腾...
+              </div>
+          
 
         </div>
       </header>
@@ -442,9 +469,8 @@
 
       
         <script src="\assets\js\APlayer.min.js"> </script><h2><span id="zsh本体的安装">zsh本体的安装</span></h2><p>先用<code>chsh -l</code>查看当前的bash情况，如下：<br>    <figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">   [root@zabbix ~]# chsh -l</span><br><span class="line">/bin/sh</span><br><span class="line">/bin/bash</span><br><span class="line">/sbin/nologin</span><br><span class="line">/bin/dash</span><br><span class="line">/bin/tcsh</span><br><span class="line">/bin/csh</span><br><span class="line">/usr/bin/tmux</span><br><span class="line">[root@zabbix ~]#</span><br></pre></td></tr></table></figure></p>
-<p>如果是centos的话，使用<code>yum install -y zsh</code>来安装zsh，装完了zsh然后就是装<code>oh my zsh</code>，使用<code>wget</code>方法安装</p>
-<pre><code>wget https://github.com/robbyrussell/oh-my-zsh/raw/master/tools/install.sh -O - | sh
-</code></pre><p>再使用<code>which zsh</code>查看安装的zsh在<code>/usr/bin/zsh</code>，这个时候使用<code>chsh -s /usr/bin/zsh</code>，出现了<code>Shell changed.</code>这样就切换到了zsh界面，需要logout退出连接重进。</p>
+<p>如果是centos的话，使用<code>yum install -y zsh</code>来安装zsh，装完了zsh然后就是装<code>oh my zsh</code>，使用<code>wget</code>方法安装：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wget https:<span class="comment">//github.com/robbyrussell/oh-my-zsh/raw/master/tools/install.sh -O - | sh</span></span><br></pre></td></tr></table></figure></p>
+<p>再使用<code>which zsh</code>查看安装的zsh在<code>/usr/bin/zsh</code>，这个时候使用<code>chsh -s /usr/bin/zsh</code>，出现了<code>Shell changed.</code>这样就切换到了zsh界面，需要logout退出连接重进。</p>
 <p>重新连接就会发现bash界面就变了，原本是路径的地方变成了一个小图标。界面主题是可以变化的，比如我个人比较喜欢<code>af-magic</code>这个模板，于是乎就把/root/.zshrc里的<code>ZSH_THEME=&quot;robbyrussell&quot;</code>改成<code>ZSH_THEME=&quot;af-magic&quot;</code>，保存文件，再一次退出连接重新进入就能看见模板变化了。</p>
 <h2><span id="autojump插件安装">autojump插件安装</span></h2><p>autojump这个插件安装之后，zsh会自动记录你访问过的目录，通过<code>j + 目录名</code>可以直接进行目录跳转，而且目录名支持模糊匹配和自动补全，例如你访问过<code>hadoop-1.0.0</code>目录，输入<code>j hado</code>即可正确跳转。<code>j –s</code>可以看你的历史路径库，安装方法如下：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git clone git:<span class="comment">//github.com/joelthelion/autojump.git</span></span><br></pre></td></tr></table></figure></p>
 <p>然后在autojump目录里执行<code>./install.sh</code>，此时屏幕会出现如下的显示：<br><img src="/images/zshautojump.png" alt="paradin"></p>
@@ -532,6 +558,14 @@
 			
 		</div>
 	
+      
+        <div class="post-tags">
+          
+            <a href="/tags/运维技术/" rel="tag"><i class="fa fa-tag"></i> 运维技术</a>
+          
+            <a href="/tags/shell/" rel="tag"><i class="fa fa-tag"></i> shell</a>
+          
+        </div>
       
 
       

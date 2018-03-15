@@ -359,6 +359,28 @@
           </span>
 
           
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/工作与技术/" itemprop="url" rel="index">
+                    <span itemprop="name">工作与技术</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
 
           
             
@@ -404,7 +426,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  826
+                  827
                 </span>
               
 
@@ -442,21 +464,14 @@
 
       
         
-          
-            <script src="\assets\js\APlayer.min.js"> </script><h2><span id="zsh本体的安装">zsh本体的安装</span></h2><p>先用<code>chsh -l</code>查看当前的bash情况，如下：<br>    <figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">   [root@zabbix ~]# chsh -l</span><br><span class="line">/bin/sh</span><br><span class="line">/bin/bash</span><br><span class="line">/sbin/nologin</span><br><span class="line">/bin/dash</span><br><span class="line">/bin/tcsh</span><br><span class="line">/bin/csh</span><br><span class="line">/usr/bin/tmux</span><br><span class="line">[root@zabbix ~]#</span><br></pre></td></tr></table></figure></p>
-<p>如果是centos的话，使用<code>yum install -y zsh</code>来安装zsh，装完了zsh然后就是装<code>oh my zsh</code>，使用<code>wget</code>方法安装</p>
-<pre><code>wget https://github.com/robbyrussell/oh-my-zsh/raw/master/tools/install.sh -O - | sh
-</code></pre><p>再使用<code>which zsh</code>查看安装的zsh在<code>/usr/bin/zsh</code>，这个时候使用<code>chsh -s /usr/bin/zsh</code>，出现了<code>Shell changed.</code>这样就切换到了zsh界面，需要logout退出连接重进。</p>
-<p>重新连接就会发现bash界面就变了，原本是路径的地方变成了一个小图标。界面主题是可以变化的，比如我个人比较喜欢<code>af-magic</code>这个模板，于是乎就把/root/.zshrc里的<code>ZSH_THEME=&quot;robbyrussell&quot;</code>改成<code>ZSH_THEME=&quot;af-magic&quot;</code>，保存文件，再一次退出连接重新进入就能看见模板变化了。</p>
-<h2><span id="autojump插件安装">autojump插件安装</span></h2><p>autojump这个插件安装之后，zsh会自动记录你访问过的目录，通过<code>j + 目录名</code>可以直接进行目录跳转，而且目录名支持模糊匹配和自动补全，例如你访问过<code>hadoop-1.0.0</code>目录，输入<code>j hado</code>即可正确跳转。<code>j –s</code>可以看你的历史路径库，安装方法如下：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git clone git:<span class="comment">//github.com/joelthelion/autojump.git</span></span><br></pre></td></tr></table></figure></p>
-<p>然后在autojump目录里执行<code>./install.sh</code>，此时屏幕会出现如下的显示：<br><img src="/images/zshautojump.png" alt="paradin"></p>
-<p>把上面那个<code>[[ -s /root/.autojump/etc/profile.d/autojump.sh ]] &amp;&amp; source /root/.autojump/etc/profile.d/autojump.sh autoload -U compinit &amp;&amp; compinit -u复</code>制到<code>/root/.zshrc</code>的文件里，最好复制在<code>source $ZSH/oh-my-zsh.sh</code>这句话上面，保存之后<code>source ~/.zshrc</code>即可。</p>
-<h2><span id="zsh-syntax-highlighting插件安装">zsh-syntax-highlighting插件安装</span></h2><p>这个插件安装之后主要效果就是命令高亮，如果是错误的命令，颜色是红色，正确的命令是绿色的，安装方法如下：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">cd .oh-my-zsh/plugins</span><br><span class="line">yum install -y git  #如果已经安装了git就不用执行的</span><br><span class="line">git clone git:<span class="comment">//github.com/zsh-users/zsh-syntax-highlighting.git</span></span><br><span class="line">source /root/.oh-my-zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh添加到 .zshrc 的最后面</span><br><span class="line">source ~<span class="regexp">/.zshrc</span></span><br></pre></td></tr></table></figure></p>
-<p>效果立竿见影。</p>
-<h2><span id="尾声">尾声</span></h2><p>至此，你现在的zsh应该具备如下几个特性：<br>1、各种补全：路径补全、命令补全，命令参数补全，插件内容补全等等。触发补全只需要按一下或两下tab键，补全项可以使用ctrl+n/p/f/b上下左右切换。比如你想杀掉java的进程，只需要输入kill java + tab键，如果只有一个java进程，zsh会自动替换为进程的pid，如果有多个则会出现选择项供你选择。ssh + 空格 + 两个tab键，zsh会列出所有访问过的主机和用户名进行补全；<br>2、即使你没有安装autojump，只要输入d，就会列出你在这个回话中访问的目录，输入前面的序号，就可以直接跳转；<br>3、可以忽略cd命令, 输入..或者…和当前目录名都可以跳转；<br>当然，除了上面几点，zsh还有很多丰富的插件可以使用，这就需要继续的探索了…</p>
-<h2><span id="参考资料">参考资料</span></h2><p><a href="https://github.com/robbyrussell/oh-my-zsh" target="_blank" rel="noopener">https://github.com/robbyrussell/oh-my-zsh</a><br><a href="http://macshuo.com/?p=676" target="_blank" rel="noopener">http://macshuo.com/?p=676</a></p>
-
-          
+          生命在于折腾...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2018/03/15/centos-7里安装zsh来提升shell的高逼格/">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
