@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2018-03-14T14:47:20.609Z</updated>
+  <updated>2018-03-15T13:58:26.897Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -15,6 +15,27 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>centos 7里安装zsh来提升shell的高逼格</title>
+    <link href="http://yoursite.com/2018/03/15/centos-7%E9%87%8C%E5%AE%89%E8%A3%85zsh%E6%9D%A5%E6%8F%90%E5%8D%87shell%E7%9A%84%E9%AB%98%E9%80%BC%E6%A0%BC/"/>
+    <id>http://yoursite.com/2018/03/15/centos-7里安装zsh来提升shell的高逼格/</id>
+    <published>2018-03-15T13:52:13.000Z</published>
+    <updated>2018-03-15T13:58:26.897Z</updated>
+    
+    <content type="html"><![CDATA[<script src="\assets\js\APlayer.min.js"> </script><h2><span id="zsh本体的安装">zsh本体的安装</span></h2><p>先用<code>chsh -l</code>查看当前的bash情况，如下：<br>    <figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">   [root@zabbix ~]# chsh -l</span><br><span class="line">/bin/sh</span><br><span class="line">/bin/bash</span><br><span class="line">/sbin/nologin</span><br><span class="line">/bin/dash</span><br><span class="line">/bin/tcsh</span><br><span class="line">/bin/csh</span><br><span class="line">/usr/bin/tmux</span><br><span class="line">[root@zabbix ~]#</span><br></pre></td></tr></table></figure></p><p>如果是centos的话，使用<code>yum install -y zsh</code>来安装zsh，装完了zsh然后就是装<code>oh my zsh</code>，使用<code>wget</code>方法安装</p><pre><code>wget https://github.com/robbyrussell/oh-my-zsh/raw/master/tools/install.sh -O - | sh</code></pre><p>再使用<code>which zsh</code>查看安装的zsh在<code>/usr/bin/zsh</code>，这个时候使用<code>chsh -s /usr/bin/zsh</code>，出现了<code>Shell changed.</code>这样就切换到了zsh界面，需要logout退出连接重进。</p><p>重新连接就会发现bash界面就变了，原本是路径的地方变成了一个小图标。界面主题是可以变化的，比如我个人比较喜欢<code>af-magic</code>这个模板，于是乎就把/root/.zshrc里的<code>ZSH_THEME=&quot;robbyrussell&quot;</code>改成<code>ZSH_THEME=&quot;af-magic&quot;</code>，保存文件，再一次退出连接重新进入就能看见模板变化了。</p><h2><span id="autojump插件安装">autojump插件安装</span></h2><p>autojump这个插件安装之后，zsh会自动记录你访问过的目录，通过<code>j + 目录名</code>可以直接进行目录跳转，而且目录名支持模糊匹配和自动补全，例如你访问过<code>hadoop-1.0.0</code>目录，输入<code>j hado</code>即可正确跳转。<code>j –s</code>可以看你的历史路径库，安装方法如下：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git clone git:<span class="comment">//github.com/joelthelion/autojump.git</span></span><br></pre></td></tr></table></figure></p><p>然后在autojump目录里执行<code>./install.sh</code>，此时屏幕会出现如下的显示：<br><img src="/images/zshautojump.png" alt="paradin"></p><p>把上面那个<code>[[ -s /root/.autojump/etc/profile.d/autojump.sh ]] &amp;&amp; source /root/.autojump/etc/profile.d/autojump.sh autoload -U compinit &amp;&amp; compinit -u复</code>制到<code>/root/.zshrc</code>的文件里，最好复制在<code>source $ZSH/oh-my-zsh.sh</code>这句话上面，保存之后<code>source ~/.zshrc</code>即可。</p><h2><span id="zsh-syntax-highlighting插件安装">zsh-syntax-highlighting插件安装</span></h2><p>这个插件安装之后主要效果就是命令高亮，如果是错误的命令，颜色是红色，正确的命令是绿色的，安装方法如下：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">cd .oh-my-zsh/plugins</span><br><span class="line">yum install -y git  #如果已经安装了git就不用执行的</span><br><span class="line">git clone git:<span class="comment">//github.com/zsh-users/zsh-syntax-highlighting.git</span></span><br><span class="line">source /root/.oh-my-zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh添加到 .zshrc 的最后面</span><br><span class="line">source ~<span class="regexp">/.zshrc</span></span><br></pre></td></tr></table></figure></p><p>效果立竿见影。</p><h2><span id="尾声">尾声</span></h2><p>至此，你现在的zsh应该具备如下几个特性：<br>1、各种补全：路径补全、命令补全，命令参数补全，插件内容补全等等。触发补全只需要按一下或两下tab键，补全项可以使用ctrl+n/p/f/b上下左右切换。比如你想杀掉java的进程，只需要输入kill java + tab键，如果只有一个java进程，zsh会自动替换为进程的pid，如果有多个则会出现选择项供你选择。ssh + 空格 + 两个tab键，zsh会列出所有访问过的主机和用户名进行补全；<br>2、即使你没有安装autojump，只要输入d，就会列出你在这个回话中访问的目录，输入前面的序号，就可以直接跳转；<br>3、可以忽略cd命令, 输入..或者…和当前目录名都可以跳转；<br>当然，除了上面几点，zsh还有很多丰富的插件可以使用，这就需要继续的探索了…</p><h2><span id="参考资料">参考资料</span></h2><p><a href="https://github.com/robbyrussell/oh-my-zsh" target="_blank" rel="noopener">https://github.com/robbyrussell/oh-my-zsh</a><br><a href="http://macshuo.com/?p=676" target="_blank" rel="noopener">http://macshuo.com/?p=676</a></p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;script src=&quot;\assets\js\APlayer.min.js&quot;&gt; &lt;/script&gt;&lt;h2&gt;&lt;span id=&quot;zsh本体的安装&quot;&gt;zsh本体的安装&lt;/span&gt;&lt;/h2&gt;&lt;p&gt;先用&lt;code&gt;chsh -l&lt;/code&gt;查看当前的bash情况，如下：&lt;br&gt;  
+      
+    
+    </summary>
+    
+    
+  </entry>
   
   <entry>
     <title>安装vim8.0的过程</title>
@@ -453,30 +474,6 @@
     
     
       <category term="docker" scheme="http://yoursite.com/tags/docker/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>阿里云获取DTS服务延迟值的脚本</title>
-    <link href="http://yoursite.com/2018/02/24/%E9%98%BF%E9%87%8C%E4%BA%91%E8%8E%B7%E5%8F%96DTS%E6%9C%8D%E5%8A%A1%E5%BB%B6%E8%BF%9F%E7%9A%84%E8%84%9A%E6%9C%AC/"/>
-    <id>http://yoursite.com/2018/02/24/阿里云获取DTS服务延迟的脚本/</id>
-    <published>2018-02-24T08:49:31.000Z</published>
-    <updated>2018-03-05T16:42:54.583Z</updated>
-    
-    <content type="html"><![CDATA[<script src="\assets\js\APlayer.min.js"> </script><h2><span id="正文">正文</span></h2><p>春节“嗖”的一下就过完了，在年前领导交代另一个任务，想要每天统计一下在阿里云DTS（数据同步）服务的延迟情况，于是我就要使用阿里云的api去写一个脚本，每小时运行一次，然后将这24个数字输出出来给领导过目。</p><p>阿里云dts的sdk包在这里：<a href="https://help.aliyun.com/document_detail/57694.html?spm=a2c4g.11186623.6.675.W811bN" target="_blank" rel="noopener">https://help.aliyun.com/document_detail/57694.html?spm=a2c4g.11186623.6.675.W811bN</a> ，直接点击<code>Python</code>下载即可，不过这个地址经我测试使用非国内IP 地址是打不开的，需要使用国内IP地址下载。</p><p>下载完毕之后，上传到linux服务器并解压，解压后的样子如图：<br><img src="/images/dts1.png" alt="paradin"></p><p>由于我们这次只是查看同步作业状态，所用的py就是<code>DescribeSynchronizationJobStatusRequest.py</code>，现在我们就可以写脚本，假设这个脚本叫<code>getDTS.py</code>,那么整个内容如下：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/usr/bin/env python</span></span><br><span class="line">#coding=utf-8</span><br><span class="line">#auther:ChrisChan@2018-2-24</span><br><span class="line">#这个脚本是用来获取DTS服务的延迟值</span><br><span class="line"><span class="keyword">from</span> aliyunsdkcore <span class="keyword">import</span> client</span><br><span class="line"><span class="keyword">from</span> aliyunsdkcore.acs_exception.exceptions <span class="keyword">import</span> ClientException</span><br><span class="line"><span class="keyword">from</span> aliyunsdkcore.acs_exception.exceptions <span class="keyword">import</span> ServerException</span><br><span class="line"><span class="keyword">import</span> json</span><br><span class="line">import sys#由于这个包不是通过pip install的方式安装,要调用其它路径的python脚本就要使用sys方法</span><br><span class="line">sys.path.append(<span class="string">'sdk压缩包的绝对路径'</span>)</span><br><span class="line"><span class="keyword">import</span> DescribeSynchronizationJobStatusRequest</span><br><span class="line"></span><br><span class="line"># 创建Client实例</span><br><span class="line">clt = client.AcsClient(<span class="string">'阿里云AK'</span>,<span class="string">'阿里云SK'</span>,<span class="string">'所属地域'</span>)</span><br><span class="line"></span><br><span class="line"># 创建request并设置参数</span><br><span class="line">request = DescribeSynchronizationJobStatusRequest.DescribeSynchronizationJobStatusRequest()</span><br><span class="line">request.set_accept_format(<span class="string">'json'</span>)</span><br><span class="line"></span><br><span class="line"># 写上对应的服务ID</span><br><span class="line">request.set_SynchronizationJobId(<span class="string">"这里写上DTS的ID"</span>)</span><br><span class="line"></span><br><span class="line">response = clt.do_action_with_exception(request)</span><br><span class="line">print response</span><br><span class="line">delay = json.loads(response)</span><br><span class="line">print <span class="string">"===================================================="</span></span><br><span class="line">print <span class="string">"当前延迟是："</span> + str(delay[<span class="string">"DataSynchronizationStatus"</span>][<span class="string">"Delay"</span>])</span><br><span class="line">print <span class="string">"当前同步速度是："</span> + str(delay[<span class="string">"Performance"</span>][<span class="string">"FLOW"</span>])</span><br></pre></td></tr></table></figure></p><p>整个脚本执行的效果如下：<br><img src="/images/dts2.png" alt="paradin"></p><p>dts的延迟时间是5秒计算一次，API请求会取到最新的延迟时间，控制台是每隔20秒才刷新一次。</p><h2><span id="补充">补充</span></h2><p><code>getDTS.py</code>这个脚本获取到的<code>response</code>是一个str字符串，这里我使用<code>json.loads</code>来将其转化成了<code>dict</code>模式。但是除了这个方法还有两个方法：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; user</span><br><span class="line"><span class="string">"&#123;'name' : 'jim', 'sex' : 'male', 'age': 18&#125;"</span></span><br><span class="line">&gt;&gt;&gt; b=<span class="built_in">eval</span>(user)</span><br><span class="line">&gt;&gt;&gt; b</span><br><span class="line">&#123;<span class="string">'age'</span>: <span class="number">18</span>, <span class="string">'name'</span>: <span class="string">'jim'</span>, <span class="string">'sex'</span>: <span class="string">'male'</span>&#125;</span><br><span class="line">&gt;&gt;&gt; print b[<span class="string">'sex'</span>]</span><br><span class="line">male</span><br><span class="line">&gt;&gt;&gt; exec(<span class="string">"c="</span>+user)</span><br><span class="line">&gt;&gt;&gt; c</span><br><span class="line">&#123;<span class="string">'age'</span>: <span class="number">18</span>, <span class="string">'name'</span>: <span class="string">'jim'</span>, <span class="string">'sex'</span>: <span class="string">'male'</span>&#125;</span><br><span class="line">&gt;&gt;&gt; print c[<span class="string">'name'</span>]</span><br><span class="line">jim</span><br></pre></td></tr></table></figure></p><font color="red">但是要注意！上面这两个方法有一定的安全隐患，而且只能全是字符串可用，如果有的<code>value</code>是<code>True</code>、<code>False</code>、<code>Null</code>这样的字眼的话，<code>eval</code>是不支持的，所以没法正确转换，就会爆这样的错：<code>NameError: name &#39;True&#39; is not defined</code>。</font><h2><span id="参考资料">参考资料</span></h2><p><a href="https://help.aliyun.com/document_detail/49453.html?spm=a2c4g.11186623.6.667.sRyVqY" target="_blank" rel="noopener">https://help.aliyun.com/document_detail/49453.html?spm=a2c4g.11186623.6.667.sRyVqY</a><br><a href="https://segmentfault.com/q/1010000000174694" target="_blank" rel="noopener">https://segmentfault.com/q/1010000000174694</a><br><a href="https://www.crifan.com/resolved_in_python_using_eval_to_force_variable_to_convert_a_string_to_a_dictionary_when_the_error_nameerror_name_39null39_is_not_defined/" target="_blank" rel="noopener">https://www.crifan.com/resolved_in_python_using_eval_to_force_variable_to_convert_a_string_to_a_dictionary_when_the_error_nameerror_name_39null39_is_not_defined/</a><br><a href="https://segmentfault.com/q/1010000000345915" target="_blank" rel="noopener">https://segmentfault.com/q/1010000000345915</a><br><img src="/images/suyaleisi.jpg" alt="paradin" title="状态越来越好~"></p>]]></content>
-    
-    <summary type="html">
-    
-      先获取到值，然后做出来一个图。
-    
-    </summary>
-    
-      <category term="工作与技术" scheme="http://yoursite.com/categories/%E5%B7%A5%E4%BD%9C%E4%B8%8E%E6%8A%80%E6%9C%AF/"/>
-    
-    
-      <category term="python" scheme="http://yoursite.com/tags/python/"/>
-    
-      <category term="阿里云" scheme="http://yoursite.com/tags/%E9%98%BF%E9%87%8C%E4%BA%91/"/>
     
   </entry>
   
