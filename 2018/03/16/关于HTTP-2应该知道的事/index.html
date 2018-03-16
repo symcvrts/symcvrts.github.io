@@ -104,7 +104,7 @@
 <meta property="og:image" content="http://yoursite.com/images/http2-7.png">
 <meta property="og:image" content="http://yoursite.com/images/http2-8.png">
 <meta property="og:image" content="http://yoursite.com/images/http2-6.png">
-<meta property="og:updated_time" content="2018-03-16T14:42:11.166Z">
+<meta property="og:updated_time" content="2018-03-16T14:46:48.701Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="关于HTTP 2.0应该知道的事">
 <meta name="twitter:description" content="HTTP 2.0的优势相比HTTP/1.x，HTTP/2在底层传输做了很大的改动和优化：1.每个服务器只用一个连接：HTTP/2对每个服务器只使用一个连接，而不是每个文件一个连接。这样，就省掉了多次建立连接的时间，这个时间对TLS尤其明显，因为TLS连接费时间;2.加速TLS交付：HTTP/2只需一次耗时的TLS握手，并且通过一个连接上的多路利用实现最佳性能。HTTP/2还会压缩首部数据，省掉H">
@@ -434,7 +434,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  2,067
+                  2,100
                 </span>
               
 
@@ -450,7 +450,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  7
+                  8
                 </span>
               
             </div>
@@ -487,11 +487,11 @@
 <p>举个例子：下载<code>a.js</code>创建一个TCP链接，就会需要TCP握手和慢启动而产生了约300ms下载延迟。当<code>a.js</code>下载完成后这时候<code>b.js</code>也要下载，如果<code>a.js</code>创建TCP链接是<code>keep-alive</code>的，<code>b.js</code>就可以复用其TCP而不需要重新TCP握手和慢启动。（没有了那300ms）</p>
 <p>而<code>HTTP/2</code>是使用一个TCP链接的，其慢启动和握手只在第一次链接的时候产生一次，其后面链接都是持久化的。并且一个TCP下载多个资源，可以将TCP吞吐量最大化来提升性能，这方面可以参考一下TCP的拥塞预防及控制。<br><img src="/images/http2-4.png" alt="paradin"></p>
 <p><img src="/images/http2-5.png" alt="paradin"></p>
-<h2><span id="nginx上如何配制http2">NGINX上如何配制HTTP/2</span></h2><p>上面说了这么多HTTP/2这个好那个好，是未来的趋势blablabla，但是要实现<code>HTTP/2</code>，还是需要“客户端和服务器都开启了HTTP/2”这一个首要条件。不过现在客户端（浏览器）大多数都已经支持<code>HTTP/2</code>，那么主要就是在服务器端如何开启<code>HTTP/2</code>，nginx的配置方法如下：</p>
-<p>这样服务器开了<code>HTTP/2</code>，那些支持<code>HTTP/2</code>的浏览器在请求页面的时候就会走<code>HTTP/2</code>模式，而不支持HTTP/2的浏览器会议就按照<code>HTTP/1.X</code>的方式发送请求，如图：<br><img src="/images/http2-7.png" alt="paradin"></p>
+<h2><span id="nginx上如何配制http2">NGINX上如何配制HTTP/2</span></h2><p>上面说了这么多HTTP/2这个好那个好，是未来的趋势blablabla，但是要实现<code>HTTP/2</code>，还是需要“客户端和服务器都开启了HTTP/2”这一个首要条件。不过现在客户端（浏览器）大多数都已经支持<code>HTTP/2</code>，那么主要就是在服务器端如何开启<code>HTTP/2</code>，nginx的配置方法请见：<a href="https://rorschachchan.github.io/2018/03/16/使用nginx开启http2协议/" target="_blank" rel="noopener">https://rorschachchan.github.io/2018/03/16/使用nginx开启http2协议/</a></p>
+<p>按照这样的操作下来，服务器就开了<code>HTTP/2</code>协议，那些支持<code>HTTP/2</code>的浏览器在请求页面的时候就会走<code>HTTP/2</code>模式，而不支持HTTP/2的浏览器会议就按照<code>HTTP/1.X</code>的方式发送请求，如图：<br><img src="/images/http2-7.png" alt="paradin"></p>
 <p><img src="/images/http2-8.png" alt="paradin" title="如果nginx是一个代理服务器的话，就是这图的传输方式"></p>
 <p>支持<code>HTTP/2</code>的Web Server基本都支持<code>HTTP/1.1</code>。这样，即使浏览器不支持<code>HTTP/2</code>，双方也可以协商出可用的<code>HTTP</code>版本，没有兼容性问题。<br><img src="/images/http2-6.png" alt="paradin" title="使用HTTP/2其实还是服务器说的算"></p>
-<h2><span id="参考资料">参考资料</span></h2><p><a href="http://www.alloyteam.com/2015/03/http2-0-di-qi-miao-ri-chang/comment-page-1/#comments" target="_blank" rel="noopener">http://www.alloyteam.com/2015/03/http2-0-di-qi-miao-ri-chang/comment-page-1/#comments</a><br><a href="https://segmentfault.com/a/1190000007637735" target="_blank" rel="noopener">https://segmentfault.com/a/1190000007637735</a><br><a href="https://github.com/creeperyang/blog/issues/23" target="_blank" rel="noopener">https://github.com/creeperyang/blog/issues/23</a><br><a href="https://www.nginx.com/blog/nginx-1-9-5/" target="_blank" rel="noopener">https://www.nginx.com/blog/nginx-1-9-5/</a></p>
+<h2><span id="参考资料">参考资料</span></h2><p><a href="http://www.alloyteam.com/2015/03/http2-0-di-qi-miao-ri-chang/comment-page-1/#comments" target="_blank" rel="noopener">http://www.alloyteam.com/2015/03/http2-0-di-qi-miao-ri-chang/comment-page-1/#comments</a><br><a href="https://segmentfault.com/a/1190000007637735" target="_blank" rel="noopener">https://segmentfault.com/a/1190000007637735</a><br><a href="https://github.com/creeperyang/blog/issues/23" target="_blank" rel="noopener">https://github.com/creeperyang/blog/issues/23</a><br><a href="https://www.nginx.com/blog/nginx-1-9-5/" target="_blank" rel="noopener">https://www.nginx.com/blog/nginx-1-9-5/</a><br><a href="https://ye11ow.gitbooks.io/http2-explained/content/part6.html" target="_blank" rel="noopener">https://ye11ow.gitbooks.io/http2-explained/content/part6.html</a></p>
 
       
     </div>
