@@ -426,7 +426,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  502
+                  452
                 </span>
               
 
@@ -464,17 +464,14 @@
 
       
         
-          
-            <script src="\assets\js\APlayer.min.js"> </script><h2><span id="部署过程">部署过程</span></h2><p>普通的HTTPS网站浏览会比HTTP网站稍微慢一些，因为需要处理加密任务，而配置了HTTP/S的HTTPS，在低延时的情况下速度会比HTTP更快更稳定！</p>
-<p><code>HTTP/2</code>是建立在TLS的基础上的，那么先要查看nginx的版本和openssl的版本，如果<code>nginx</code>版本在<code>1.10.0</code>以上且需要<code>openssl</code>版本在<code>1.0.2</code>以上那么就可以进行下一步了：<br><img src="/images/http2-10.png" alt="paradin"></p>
-<p>先编辑https（443端口）对应的<code>conf</code>文件：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">server &#123;</span><br><span class="line">        listen 443 ssl http2;    #这里多加一句http2</span><br><span class="line">        server_name  cuntao.lechange.com *.lechange.com;    #这里填写实际的域名，我这里以cuntao.lechange.com为例</span><br><span class="line"></span><br><span class="line">        ssl_certificate /实际路径/server-com.crt;        </span><br><span class="line">        ssl_certificate_key /实际路径/server-com.key;</span><br><span class="line"></span><br><span class="line">        ssl_session_timeout  30m;        #客户端会话缓存时间</span><br><span class="line">        ssl_protocols  TLSv1 TLSv1.1 TLSv1.2;    #允许的协议</span><br><span class="line">        ssl_ciphers  EECDH+CHACHA20:EECDH+AES128:RSA+AES128:EECDH+AES256:RSA+AES256:EECDH+3DES:RSA+3DES:!MD5;    #加密算法(CloudFlare 推荐的加密套件组)</span><br><span class="line">        ssl_prefer_server_ciphers   on;        #优化 SSL 加密套件</span><br><span class="line">        ssl_session_cache builtin:1000 shared:SSL:10m;        #SSL会话缓存类型和大小</span><br><span class="line">        ssl_buffer_size 1400;        #每个MTU大小1400b</span><br><span class="line"></span><br><span class="line">        location / &#123;</span><br><span class="line">            root   html;</span><br><span class="line">            index  index.html index.htm;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        error_page  <span class="number">404</span>              /<span class="number">404.</span>html;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
-<p>保存之后再编辑http（80端口）对应的<code>conf</code>文件：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">server &#123;</span><br><span class="line">    listen <span class="number">80</span> <span class="keyword">default</span>;</span><br><span class="line">    add_header Strict-Transport-Security max-age=<span class="number">15768000</span>;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">301</span> https:<span class="comment">//$host$request_uri;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>然后使用<code>nginx-t</code>检查一下是否文件有错误，如果是OK的话，那么就<code>nginx -s reload</code>平滑重启一下nginx即可。</p>
-<p>验证http/2是否开启很简单，有两个方法：<br>1）登陆<code>https://tools.keycdn.com/http2-test</code>，将你的域名填写进去，查看一下配置成功：<br><img src="/images/http2-11.png" alt="paradin"></p>
-<p>2)在Chrome浏览器上可以通过安装<code>HTTP/2 and SPDY indicator</code>插件来检验（<a href="https://chrome.google.com/webstore/detail/http2-and-spdy-indicator/mpbpobfflnpcgagjijhmgnchggcjblin），如果地址栏出现蓝色的闪电就是`HTTP/2`，灰色的话就是`HTTP/2`没开启。" target="_blank" rel="noopener">https://chrome.google.com/webstore/detail/http2-and-spdy-indicator/mpbpobfflnpcgagjijhmgnchggcjblin），如果地址栏出现蓝色的闪电就是`HTTP/2`，灰色的话就是`HTTP/2`没开启。</a></p>
-<h2><span id="参考资料">参考资料</span></h2><p><a href="https://www.nginx.com/blog/nginx-1-9-5/" target="_blank" rel="noopener">https://www.nginx.com/blog/nginx-1-9-5/</a><br><a href="https://blog.fazero.me/2017/01/06/upgrate-nginx-and-use-http2/" target="_blank" rel="noopener">https://blog.fazero.me/2017/01/06/upgrate-nginx-and-use-http2/</a><br><a href="https://iyaozhen.com/nginx-http2-conf.html" target="_blank" rel="noopener">https://iyaozhen.com/nginx-http2-conf.html</a></p>
-
-          
+          普通的HTTPS网站浏览会比HTTP网站稍微慢一些，因为需要处理加密任务，而配置了HTTP/2的HTTPS，在低延时的情况下速度会比HTTP更快更稳定！
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2018/03/16/使用nginx开启http2协议/">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -689,10 +686,10 @@
 <p>可以并行交错地发送请求,请求之间互不影响;<br>可以并行交错地发送响应,响应之间互不干扰;<br>只使用一个连接即可并行发送多个请求和响应;<br>消除不必要的延迟,从而减少页面加载的时间;</p>
 <p><img src="/images/http2-3.png" alt="paradin" title="“域名分区”这种优化手段对于HTTP2.0是无用的，因为资源都是并行交错发送，且没有限制，不需要额外的多域名并行下载"></p>
 <h2><span id="keep-alive与http2集中tcp的区别">Keep Alive与HTTP/2集中TCP的区别</span></h2><p><code>HTTP1.1</code>的<code>keep-alive</code>是为了尽可能使用持久链接，以消除TCP握手和慢启动。但是<code>keep-alive</code>使用多了同样会给服务端带来大量的性能压力，并且对于单个文件被不断请求的服务(例如图片存放网站)，<code>keep-alive</code>可能会极大的影响性能，因为它在文件被请求之后还保持了不必要的连接很长时间。</p>
-<p>举个例子：下载<code>a.js</code>创建一个TCP链接，就会需要TCP握手和慢启动而产生了约300ms下载延迟。当<code>a.js</code>下载完成后这时候<code>b.js</code>也要下载，如果<code>a.js</code>创建TCP链接是<code>keep-alive</code>的，<code>b.js</code>就可以复用其TCP而不需要重新TCP握手和慢启动。（没有了那300ms）</p>
+<p>举个例子：下载<code>a.js</code>创建一个TCP链接，就会需要TCP握手和慢启动而产生了约300ms下载延迟。当<code>a.js</code>下载完成后这时候<code>b.js</code>也要下载，如果<code>a.js</code>创建TCP链接是<code>keep-alive</code>的，<code>b.js</code>就可以复用其TCP而不需要重新TCP握手和慢启动（没有了那300ms）。</p>
 <p>而<code>HTTP/2</code>是使用一个TCP链接的，其慢启动和握手只在第一次链接的时候产生一次，其后面链接都是持久化的。并且一个TCP下载多个资源，可以将TCP吞吐量最大化来提升性能，这方面可以参考一下TCP的拥塞预防及控制。<br><img src="/images/http2-4.png" alt="paradin"></p>
 <p><img src="/images/http2-5.png" alt="paradin"></p>
-<h2><span id="nginx上如何配制http2">NGINX上如何配制HTTP/2</span></h2><p>上面说了这么多HTTP/2这个好那个好，是未来的趋势blablabla，但是要实现<code>HTTP/2</code>，还是需要“客户端和服务器都开启了HTTP/2”这一个首要条件。不过现在客户端（浏览器）大多数都已经支持<code>HTTP/2</code>，那么主要就是在服务器端如何开启<code>HTTP/2</code>，nginx的配置方法请见：<a href="https://rorschachchan.github.io/2018/03/16/使用nginx开启http2协议/" target="_blank" rel="noopener">https://rorschachchan.github.io/2018/03/16/使用nginx开启http2协议/</a></p>
+<h2><span id="nginx上如何配制http2">NGINX上如何配制HTTP/2</span></h2><p>上面说了这么多HTTP/2这个好那个好，是未来的趋势blablabla，但是要实现<code>HTTP/2</code>，还是需要“客户端和服务器都开启了HTTP/2”这一个首要条件。不过现在客户端（浏览器）大多数都已经支持<code>HTTP/2</code>，那么主要就是在服务器端如何开启<code>HTTP/2</code>，nginx的配置方法请见：<a href="https://rorschachchan.github.io/2018/03/16/使用nginx开启http2协议/" target="_blank" rel="noopener">https://rorschachchan.github.io/2018/03/16/使用nginx开启http2协议/</a> 。</p>
 <p>按照这样的操作下来，服务器就开了<code>HTTP/2</code>协议，那些支持<code>HTTP/2</code>的浏览器在请求页面的时候就会走<code>HTTP/2</code>模式，而不支持HTTP/2的浏览器会议就按照<code>HTTP/1.X</code>的方式发送请求，如图：<br><img src="/images/http2-7.png" alt="paradin"></p>
 <p><img src="/images/http2-8.png" alt="paradin" title="如果nginx是一个代理服务器的话，就是这图的传输方式"></p>
 <p>支持<code>HTTP/2</code>的Web Server基本都支持<code>HTTP/1.1</code>。这样，即使浏览器不支持<code>HTTP/2</code>，双方也可以协商出可用的<code>HTTP</code>版本，没有兼容性问题。<br><img src="/images/http2-6.png" alt="paradin" title="使用HTTP/2其实还是服务器说的算"></p>
