@@ -98,7 +98,7 @@
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://yoursite.com/images/http2-10.png">
 <meta property="og:image" content="http://yoursite.com/images/http2-11.png">
-<meta property="og:updated_time" content="2018-03-16T16:23:14.778Z">
+<meta property="og:updated_time" content="2018-03-16T16:24:29.939Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="使用nginx开启http2协议">
 <meta name="twitter:description" content="普通的HTTPS网站浏览会比HTTP网站稍微慢一些，因为需要处理加密任务，而配置了HTTP/2的HTTPS，在低延时的情况下速度会比HTTP更快更稳定！">
@@ -428,7 +428,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  495
+                  508
                 </span>
               
 
@@ -475,7 +475,7 @@
 <p>保存之后再编辑http（80端口）对应的<code>conf</code>文件：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">server &#123;</span><br><span class="line">    listen <span class="number">80</span> <span class="keyword">default</span>;</span><br><span class="line">    add_header Strict-Transport-Security max-age=<span class="number">15768000</span>;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">301</span> https:<span class="comment">//$host$request_uri;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <p>然后使用<code>nginx -t</code>检查一下是否文件有错误，如果是OK的话，那么就<code>nginx -s reload</code>平滑重启一下nginx即可。</p>
 <p>验证<code>HTTP/2</code>协议是否开启很简单，有两个方法：<br>1）登陆<code>https://tools.keycdn.com/http2-test</code>，将你的域名填写进去，查看一下配置成功：<br><img src="/images/http2-11.png" alt="paradin"></p>
-<p>2)在Chrome浏览器上可以通过安装<code>HTTP/2 and SPDY indicator</code>插件来检验（<a href="https://chrome.google.com/webstore/detail/http2-and-spdy-indicator/mpbpobfflnpcgagjijhmgnchggcjblin），如果地址栏出现蓝色的闪电就是`HTTP/2`，灰色的话就是`HTTP/2`没开启。" target="_blank" rel="noopener">https://chrome.google.com/webstore/detail/http2-and-spdy-indicator/mpbpobfflnpcgagjijhmgnchggcjblin），如果地址栏出现蓝色的闪电就是`HTTP/2`，灰色的话就是`HTTP/2`没开启。</a></p>
+<p>2)在Chrome浏览器上可以通过安装<code>HTTP/2 and SPDY indicator</code>插件来检验，网址是<a href="https://chrome.google.com/webstore/detail/http2-and-spdy-indicator/mpbpobfflnpcgagjijhmgnchggcjblin" target="_blank" rel="noopener">https://chrome.google.com/webstore/detail/http2-and-spdy-indicator/mpbpobfflnpcgagjijhmgnchggcjblin</a>  ，如果地址栏出现蓝色的闪电就是该网站开启了<code>HTTP/2</code>协议，灰色的话就是<code>HTTP/2</code>协议没开启。</p>
 <h2><span id="参考资料">参考资料</span></h2><p><a href="https://www.nginx.com/blog/nginx-1-9-5/" target="_blank" rel="noopener">https://www.nginx.com/blog/nginx-1-9-5/</a><br><a href="https://blog.fazero.me/2017/01/06/upgrate-nginx-and-use-http2/" target="_blank" rel="noopener">https://blog.fazero.me/2017/01/06/upgrate-nginx-and-use-http2/</a><br><a href="https://iyaozhen.com/nginx-http2-conf.html" target="_blank" rel="noopener">https://iyaozhen.com/nginx-http2-conf.html</a></p>
 
       
