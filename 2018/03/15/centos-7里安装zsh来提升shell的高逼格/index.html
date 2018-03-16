@@ -96,12 +96,13 @@
 <meta property="og:site_name" content="Chris Chan&#39;s BLOG">
 <meta property="og:description" content="生命在于折腾...">
 <meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://yoursite.com/images/zsh2.png">
 <meta property="og:image" content="http://yoursite.com/images/zshautojump.png">
-<meta property="og:updated_time" content="2018-03-15T14:03:35.846Z">
+<meta property="og:updated_time" content="2018-03-16T16:14:04.871Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="centos 7里安装zsh来提升shell的高逼格">
 <meta name="twitter:description" content="生命在于折腾...">
-<meta name="twitter:image" content="http://yoursite.com/images/zshautojump.png">
+<meta name="twitter:image" content="http://yoursite.com/images/zsh2.png">
 
 
 
@@ -427,7 +428,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  827
+                  883
                 </span>
               
 
@@ -443,7 +444,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  3
+                  4
                 </span>
               
             </div>
@@ -472,6 +473,8 @@
 <p>如果是centos的话，使用<code>yum install -y zsh</code>来安装zsh，装完了zsh然后就是装<code>oh my zsh</code>，使用<code>wget</code>方法安装：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wget https:<span class="comment">//github.com/robbyrussell/oh-my-zsh/raw/master/tools/install.sh -O - | sh</span></span><br></pre></td></tr></table></figure></p>
 <p>再使用<code>which zsh</code>查看安装的zsh在<code>/usr/bin/zsh</code>，这个时候使用<code>chsh -s /usr/bin/zsh</code>，出现了<code>Shell changed.</code>这样就切换到了zsh界面，需要logout退出连接重进。</p>
 <p>重新连接就会发现bash界面就变了，原本是路径的地方变成了一个小图标。界面主题是可以变化的，比如我个人比较喜欢<code>af-magic</code>这个模板，于是乎就把/root/.zshrc里的<code>ZSH_THEME=&quot;robbyrussell&quot;</code>改成<code>ZSH_THEME=&quot;af-magic&quot;</code>，保存文件，再一次退出连接重新进入就能看见模板变化了。</p>
+<p>如果在使用vim的时候发现了tab键的补全爆错_arguments:451: _vim_files: function definition file not found，如下图：<br><img src="/images/zsh2.png" alt="paradin"></p>
+<p>这个时候需要把/root/.zcompdump改一个名字，比如叫.zcompdump-bak，然后重新ssh连接即可。</p>
 <h2><span id="autojump插件安装">autojump插件安装</span></h2><p>autojump这个插件安装之后，zsh会自动记录你访问过的目录，通过<code>j + 目录名</code>可以直接进行目录跳转，而且目录名支持模糊匹配和自动补全，例如你访问过<code>hadoop-1.0.0</code>目录，输入<code>j hado</code>即可正确跳转。<code>j –s</code>可以看你的历史路径库，安装方法如下：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git clone git:<span class="comment">//github.com/joelthelion/autojump.git</span></span><br></pre></td></tr></table></figure></p>
 <p>然后在autojump目录里执行<code>./install.sh</code>，此时屏幕会出现如下的显示：<br><img src="/images/zshautojump.png" alt="paradin"></p>
 <p>把上面那个<code>[[ -s /root/.autojump/etc/profile.d/autojump.sh ]] &amp;&amp; source /root/.autojump/etc/profile.d/autojump.sh autoload -U compinit &amp;&amp; compinit -u复</code>制到<code>/root/.zshrc</code>的文件里，最好复制在<code>source $ZSH/oh-my-zsh.sh</code>这句话上面，保存之后<code>source ~/.zshrc</code>即可。</p>
