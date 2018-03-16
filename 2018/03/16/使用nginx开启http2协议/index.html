@@ -98,7 +98,7 @@
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://yoursite.com/images/http2-10.png">
 <meta property="og:image" content="http://yoursite.com/images/http2-11.png">
-<meta property="og:updated_time" content="2018-03-16T14:53:33.831Z">
+<meta property="og:updated_time" content="2018-03-16T16:23:14.778Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="使用nginx开启http2协议">
 <meta name="twitter:description" content="普通的HTTPS网站浏览会比HTTP网站稍微慢一些，因为需要处理加密任务，而配置了HTTP/2的HTTPS，在低延时的情况下速度会比HTTP更快更稳定！">
@@ -428,7 +428,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  452
+                  495
                 </span>
               
 
@@ -470,6 +470,7 @@
 
       
         <script src="\assets\js\APlayer.min.js"> </script><h2><span id="部署过程">部署过程</span></h2><p><code>HTTP/2</code>是建立在TLS的基础上的，那么先要查看nginx的版本和openssl的版本，如果<code>nginx</code>版本在<code>1.10.0</code>以上且需要<code>openssl</code>版本在<code>1.0.2</code>以上那么就可以进行下一步了：<br><img src="/images/http2-10.png" alt="paradin"></p>
+<p>如果版本并不符合要求，可以按照<a href="https://rorschachchan.github.io/2018/01/03/Nginx动态编译新的模块/" target="_blank" rel="noopener">https://rorschachchan.github.io/2018/01/03/Nginx动态编译新的模块/</a> 里的方法升级对应的模块版本。</p>
 <p>先编辑https（443端口）对应的<code>conf</code>文件：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">server &#123;</span><br><span class="line">        listen 443 ssl http2;    #这里多加一句http2</span><br><span class="line">        server_name  cuntao.lechange.com *.lechange.com;    #这里填写实际的域名，我这里以cuntao.lechange.com为例</span><br><span class="line"></span><br><span class="line">        ssl_certificate /实际路径/server-com.crt;        </span><br><span class="line">        ssl_certificate_key /实际路径/server-com.key;</span><br><span class="line"></span><br><span class="line">        ssl_session_timeout  30m;        #客户端会话缓存时间</span><br><span class="line">        ssl_protocols  TLSv1 TLSv1.1 TLSv1.2;    #允许的协议</span><br><span class="line">        ssl_ciphers  EECDH+CHACHA20:EECDH+AES128:RSA+AES128:EECDH+AES256:RSA+AES256:EECDH+3DES:RSA+3DES:!MD5;    #加密算法(CloudFlare 推荐的加密套件组)</span><br><span class="line">        ssl_prefer_server_ciphers   on;        #优化 SSL 加密套件</span><br><span class="line">        ssl_session_cache builtin:1000 shared:SSL:10m;        #SSL会话缓存类型和大小</span><br><span class="line">        ssl_buffer_size 1400;        #每个MTU大小1400b</span><br><span class="line"></span><br><span class="line">        location / &#123;</span><br><span class="line">            root   html;</span><br><span class="line">            index  index.html index.htm;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        error_page  <span class="number">404</span>              /<span class="number">404.</span>html;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
 <p>保存之后再编辑http（80端口）对应的<code>conf</code>文件：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">server &#123;</span><br><span class="line">    listen <span class="number">80</span> <span class="keyword">default</span>;</span><br><span class="line">    add_header Strict-Transport-Security max-age=<span class="number">15768000</span>;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">301</span> https:<span class="comment">//$host$request_uri;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <p>然后使用<code>nginx -t</code>检查一下是否文件有错误，如果是OK的话，那么就<code>nginx -s reload</code>平滑重启一下nginx即可。</p>
@@ -923,7 +924,7 @@ show_date_time();
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">博客全站共103.0k字</span>
+  <span class="post-count">博客全站共103.1k字</span>
 </div>
         
 
