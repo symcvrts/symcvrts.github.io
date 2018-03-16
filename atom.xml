@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2018-03-16T14:17:59.449Z</updated>
+  <updated>2018-03-16T14:37:20.314Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -15,6 +15,31 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>使用nginx开启http2协议</title>
+    <link href="http://yoursite.com/2018/03/16/%E4%BD%BF%E7%94%A8nginx%E5%BC%80%E5%90%AFhttp2%E5%8D%8F%E8%AE%AE/"/>
+    <id>http://yoursite.com/2018/03/16/使用nginx开启http2协议/</id>
+    <published>2018-03-16T14:34:44.000Z</published>
+    <updated>2018-03-16T14:37:20.314Z</updated>
+    
+    <content type="html"><![CDATA[<script src="\assets\js\APlayer.min.js"> </script><h2><span id="部署过程">部署过程</span></h2><p>普通的HTTPS网站浏览会比HTTP网站稍微慢一些，因为需要处理加密任务，而配置了HTTP/S的HTTPS，在低延时的情况下速度会比HTTP更快更稳定！</p><p><code>HTTP/2</code>是建立在TLS的基础上的，那么先要查看nginx的版本和openssl的版本，如果<code>nginx</code>版本在<code>1.10.0</code>以上且需要<code>openssl</code>版本在<code>1.0.2</code>以上那么就可以进行下一步了：<br><img src="/images/http2-10.png" alt="paradin"></p><p>先编辑https（443端口）对应的<code>conf</code>文件：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">server &#123;</span><br><span class="line">        listen 443 ssl http2;    #这里多加一句http2</span><br><span class="line">        server_name  cuntao.lechange.com *.lechange.com;    #这里填写实际的域名，我这里以cuntao.lechange.com为例</span><br><span class="line"></span><br><span class="line">        ssl_certificate /实际路径/server-com.crt;        </span><br><span class="line">        ssl_certificate_key /实际路径/server-com.key;</span><br><span class="line"></span><br><span class="line">        ssl_session_timeout  30m;        #客户端会话缓存时间</span><br><span class="line">        ssl_protocols  TLSv1 TLSv1.1 TLSv1.2;    #允许的协议</span><br><span class="line">        ssl_ciphers  EECDH+CHACHA20:EECDH+AES128:RSA+AES128:EECDH+AES256:RSA+AES256:EECDH+3DES:RSA+3DES:!MD5;    #加密算法(CloudFlare 推荐的加密套件组)</span><br><span class="line">        ssl_prefer_server_ciphers   on;        #优化 SSL 加密套件</span><br><span class="line">        ssl_session_cache builtin:1000 shared:SSL:10m;        #SSL会话缓存类型和大小</span><br><span class="line">        ssl_buffer_size 1400;        #每个MTU大小1400b</span><br><span class="line"></span><br><span class="line">        location / &#123;</span><br><span class="line">            root   html;</span><br><span class="line">            index  index.html index.htm;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        error_page  <span class="number">404</span>              /<span class="number">404.</span>html;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p><p>保存之后再编辑http（80端口）对应的<code>conf</code>文件：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">server &#123;</span><br><span class="line">    listen <span class="number">80</span> <span class="keyword">default</span>;</span><br><span class="line">    add_header Strict-Transport-Security max-age=<span class="number">15768000</span>;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">301</span> https:<span class="comment">//$host$request_uri;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p><p>然后使用<code>nginx-t</code>检查一下是否文件有错误，如果是OK的话，那么就<code>nginx -s reload</code>平滑重启一下nginx即可。</p><p>验证http/2是否开启很简单，有两个方法：<br>1）登陆<code>https://tools.keycdn.com/http2-test</code>，将你的域名填写进去，查看一下配置成功：<br><img src="/images/http2-11.png" alt="paradin"></p><p>2)在Chrome浏览器上可以通过安装<code>HTTP/2 and SPDY indicator</code>插件来检验（<a href="https://chrome.google.com/webstore/detail/http2-and-spdy-indicator/mpbpobfflnpcgagjijhmgnchggcjblin），如果地址栏出现蓝色的闪电就是`HTTP/2`，灰色的话就是`HTTP/2`没开启。" target="_blank" rel="noopener">https://chrome.google.com/webstore/detail/http2-and-spdy-indicator/mpbpobfflnpcgagjijhmgnchggcjblin），如果地址栏出现蓝色的闪电就是`HTTP/2`，灰色的话就是`HTTP/2`没开启。</a></p><h2><span id="参考资料">参考资料</span></h2><p><a href="https://www.nginx.com/blog/nginx-1-9-5/" target="_blank" rel="noopener">https://www.nginx.com/blog/nginx-1-9-5/</a><br><a href="https://blog.fazero.me/2017/01/06/upgrate-nginx-and-use-http2/" target="_blank" rel="noopener">https://blog.fazero.me/2017/01/06/upgrate-nginx-and-use-http2/</a><br><a href="https://iyaozhen.com/nginx-http2-conf.html" target="_blank" rel="noopener">https://iyaozhen.com/nginx-http2-conf.html</a></p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;script src=&quot;\assets\js\APlayer.min.js&quot;&gt; &lt;/script&gt;&lt;h2&gt;&lt;span id=&quot;部署过程&quot;&gt;部署过程&lt;/span&gt;&lt;/h2&gt;&lt;p&gt;普通的HTTPS网站浏览会比HTTP网站稍微慢一些，因为需要处理加密任务，而配置了HTTP/S的HTT
+      
+    
+    </summary>
+    
+      <category term="工作与技术" scheme="http://yoursite.com/categories/%E5%B7%A5%E4%BD%9C%E4%B8%8E%E6%8A%80%E6%9C%AF/"/>
+    
+    
+      <category term="nginx" scheme="http://yoursite.com/tags/nginx/"/>
+    
+  </entry>
   
   <entry>
     <title>关于HTTP/2应该知道的事</title>
@@ -458,30 +483,6 @@
       <category term="大数据分析" scheme="http://yoursite.com/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90/"/>
     
       <category term="storm" scheme="http://yoursite.com/tags/storm/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>DockerFile创建一个nginx容器的全过程</title>
-    <link href="http://yoursite.com/2018/02/25/DockerFile%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AAnginx%E5%AE%B9%E5%99%A8%E7%9A%84%E5%85%A8%E8%BF%87%E7%A8%8B/"/>
-    <id>http://yoursite.com/2018/02/25/DockerFile创建一个nginx容器的全过程/</id>
-    <published>2018-02-25T11:54:34.000Z</published>
-    <updated>2018-02-25T12:09:17.094Z</updated>
-    
-    <content type="html"><![CDATA[<script src="\assets\js\APlayer.min.js"> </script><h2><span id="创建容器">创建容器</span></h2><p>首先，随便建立一个文件夹，比如先<code>mkdir sample</code>，然后我在这个sample文件夹里建立一个<code>Dockerfile</code>，内容如下：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">FROM ubuntu:<span class="number">14.04</span></span><br><span class="line">MAINTAINER Chris Chan <span class="string">"chenx1242@163.com"</span></span><br><span class="line">ENV REFRESHED_AT <span class="number">2016</span><span class="number">-12</span><span class="number">-05</span></span><br><span class="line">RUN apt-get -y update &amp;&amp; apt-get install -y nginx</span><br><span class="line">RUN mkdir -p /<span class="keyword">var</span>/www/html/website</span><br><span class="line">ADD nginx/global.conf /etc/nginx/conf.d/</span><br><span class="line">ADD nginx/nginx.conf /etc/nginx/nginx.conf</span><br><span class="line">EXPOSE <span class="number">80</span></span><br></pre></td></tr></table></figure></p><p>从这个Dockfile里面看出：我们使用了ubuntu的基础镜像，然后下载了nginx，同时建立一个<code>/var/www/html/website</code>文件夹，然后又拷贝了宿主机上的两个文件，一个是<code>global.conf</code>，另一个是<code>nginx.conf</code>，这两个文件需要我们自己写。于是我们就要在sample下再建立一个叫nginx的文件夹，里面写上这两个文件，其中<code>global.conf</code>的内容如下：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">server &#123;</span><br><span class="line">       listen   <span class="number">0.0</span><span class="number">.0</span><span class="number">.0</span>:<span class="number">80</span>;</span><br><span class="line">       server_name     _;</span><br><span class="line">       root    /<span class="keyword">var</span>/www/html/website;</span><br><span class="line">       index   index.html index.htm;</span><br><span class="line">       access_log      /<span class="keyword">var</span>/log/nginx/default_access.log;</span><br><span class="line">       error_log       /<span class="keyword">var</span>/log/nginx/default_error.log;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p><p>而<code>nginx.conf</code>的内容如下：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">user www-data;</span><br><span class="line">worker_processes <span class="number">4</span>;</span><br><span class="line">pid /run/nginx.pid;</span><br><span class="line">events &#123; &#125;</span><br><span class="line">http &#123;</span><br><span class="line"> sendfile on;</span><br><span class="line"> tcp_nopush on;</span><br><span class="line"> tcp_nodelay on;</span><br><span class="line"> keepalive_timeout <span class="number">65</span>;</span><br><span class="line"> types_hash_max_size <span class="number">2048</span>;</span><br><span class="line"> include /etc/nginx/mime.types;</span><br><span class="line"> default_type application/octet-stream;</span><br><span class="line"> access_log /<span class="keyword">var</span>/log/nginx/access.log;</span><br><span class="line"> error_log /<span class="keyword">var</span>/log/nginx/error.log;</span><br><span class="line"> gzip on;</span><br><span class="line"> gzip_disable <span class="string">"msie6"</span>;</span><br><span class="line"> include /etc/nginx/conf.d<span class="comment">/*.conf;</span></span><br><span class="line"><span class="comment">&#125;</span></span><br></pre></td></tr></table></figure></p><p>全部搞定之后，我们就来build这个镜像，比如这个镜像名叫做<code>chentest/nginx001</code>，在sample文件夹里使用的命令语句就是：<code>docker build -t=&#39;chentest/nginx001&#39; .</code>。</p><p>一顿七七八八之后，显示OK，<code>docker ps -a</code>就会显示我们新建的镜像，如图：<br><img src="/images/dockernginx1.png" alt="paradin"></p><p>有了镜像，再在sample文件夹里新增一个文件夹，比如就叫<code>webiste</code>，里面有一个文件叫<code>index.html</code>。而<code>index.html</code>的内容如下：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">this</span> is a nginxtest page.</span><br></pre></td></tr></table></figure></p><p>保存退出之后，返回到sample目录。</p><p>现在我们可以制作一个容器了，制作容器命令是<code>docker run -d -p 8080:80 --name test02 -v $PWD/website:/var/www/html/website chentest/nginx001 nginx -g &quot;daemon off;&quot;</code>,这句话里规定容器的8080端口映射到宿主机的80端口，同时引入了当前目录的website目录到容器的<code>/var/www/html/website</code>目录，nginx也默认在前台进程进行。执行之后，<code>docker ps -a</code>看一下：<br><img src="/images/dockernginx2.png" alt="paradin"></p><p>看见port这一栏已经显示8080与80端口的相勾结成功，于是我们可以登录这台机器的80端口看一下。<br><img src="/images/dockernginx3.png" alt="paradin"></p><p>而如果现在我更改一下上面的<code>index.html</code>，改成另外一句话。比如说改成“why so serious??”,保存文件之后，直接刷新网页，就会看到网页的内容已经发生了变化，如图：<br><img src="/images/dockernginx4.png" alt="paradin"></p><p>可见引入<code>-v</code>这个命令在容器里，可以随时调试内容，而不是每次都要重新打包生成镜像。这一点再调试阶段为我们提供了很大的方便。</p><h2><span id="docker端口映射的问题">docker端口映射的问题</span></h2><p><code>docker run</code>命令里指定端口的格式是<code>-p 容器端口:宿主机端口</code>。如果想要随机指定就是大写的<code>P</code>。如图：<br><img src="/images/dockernginx5.png" alt="paradin"></p><p>这里就是随机分配了一个32775端口给宿主机，访问的时候也是要访问这个32775端口。</p><p>有时候port这里却不显示端口映射的情况，如图：<br><img src="/images/dockernginx6.png" alt="paradin"></p><p>这个情况是因为这个容器的status是<code>exited</code>，docker会在容器主进程结束后自动终止容器运行，而<code>nginx</code>启动后就会在后台运行，docker以为<code>nginx</code>已经结束运行了，所以就会停止容器。</p>]]></content>
-    
-    <summary type="html">
-    
-      中国共产党建议修改宪法，取消国家主席任期不得超过两届的规定。
-    
-    </summary>
-    
-      <category term="工作与技术" scheme="http://yoursite.com/categories/%E5%B7%A5%E4%BD%9C%E4%B8%8E%E6%8A%80%E6%9C%AF/"/>
-    
-    
-      <category term="docker" scheme="http://yoursite.com/tags/docker/"/>
-    
-      <category term="nginx" scheme="http://yoursite.com/tags/nginx/"/>
     
   </entry>
   

@@ -75,7 +75,7 @@
 
 
 
-  <meta name="keywords" content="nginx,日志统计," />
+  <meta name="keywords" content="nginx," />
 
 
 
@@ -88,24 +88,21 @@
 
 
 
-<meta name="description" content="面试的时候一定会被面到的问题是：给出web服务器的访问日志，请写一个脚本来统计访问前10的IP有哪些？访问前10的请求有哪些？当你领略过goaccess之后，你就明白，这些问题，除了考验你的脚本背诵记忆能力以外，唯一的作用只有装A或者装C了。">
-<meta name="keywords" content="nginx,日志统计">
+<meta name="description" content="部署过程普通的HTTPS网站浏览会比HTTP网站稍微慢一些，因为需要处理加密任务，而配置了HTTP/S的HTTPS，在低延时的情况下速度会比HTTP更快更稳定！ HTTP/2是建立在TLS的基础上的，那么先要查看nginx的版本和openssl的版本，如果nginx版本在1.10.0以上且需要openssl版本在1.0.2以上那么就可以进行下一步了： 先编辑https（443端口）对应的conf">
+<meta name="keywords" content="nginx">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Goaccess---良心nginx日志分析工具">
-<meta property="og:url" content="http://yoursite.com/2018/01/30/Goaccess-良心nginx日志分析工具/index.html">
+<meta property="og:title" content="使用nginx开启http2协议">
+<meta property="og:url" content="http://yoursite.com/2018/03/16/使用nginx开启http2协议/index.html">
 <meta property="og:site_name" content="Chris Chan&#39;s BLOG">
-<meta property="og:description" content="面试的时候一定会被面到的问题是：给出web服务器的访问日志，请写一个脚本来统计访问前10的IP有哪些？访问前10的请求有哪些？当你领略过goaccess之后，你就明白，这些问题，除了考验你的脚本背诵记忆能力以外，唯一的作用只有装A或者装C了。">
+<meta property="og:description" content="部署过程普通的HTTPS网站浏览会比HTTP网站稍微慢一些，因为需要处理加密任务，而配置了HTTP/S的HTTPS，在低延时的情况下速度会比HTTP更快更稳定！ HTTP/2是建立在TLS的基础上的，那么先要查看nginx的版本和openssl的版本，如果nginx版本在1.10.0以上且需要openssl版本在1.0.2以上那么就可以进行下一步了： 先编辑https（443端口）对应的conf">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="http://yoursite.com/images/goaccess1.png">
-<meta property="og:image" content="http://yoursite.com/images/goaccess2.png">
-<meta property="og:image" content="http://yoursite.com/images/goaccess3.png">
-<meta property="og:image" content="http://yoursite.com/images/goaccess4.png">
-<meta property="og:image" content="http://yoursite.com/images/goaccess5.png">
-<meta property="og:updated_time" content="2018-01-30T07:53:27.531Z">
+<meta property="og:image" content="http://yoursite.com/images/http2-10.png">
+<meta property="og:image" content="http://yoursite.com/images/http2-11.png">
+<meta property="og:updated_time" content="2018-03-16T14:37:20.314Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Goaccess---良心nginx日志分析工具">
-<meta name="twitter:description" content="面试的时候一定会被面到的问题是：给出web服务器的访问日志，请写一个脚本来统计访问前10的IP有哪些？访问前10的请求有哪些？当你领略过goaccess之后，你就明白，这些问题，除了考验你的脚本背诵记忆能力以外，唯一的作用只有装A或者装C了。">
-<meta name="twitter:image" content="http://yoursite.com/images/goaccess1.png">
+<meta name="twitter:title" content="使用nginx开启http2协议">
+<meta name="twitter:description" content="部署过程普通的HTTPS网站浏览会比HTTP网站稍微慢一些，因为需要处理加密任务，而配置了HTTP/S的HTTPS，在低延时的情况下速度会比HTTP更快更稳定！ HTTP/2是建立在TLS的基础上的，那么先要查看nginx的版本和openssl的版本，如果nginx版本在1.10.0以上且需要openssl版本在1.0.2以上那么就可以进行下一步了： 先编辑https（443端口）对应的conf">
+<meta name="twitter:image" content="http://yoursite.com/images/http2-10.png">
 
 
 
@@ -135,13 +132,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2018/01/30/Goaccess-良心nginx日志分析工具/"/>
+  <link rel="canonical" href="http://yoursite.com/2018/03/16/使用nginx开启http2协议/"/>
 
 
 
 
 
-  <title>Goaccess---良心nginx日志分析工具 | Chris Chan's BLOG</title>
+  <title>使用nginx开启http2协议 | Chris Chan's BLOG</title>
   
 
 
@@ -324,7 +321,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/01/30/Goaccess-良心nginx日志分析工具/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/03/16/使用nginx开启http2协议/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Chris Chan">
@@ -341,7 +338,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Goaccess---良心nginx日志分析工具</h1>
+          <h1 class="post-title" itemprop="name headline">使用nginx开启http2协议</h1>
         
 
         <div class="post-meta">
@@ -353,8 +350,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-30T15:42:33+08:00">
-                2018-01-30
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-16T22:34:44+08:00">
+                2018-03-16
               </time>
             
 
@@ -395,8 +392,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2018/01/30/Goaccess-良心nginx日志分析工具/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count hc-comment-count" data-xid="2018/01/30/Goaccess-良心nginx日志分析工具/" itemprop="commentsCount"></span>
+                <a href="/2018/03/16/使用nginx开启http2协议/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count hc-comment-count" data-xid="2018/03/16/使用nginx开启http2协议/" itemprop="commentsCount"></span>
                 </a>
               </span>
               <!--/noindex-->
@@ -405,7 +402,7 @@
 
           
           
-             <span id="/2018/01/30/Goaccess-良心nginx日志分析工具/" class="leancloud_visitors" data-flag-title="Goaccess---良心nginx日志分析工具">
+             <span id="/2018/03/16/使用nginx开启http2协议/" class="leancloud_visitors" data-flag-title="使用nginx开启http2协议">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -431,7 +428,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  594
+                  502
                 </span>
               
 
@@ -454,10 +451,6 @@
           
 
           
-              <div class="post-description">
-                  面试的时候一定会被面到的问题是：给出web服务器的访问日志，请写一个脚本来统计访问前10的IP有哪些？访问前10的请求有哪些？当你领略过goaccess之后，你就明白，这些问题，除了考验你的脚本背诵记忆能力以外，唯一的作用只有装A或者装C了。
-              </div>
-          
 
         </div>
       </header>
@@ -472,25 +465,14 @@
       
 
       
-        <script src="\assets\js\APlayer.min.js"> </script><p>Goaccess是一个非常良心的开源软件，它的良心之处体现在如下方面：</p>
-<ul>
-<li>安装简单；</li>
-<li>操作容易；</li>
-<li>界面酷炫；</li>
-</ul>
-<h2><span id="安装">安装</span></h2><p>安装<code>Goaccess</code>十分的简单，在centos里直接<code>yum install goaccess</code>，如果yum源里没有<code>goaccess</code>，可以先安装<code>epel</code>。安装<code>epel</code>的方法如下：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">wget http:<span class="comment">//dl.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm</span></span><br><span class="line">wget http:<span class="comment">//rpms.famillecollet.com/enterprise/remi-release-6.rpm</span></span><br><span class="line">rpm -Uvh remi-release<span class="number">-6</span>*.rpm epel-release<span class="number">-6</span>*.rpm</span><br></pre></td></tr></table></figure></p>
-<h2><span id="配置和使用">配置和使用</span></h2><p>安装完<code>goaccess</code>之后，我们需要在<code>/etc/goaccess.conf</code>里添加如下几句话：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">time-format %T</span><br><span class="line">date-format %d/%b/%Y</span><br><span class="line">log-format %h %^[%d:%t %^] “%r” %s %b “%R” “%u”</span><br></pre></td></tr></table></figure></p>
-<p>保存退出之后，我们就可以通过<code>goaccess</code>来分析<code>nginx</code>日志了，语句格式也很简单：<code>goaccess -f nginx日志的绝对路径</code>。比如我的nginx日志是<code>access-chen.log</code>，查看一下里面的内容：<br><img src="/images/goaccess1.png" alt="goaccess"></p>
-<p>虽然有规律，但是看上去很乱，需要在分析日志之前喝两瓶静心口服液。</p>
-<p>然后我就<code>goaccess -f access-chen.log</code>，就会看到如下的界面：<br><img src="/images/goaccess2.png" alt="goaccess"></p>
-<p>这一下，整个日志看起来更加友好，更加直白，更加高大上。足以吸引周围人的羡慕目光。</p>
-<p>但是这里面还是有一个注意点：<code>goaccess</code>默认支持的日志格式是<code>nginx</code>默认的日志格式，也就是nginx.conf里的如下格式：<br><img src="/images/goaccess3.png" alt="goaccess"></p>
-<p>如果你的日志格式是有过更改的，而且还不想改回来，那么就需要去<code>/etc/goaccess.conf</code>里对应的<code>log-format</code>进行更改。</p>
-<p>这还没有完，goaccess还可以生成html，这里<code>goaccess -f access-chen.log  -a &gt; /nginx安装路径/html/chen.html</code>。然后在浏览器里登陆到这个服务器的chen.html，就会看到整个日志情况的网页排版，如图：<br><img src="/images/goaccess4.png" alt="goaccess"></p>
-<p>这样的话，我们可以每一天都发一份当天的日志html去运维人员的信箱里，这样更加方便我们分析日志。</p>
-<h2><span id="缺点">缺点</span></h2><p>虽然前面说了那么多goaccess的优点，但是缺点也是有的，比如<code>goaccess</code>的粒度太粗，只能按天分割，如果要按小时分割，需要先<code>grep</code>出来，这个做法比较挫我懂…</p>
-<p>还有一个缺点，就是访问人的来源只能定位到国家，无法具体定位到省市县村屯…<br><img src="/images/goaccess5.png" alt="goaccess"></p>
-<h2><span id="参考资料">参考资料</span></h2><p><a href="http://blog.maxhemby.se/determine-the-apache-traffic-load/#respond" target="_blank" rel="noopener">http://blog.maxhemby.se/determine-the-apache-traffic-load/#respond</a></p>
+        <script src="\assets\js\APlayer.min.js"> </script><h2><span id="部署过程">部署过程</span></h2><p>普通的HTTPS网站浏览会比HTTP网站稍微慢一些，因为需要处理加密任务，而配置了HTTP/S的HTTPS，在低延时的情况下速度会比HTTP更快更稳定！</p>
+<p><code>HTTP/2</code>是建立在TLS的基础上的，那么先要查看nginx的版本和openssl的版本，如果<code>nginx</code>版本在<code>1.10.0</code>以上且需要<code>openssl</code>版本在<code>1.0.2</code>以上那么就可以进行下一步了：<br><img src="/images/http2-10.png" alt="paradin"></p>
+<p>先编辑https（443端口）对应的<code>conf</code>文件：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">server &#123;</span><br><span class="line">        listen 443 ssl http2;    #这里多加一句http2</span><br><span class="line">        server_name  cuntao.lechange.com *.lechange.com;    #这里填写实际的域名，我这里以cuntao.lechange.com为例</span><br><span class="line"></span><br><span class="line">        ssl_certificate /实际路径/server-com.crt;        </span><br><span class="line">        ssl_certificate_key /实际路径/server-com.key;</span><br><span class="line"></span><br><span class="line">        ssl_session_timeout  30m;        #客户端会话缓存时间</span><br><span class="line">        ssl_protocols  TLSv1 TLSv1.1 TLSv1.2;    #允许的协议</span><br><span class="line">        ssl_ciphers  EECDH+CHACHA20:EECDH+AES128:RSA+AES128:EECDH+AES256:RSA+AES256:EECDH+3DES:RSA+3DES:!MD5;    #加密算法(CloudFlare 推荐的加密套件组)</span><br><span class="line">        ssl_prefer_server_ciphers   on;        #优化 SSL 加密套件</span><br><span class="line">        ssl_session_cache builtin:1000 shared:SSL:10m;        #SSL会话缓存类型和大小</span><br><span class="line">        ssl_buffer_size 1400;        #每个MTU大小1400b</span><br><span class="line"></span><br><span class="line">        location / &#123;</span><br><span class="line">            root   html;</span><br><span class="line">            index  index.html index.htm;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        error_page  <span class="number">404</span>              /<span class="number">404.</span>html;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
+<p>保存之后再编辑http（80端口）对应的<code>conf</code>文件：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">server &#123;</span><br><span class="line">    listen <span class="number">80</span> <span class="keyword">default</span>;</span><br><span class="line">    add_header Strict-Transport-Security max-age=<span class="number">15768000</span>;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">301</span> https:<span class="comment">//$host$request_uri;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>然后使用<code>nginx-t</code>检查一下是否文件有错误，如果是OK的话，那么就<code>nginx -s reload</code>平滑重启一下nginx即可。</p>
+<p>验证http/2是否开启很简单，有两个方法：<br>1）登陆<code>https://tools.keycdn.com/http2-test</code>，将你的域名填写进去，查看一下配置成功：<br><img src="/images/http2-11.png" alt="paradin"></p>
+<p>2)在Chrome浏览器上可以通过安装<code>HTTP/2 and SPDY indicator</code>插件来检验（<a href="https://chrome.google.com/webstore/detail/http2-and-spdy-indicator/mpbpobfflnpcgagjijhmgnchggcjblin），如果地址栏出现蓝色的闪电就是`HTTP/2`，灰色的话就是`HTTP/2`没开启。" target="_blank" rel="noopener">https://chrome.google.com/webstore/detail/http2-and-spdy-indicator/mpbpobfflnpcgagjijhmgnchggcjblin），如果地址栏出现蓝色的闪电就是`HTTP/2`，灰色的话就是`HTTP/2`没开启。</a></p>
+<h2><span id="参考资料">参考资料</span></h2><p><a href="https://www.nginx.com/blog/nginx-1-9-5/" target="_blank" rel="noopener">https://www.nginx.com/blog/nginx-1-9-5/</a><br><a href="https://blog.fazero.me/2017/01/06/upgrate-nginx-and-use-http2/" target="_blank" rel="noopener">https://blog.fazero.me/2017/01/06/upgrate-nginx-and-use-http2/</a><br><a href="https://iyaozhen.com/nginx-http2-conf.html" target="_blank" rel="noopener">https://iyaozhen.com/nginx-http2-conf.html</a></p>
 
       
     </div>
@@ -555,11 +537,11 @@
 
 				<li class="post-copyright-link">
 					<strong>本文标题：</strong>
-					<a href="http://yoursite.com/2018/01/30/Goaccess-良心nginx日志分析工具/" title="Goaccess---良心nginx日志分析工具">Goaccess---良心nginx日志分析工具</a>
+					<a href="http://yoursite.com/2018/03/16/使用nginx开启http2协议/" title="使用nginx开启http2协议">使用nginx开启http2协议</a>
 				</li>
 
 				<li class="post-copyright-date">
-					<strong>发布时间：</strong>2018年1月30日 - 15时01分
+					<strong>发布时间：</strong>2018年3月16日 - 22时03分
 				</li>  
 
 				<li class="post-copyright-license">
@@ -574,8 +556,6 @@
         <div class="post-tags">
           
             <a href="/tags/nginx/" rel="tag"><i class="fa fa-tag"></i> nginx</a>
-          
-            <a href="/tags/日志统计/" rel="tag"><i class="fa fa-tag"></i> 日志统计</a>
           
         </div>
       
@@ -601,8 +581,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/01/29/处理掉积压过多的activemq持久化消息/" rel="next" title="处理掉积压过多的activemq持久化消息">
-                <i class="fa fa-chevron-left"></i> 处理掉积压过多的activemq持久化消息
+              <a href="/2018/03/16/关于HTTP-2应该知道的事/" rel="next" title="关于HTTP/2应该知道的事">
+                <i class="fa fa-chevron-left"></i> 关于HTTP/2应该知道的事
               </a>
             
           </div>
@@ -610,10 +590,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/01/30/mysql查看实时语句和慢sql/" rel="prev" title="mysql查看实时语句和慢sql">
-                mysql查看实时语句和慢sql <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -889,7 +865,7 @@ show_date_time();
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text"><span id="&#x5B89;&#x88C5;">&#x5B89;&#x88C5;</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">2.</span> <span class="nav-text"><span id="&#x914D;&#x7F6E;&#x548C;&#x4F7F;&#x7528;">&#x914D;&#x7F6E;&#x548C;&#x4F7F;&#x7528;</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">3.</span> <span class="nav-text"><span id="&#x7F3A;&#x70B9;">&#x7F3A;&#x70B9;</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">4.</span> <span class="nav-text"><span id="&#x53C2;&#x8003;&#x8D44;&#x6599;">&#x53C2;&#x8003;&#x8D44;&#x6599;</span></span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text"><span id="&#x90E8;&#x7F72;&#x8FC7;&#x7A0B;">&#x90E8;&#x7F72;&#x8FC7;&#x7A0B;</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">2.</span> <span class="nav-text"><span id="&#x53C2;&#x8003;&#x8D44;&#x6599;">&#x53C2;&#x8003;&#x8D44;&#x6599;</span></span></a></li></ol></div>
             
 
           </div>
@@ -1077,7 +1053,7 @@ show_date_time();
 		_hcwp.push({widget:"Bloggerstream", widget_id: 99594, selector:".hc-comment-count", label: "{\%COUNT%\}" });
 
 		
-		_hcwp.push({widget:"Stream", widget_id: 99594, xid: "2018/01/30/Goaccess-良心nginx日志分析工具/"});
+		_hcwp.push({widget:"Stream", widget_id: 99594, xid: "2018/03/16/使用nginx开启http2协议/"});
 		
 
 		(function() {
