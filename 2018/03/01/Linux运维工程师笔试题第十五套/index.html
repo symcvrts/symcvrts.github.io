@@ -96,7 +96,7 @@
 <meta property="og:site_name" content="Chris Chan&#39;s BLOG">
 <meta property="og:description" content="大牛之路，如此辛苦">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-03-07T03:35:44.952Z">
+<meta property="og:updated_time" content="2018-03-18T11:09:00.694Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Linux运维工程师笔试题第十五套">
 <meta name="twitter:description" content="大牛之路，如此辛苦">
@@ -425,7 +425,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  2,739
+                  2,737
                 </span>
               
 
@@ -475,7 +475,7 @@
 <p>边沿触发(ET)：当<code>epoll</code>检测到其上有事件发生并通知应用程序时，应用程序必须立即处理，并且下一次的<code>epoll</code>调用，不会再向应用程序通知此事件。</p>
 <p>所以<code>ET</code>模式大大得降低了同一个<code>epoll</code>事件被重复触发的次数，因此<code>ET</code>模式工作效率比<code>LT</code>模式更高。<code>select</code>、<code>poll</code>、<code>epoll</code>的默认工作模式都是水平触发(<code>LT</code>)模式，但是epoll是支持边沿触发(<code>ET</code>)模式的。 </p>
 <p>4.<code>varchar</code>和<code>char</code>的区别是什么？utf8字符集下<code>varchar</code>最多存多少个字符？<br>[我的答案]前面那个问题去看<a href="http://blog.51cto.com/chenx1242/1742467，这里说后面那个。" target="_blank" rel="noopener">http://blog.51cto.com/chenx1242/1742467，这里说后面那个。</a><br>在<code>utf-8</code>状态下的<code>varchar</code>，最大只能到 <code>(65535 - 2) / 3 = 21844 余 1</code>。<br>在<code>gbk</code>状态下的<code>varchar</code>, 最大只能到 <code>(65535 - 2) / 2 = 32766 余 1</code>。</p>
-<p>5.<code>primary key</code>和<code>unique</code>的区别？<br>[我的答案]首先先说明<code>primary key = unique +  not null</code>，其次<code>Unique Key</code>可以可以是空，可以在一个表里的一个或多个字段定义，也就是爱有几个有几个，同时存在也可以；但是<code>Primary Key</code>不能为空不能重复，而其一个表里只能有一个<code>Primary Key</code>。</p>
+<p>5.<code>primary key</code>和<code>unique</code>的区别？<br>[我的答案]首先先说明<code>primary key = unique +  not null</code>，其次<code>Unique Key</code>可以是空，可以在一个表里的一个或多个字段定义，也就是爱有几个有几个，同时存在也可以；但是<code>Primary Key</code>不能为空不能重复，而其一个表里只能有一个<code>Primary Key</code>。</p>
 <p>6.乐观锁是啥，悲观锁是啥？<br>[我的答案]悲观锁<code>Pessimistic Lock</code>, 顾名思义，就是很悲观，每次去拿数据的时候都认为别人会修改，所以每次在拿数据的时候都会上锁，这样别人想拿这个数据就会<code>block</code>直到它拿到锁。传统的关系型数据库里边就用到了很多这种锁机制，比如行锁，表锁等，读锁，写锁等，都是在做操作之前先上锁。</p>
 <p>乐观锁<code>Optimistic Lock</code>, 顾名思义，就是很乐观，每次去拿数据的时候都认为别人不会修改，所以不会上锁，但是在更新的时候会判断一下在此期间别人有没有去更新这个数据，可以使用版本号等机制。乐观锁适用于多读的应用类型，这样可以提高吞吐量，像数据库如果提供类似于<code>write_condition</code>机制的其实都是提供的乐观锁。</p>
 <p>两种锁各有优缺点，不可认为一种好于另一种，像乐观锁适用于写比较少的情况下，即冲突真的很少发生的时候，这样可以省去了锁的开销，加大了系统的整个吞吐量。但如果经常产生冲突，上层应用会不断的进行retry，这样反倒是降低了性能，所以这种情况下用悲观锁就比较合适。</p>
