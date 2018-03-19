@@ -96,7 +96,7 @@
 <meta property="og:site_name" content="Chris Chan&#39;s BLOG">
 <meta property="og:description" content="呼~~不晓得会不会有下一轮...">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-03-19T07:26:00.920Z">
+<meta property="og:updated_time" content="2018-03-19T07:30:44.161Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="蚂蚁金服运维面试全纪录">
 <meta name="twitter:description" content="呼~~不晓得会不会有下一轮...">
@@ -425,7 +425,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  1,255
+                  1,262
                 </span>
               
 
@@ -476,7 +476,7 @@
 <p>6）RDS为什么会在DTS的时候有飙升的现象？<br>这个我答的不好，有点东拉西扯…（尴尬）</p>
 <p>7）mysql备份的时候使用过什么参数？<br>答：<code>--skip-opt</code> 防止运行中的MYSQL锁库<br>加速数据备份的参数是什么？<br><code>-q</code> 提高导出性能<br><code>-e</code> 提高导入性能，使用包括几个<code>VALUES</code>列表的多行<code>INSERT</code>语法；<br><code>--max_allowed_packet=XXX</code> 客户端/服务器之间通信的缓存区的最大大小；<br><code>--net_buffer_length=XXX</code> TCP/IP和套接字通信缓冲区大小，创建长度达到<code>net_buffer_length</code>的行；</p>
 <p>注意！<code>max_allowed_packet</code>和<code>net_buffer_length</code>在mysql里有参数值，不能超过参数值！<br>查看方法：<code>show variables like &#39;max_allowed_packet&#39;;</code></p>
-<p>8）cache和buffer有什么区别？<br><code>cache</code>是缓存，弥补高速设备与低速设备的鸿沟引入的中间层，达到数据快取的目的；<br><code>buffer</code>是缓冲区，用户流量整形，把大量的小的io整理一个平稳的大io，减少磁盘响应次数；<br><code>buffer</code>是即将要写入磁盘的，<code>cache</code>是要被从磁盘里读出来的。当然这只是普通用途，<code>buffer</code>用来读、<code>cache</code>用来写也是有可能的。具体问题具体分析。</p>
+<p>8）cache和buffer有什么区别？<br><code>cache</code>是缓存，弥补高速设备与低速设备的鸿沟引入的中间层，达到数据快取的目的（救火车与蓄水池）；<br><code>buffer</code>是缓冲区，用户流量整形，把大量的小的io整理一个平稳的大io，减少磁盘响应次数；<br><code>buffer</code>是即将要写入磁盘的，<code>cache</code>是要被从磁盘里读出来的。当然这只是普通用途，<code>buffer</code>用来读、<code>cache</code>用来写也是有可能的。具体问题具体分析。</p>
 <p>9）他俩的调用有什么区别？<br>我问是要说“块读取”什么的么，面试官说是。我就蒙说cache是块读取，buffer我不清楚…（尴尬 again）<br>【事后补充】</p>
 <p>10）谈一谈time_wait和close_wait，各自在什么情况下出现？<br><code>time_wait</code>和<code>close_wait</code>是出现在“四次挥手”的环节里，<code>time_wait</code>是服务器接收到客户端发来的断开TCP连接的请求，并且服务器发送确认断开的包给客户端，此时服务器处于<code>time_wait</code>状态，如果服务器等待两个<code>msl</code>的话，就会默认断开连接，如果想修改<code>msl</code>可以通过修改<code>/etc/systl.conf</code>文件；<br><code>close_wait</code>是客户端已经发送了断开TCP请求，但是服务器端没有接收到，也就是<code>time_wait</code>的上一步，此时这个资源就一直被程序霸占。</p>
 <p>11）为什么time_wait需要等待两个msl?1.99行不行？2.01行不行？<br>我当时说防止上一次连接中的包，迷路后重新出现，影响新连接。面试官好像觉得不是很满意…（尴尬 again）<br>【事后补充】MSL是指一个片段在网络中的最大存活时间，2MSL是一个发送和一个回复所需的最大时间，如果直到2MSL，客户端都没有收到fin包，那么客户端就可以断定他发出去的ack已经被服务端接收，结束TCP连接。</p>
