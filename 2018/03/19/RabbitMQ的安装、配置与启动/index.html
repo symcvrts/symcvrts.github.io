@@ -102,7 +102,8 @@
 <meta property="og:image" content="http://yoursite.com/images/rabbitmq6.png">
 <meta property="og:image" content="http://yoursite.com/images/rabbitmq4.png">
 <meta property="og:image" content="http://yoursite.com/images/rabbitmq5.png">
-<meta property="og:updated_time" content="2018-03-19T03:17:43.979Z">
+<meta property="og:image" content="http://yoursite.com/images/salahe.gif">
+<meta property="og:updated_time" content="2018-03-19T03:35:49.323Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="RabbitMQ的安装、配置与启动">
 <meta name="twitter:description" content="这个MQ是给activemq当备胎的">
@@ -432,7 +433,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  818
+                  825
                 </span>
               
 
@@ -489,11 +490,12 @@
 <pre><code>内网IP地址 3-dvl-hlsproxy-001
 </code></pre><p>然后执行<code>rabbitmq-plugins enable rabbitmq_management</code>来安装WEB图形界面，然后拷贝<code>rabbitmq.config.example</code>到<code>/etc/rabbitmq/</code>里，并且改名叫<code>rabbitmq.config</code>，命令如下：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cp /usr/share/doc/rabbitmq-server<span class="number">-3.7</span><span class="number">.4</span>/rabbitmq.config.example /etc/rabbitmq/</span><br><span class="line">cd /etc/rabbitmq/</span><br><span class="line">mv rabbitmq.config.example rabbitmq.config</span><br></pre></td></tr></table></figure></p>
 <p>编辑<code>rabbitmq.config</code>这个文件，把<code>%%{loopback_users, []}.</code>改成<code>{loopback_users, []}</code>，保存之后，执行<code>service rabbitmq-server restart</code>来启动RabbitMQ。</p>
-<p>如果启动之后，<code>rabbitmqctl status</code>不断的刷<code>Error when reading /var/lib/rabbitmq/.erlang.cookie: eacces</code>，执行<code>chown rabbitmq:rabbitmq /var/lib/rabbitmq/.erlang.cookie</code>。</p>
+<p>如果启动之后，执行<code>rabbitmqctl status</code>不断的刷<code>Error when reading /var/lib/rabbitmq/.erlang.cookie: eacces</code>的错误的话，执行<code>chown rabbitmq:rabbitmq /var/lib/rabbitmq/.erlang.cookie</code>。</p>
 <p>在浏览器里登录<code>外网IP:15672</code>就会看到RabbitMQ的WEB配置界面了，<br><img src="/images/rabbitmq4.png" alt="paradin"></p>
 <p>账号和密码都是guest，输入之后就会看到如下的界面，可以在界面里看到<code>3-dvl-hlsproxy-001</code>的情况了，如图：<br><img src="/images/rabbitmq5.png" alt="paradin"></p>
 <p>RabbitMQ 3.0以后版本的WEB端口是<code>15672</code>,服务的端口是<code>5672</code>,这俩都可以在配置文件里面更改。至此RabbitMQ的安装与配置结束了，但是这个仅仅是最简单的配置，RabbitMQ自身有一套很详细的用户管理规则以及它支持Python等很多语言的管理，这些内容以后再详细说明。</p>
 <h2><span id="参考资料">参考资料</span></h2><p><a href="https://packages.erlang-solutions.com/erlang/" target="_blank" rel="noopener">https://packages.erlang-solutions.com/erlang/</a><br><a href="https://laucyun.com/9849587ce75f31d534d52f906c94368f.html" target="_blank" rel="noopener">https://laucyun.com/9849587ce75f31d534d52f906c94368f.html</a><br><a href="https://www.rabbitmq.com/access-control.html" target="_blank" rel="noopener">https://www.rabbitmq.com/access-control.html</a></p>
+<p><img src="/images/salahe.gif" alt="paradin" title="大四喜的萨拉赫"></p>
 
       
     </div>
