@@ -88,21 +88,21 @@
 
 
 
-<meta name="description" content="前言之前说了如何使用阿里云的SDK获取云存储的值然后发送表格邮件，但是最近领导又发话了，说这个邮件每天一封看的有点审美疲劳，要响应“数据可视化”的要求，于是就要求画图。我之前用python的matplotlib画过，这一次尝试用echart来做图！ echart是不太良心的百度良心的开源作品，提供各种各样精美的作图方案，分分钟把图片做的高大上，吸引周围人的目光。不过我对前端的了解非常浅薄，但是没">
+<meta name="description" content="有了`pyechart`加持，准保你的大数据图案美观简洁又大方！">
 <meta name="keywords" content="python,echart">
 <meta property="og:type" content="article">
 <meta property="og:title" content="使用python调用echart画图">
 <meta property="og:url" content="http://yoursite.com/2018/03/22/使用python调用echart画图/index.html">
 <meta property="og:site_name" content="Chris Chan&#39;s BLOG">
-<meta property="og:description" content="前言之前说了如何使用阿里云的SDK获取云存储的值然后发送表格邮件，但是最近领导又发话了，说这个邮件每天一封看的有点审美疲劳，要响应“数据可视化”的要求，于是就要求画图。我之前用python的matplotlib画过，这一次尝试用echart来做图！ echart是不太良心的百度良心的开源作品，提供各种各样精美的作图方案，分分钟把图片做的高大上，吸引周围人的目光。不过我对前端的了解非常浅薄，但是没">
+<meta property="og:description" content="有了`pyechart`加持，准保你的大数据图案美观简洁又大方！">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://yoursite.com/images/pyechart.png">
 <meta property="og:image" content="http://yoursite.com/images/pyechart2.png">
 <meta property="og:image" content="http://yoursite.com/images/pyechart3.png">
-<meta property="og:updated_time" content="2018-03-22T15:27:38.557Z">
+<meta property="og:updated_time" content="2018-03-22T15:32:15.179Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="使用python调用echart画图">
-<meta name="twitter:description" content="前言之前说了如何使用阿里云的SDK获取云存储的值然后发送表格邮件，但是最近领导又发话了，说这个邮件每天一封看的有点审美疲劳，要响应“数据可视化”的要求，于是就要求画图。我之前用python的matplotlib画过，这一次尝试用echart来做图！ echart是不太良心的百度良心的开源作品，提供各种各样精美的作图方案，分分钟把图片做的高大上，吸引周围人的目光。不过我对前端的了解非常浅薄，但是没">
+<meta name="twitter:description" content="有了`pyechart`加持，准保你的大数据图案美观简洁又大方！">
 <meta name="twitter:image" content="http://yoursite.com/images/pyechart.png">
 
 
@@ -429,7 +429,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  1,121
+                  1,088
                 </span>
               
 
@@ -451,6 +451,10 @@
             </div>
           
 
+          
+              <div class="post-description">
+                  有了`pyechart`加持，准保你的大数据图案美观简洁又大方！
+              </div>
           
 
         </div>
@@ -475,7 +479,7 @@
 <p>如果想要在一个html里做多个图，比如要做三个柱状图，那么example如下：<br>    <figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/usr/bin/env python</span></span><br><span class="line">#coding=utf-8</span><br><span class="line"><span class="keyword">from</span> pyecharts <span class="keyword">import</span> Bar, Grid</span><br><span class="line"></span><br><span class="line">attr = [<span class="string">"一班"</span>, <span class="string">"二班"</span>, <span class="string">"三班"</span>, <span class="string">"四班"</span>]</span><br><span class="line">v1 = [<span class="number">54</span>, <span class="number">81</span>, <span class="number">32</span>, <span class="number">32</span>] </span><br><span class="line">v2 = [<span class="number">68</span>, <span class="number">69</span>, <span class="number">27</span>, <span class="number">32</span>] </span><br><span class="line">bar = Bar(<span class="string">"赞成票"</span>,<span class="string">"本图表展示赞成票情况"</span>)</span><br><span class="line">bar.add(<span class="string">"年纪长"</span>, attr, v1, mark_point=[<span class="string">"max"</span>, <span class="string">"min"</span>])</span><br><span class="line">bar.add(<span class="string">"副年纪长"</span>, attr, v2, mark_point=[<span class="string">"max"</span>, <span class="string">"min"</span>])</span><br><span class="line"></span><br><span class="line">attr2 = [<span class="string">"一班"</span>, <span class="string">"二班"</span>, <span class="string">"三班"</span>, <span class="string">"四班"</span>]</span><br><span class="line">x1 = [<span class="number">2</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>]</span><br><span class="line">x2 = [<span class="number">1</span>, <span class="number">3</span>, <span class="number">0</span>, <span class="number">2</span>]</span><br><span class="line">bar2 = Bar("反对票","本图表展示反对票情况",title_top='bottom',title_color='#1d12eb')            #title_color是标题颜色，这个跟html的颜色取值一样</span><br><span class="line">bar2.add(<span class="string">"年纪长"</span>, attr2, x1, mark_point=[<span class="string">"max"</span>, <span class="string">"min"</span>])</span><br><span class="line">bar2.add(<span class="string">"副年纪长"</span>, attr2, x2, mark_point=[<span class="string">"max"</span>, <span class="string">"min"</span>])</span><br><span class="line"></span><br><span class="line">attr3 = [<span class="string">"一班"</span>, <span class="string">"二班"</span>, <span class="string">"三班"</span>, <span class="string">"四班"</span>]</span><br><span class="line">y1 = [<span class="number">2</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>]</span><br><span class="line">y2 = [<span class="number">2</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>]</span><br><span class="line">bar3 = Bar("弃权票","本图表展示弃权票情况",title_pos='right',title_color='#eb1212')             #title_pos是标题的位置，如果不特殊说明，会重叠</span><br><span class="line">bar3.add(<span class="string">"年纪长"</span>, attr3, y1, mark_point=[<span class="string">"max"</span>, <span class="string">"min"</span>])    </span><br><span class="line">bar3.add(<span class="string">"副年纪长"</span>, attr3, y1, mark_point=[<span class="string">"max"</span>, <span class="string">"min"</span>])</span><br><span class="line"></span><br><span class="line">grid = Grid()    </span><br><span class="line">grid.add(bar, grid_width="40%", grid_height="30%", grid_bottom="60%", grid_right="55%")        #grid_height和grid_width是每一个小图的大小</span><br><span class="line">grid.add(bar2, grid_width="40%", grid_height="30%", grid_bottom="60%", grid_left="55%")        #grid_bottom和grid_top是垂直位置</span><br><span class="line">grid.add(bar3, grid_width="40%", grid_height="30%", grid_top="60%", grid_right="55%")        #grid_right和grid_left是水平位置</span><br><span class="line">grid.render('/tmp/grid.html')    #在/tmp文件夹里生成一个grid.html文件</span><br></pre></td></tr></table></figure></p>
 <p><img src="/images/pyechart3.png" alt="paradin"></p>
 <p>例子中的数字都是我虚拟的，实际情况中，这些数字都应该是存储在redis这样的数据库里，然后取出来使用。</p>
-<p>上面的两个例子仅仅是<code>pyechart</code>使用的冰山一角，如果想更多的了解，请去看一下文末<code>pyechart</code>的中文说明文档，里面内容特别丰富！我这篇文章就是一个宣传稿，有了<code>pyechart</code>加持，准保你的大数据图案美观简洁又大方！</p>
+<p>上面的两个例子仅仅是<code>pyechart</code>使用的冰山一角，如果想更多的了解，请去看一下文末<code>pyechart</code>的中文说明文档，里面内容特别丰富！</p>
 <h2><span id="参考资料">参考资料</span></h2><p><a href="http://echarts.baidu.com" target="_blank" rel="noopener">http://echarts.baidu.com</a><br><a href="http://pyecharts.org/#/zh-cn/prepare" target="_blank" rel="noopener">http://pyecharts.org/#/zh-cn/prepare</a></p>
 
       
@@ -924,7 +928,7 @@ show_date_time();
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">博客全站共105.2k字</span>
+  <span class="post-count">博客全站共105.1k字</span>
 </div>
         
 
