@@ -1,6 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[使用python调用echart画图]]></title>
+    <url>%2F2018%2F03%2F22%2F%E4%BD%BF%E7%94%A8python%E8%B0%83%E7%94%A8echart%E7%94%BB%E5%9B%BE%2F</url>
+    <content type="text"><![CDATA[前言之前说了如何使用阿里云的SDK获取云存储的值然后发送表格邮件，但是最近领导又发话了，说这个邮件每天一封看的有点审美疲劳，要响应“数据可视化”的要求，于是就要求画图。我之前用python的matplotlib画过，这一次尝试用echart来做图！ echart是不太良心的百度良心的开源作品，提供各种各样精美的作图方案，分分钟把图片做的高大上，吸引周围人的目光。不过我对前端的了解非常浅薄，但是没关系。这次使用pyechart插件！这个插件可以让python直接调用echart接口，选择需要的图形之后，直接往里查数据就好，简单粗暴见效快，而且支持3D，可以说是居家旅行常备物品。可以说，有了它，作图能力顶呱呱。感谢开发者大神们的辛苦工作！ 作图首先先需要安装pyecharts插件，命令是pip install pyecharts。 然后我们就可以写一个简单的案例，如下： 123456789101112131415#!/usr/bin/env python#coding=utf-8from pyecharts import Bar #导入第三方库#attr = ["&#123;&#125;day".format(i) for i in range(1, 8)] #这样的话X坐标就是1day、2day、3day...attr = ["Mon", "Feb", "Wed", "Thu", "Fri", "Sat", "Sun"] #这样X坐标就是星期v1 = [1.49, 2.09, 4.03, 2.23, 5.26, 7.71, 7.56] v2 = [0.3, 0.9, 0.2, 0.4, 0.7, 0.7, 0.6]v3 = [18.15, 13.22, 11.28, 17.99, 18.7, 19.7, 15.6]bar = Bar("乐橙云存储情况总览", "本图表展示过去一周的云存储情况") #这里是主标题和副标题bar.add("录像分享文件", attr, v1, mark_line=["average"], mark_point=["max", "min"]) #每一个值的名称以及要展现平均值和最大最小值bar.add("视频直播文件", attr, v2, mark_line=["average"], mark_point=["max", "min"])bar.add("云录像、报警图片、全景图片", attr, v3, mark_line=["average"], mark_point=["max", "min"]) bar.render('/tmp/111.html') #在/tmp文件夹里生成一个111.html文件 如果服务器里有nginx，那么把这个html文件放到nginx/html路径里，再在浏览器里打开就会看到这样的图： 而且还可以通过点击网页上“A值”、“B值”、“C值”就可以达到屏蔽相应值的效果，而且如果点击红色箭头的“数据视图”，还可以直接看到对应的数据，非常贴心非常屌，如图： 如果想要在一个html里做多个图，比如要做三个柱状图，那么example如下： 123456789101112131415161718192021222324252627282930#!/usr/bin/env python#coding=utf-8from pyecharts import Bar, Gridattr = ["一班", "二班", "三班", "四班"]v1 = [54, 81, 32, 32] v2 = [68, 69, 27, 32] bar = Bar("赞成票","本图表展示赞成票情况")bar.add("年纪长", attr, v1, mark_point=["max", "min"])bar.add("副年纪长", attr, v2, mark_point=["max", "min"])attr2 = ["一班", "二班", "三班", "四班"]x1 = [2, 0, 0, 1]x2 = [1, 3, 0, 2]bar2 = Bar("反对票","本图表展示反对票情况",title_top='bottom',title_color='#1d12eb') #title_color是标题颜色，这个跟html的颜色取值一样bar2.add("年纪长", attr2, x1, mark_point=["max", "min"])bar2.add("副年纪长", attr2, x2, mark_point=["max", "min"])attr3 = ["一班", "二班", "三班", "四班"]y1 = [2, 0, 0, 1]y2 = [2, 0, 0, 1]bar3 = Bar("弃权票","本图表展示弃权票情况",title_pos='right',title_color='#eb1212') #title_pos是标题的位置，如果不特殊说明，会重叠bar3.add("年纪长", attr3, y1, mark_point=["max", "min"]) bar3.add("副年纪长", attr3, y1, mark_point=["max", "min"])grid = Grid() grid.add(bar, grid_width="40%", grid_height="30%", grid_bottom="60%", grid_right="55%") #grid_height和grid_width是每一个小图的大小grid.add(bar2, grid_width="40%", grid_height="30%", grid_bottom="60%", grid_left="55%") #grid_bottom和grid_top是垂直位置grid.add(bar3, grid_width="40%", grid_height="30%", grid_top="60%", grid_right="55%") #grid_right和grid_left是水平位置grid.render('/tmp/grid.html') #在/tmp文件夹里生成一个grid.html文件 例子中的数字都是我虚拟的，实际情况中，这些数字都应该是存储在redis这样的数据库里，然后取出来使用。 上面的两个例子仅仅是pyechart使用的冰山一角，如果想更多的了解，请去看一下文末pyechart的中文说明文档，里面内容特别丰富！我这篇文章就是一个宣传稿，有了pyechart加持，准保你的大数据图案美观简洁又大方！ 参考资料http://echarts.baidu.comhttp://pyecharts.org/#/zh-cn/prepare]]></content>
+      <categories>
+        <category>工作与技术</category>
+      </categories>
+      <tags>
+        <tag>python</tag>
+        <tag>echart</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[RabbitMQ的安装、配置与启动]]></title>
     <url>%2F2018%2F03%2F19%2FRabbitMQ%E7%9A%84%E5%AE%89%E8%A3%85%E3%80%81%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%90%AF%E5%8A%A8%2F</url>
     <content type="text"><![CDATA[前言环境介绍：Centos 7 + RabbitMQ：3.6.12 + Erlang：20.0 安装erlang由于RabbitMQ使用erlang语言编写的，所以要先安装erlang语言环境。但是yum源里的erlang版本太老了，于是这里选择手动安装，使用Erlang官方推荐的Erlang Solutions安装方法如下： 1234yum install gcc gcc-c++ glibc-devel make ncurses-devel openssl-devel autoconf java-1.8.0-openjdk-devel git wget wxBase.x86_64 #先把其他模块准备好wget https://packages.erlang-solutions.com/erlang-solutions-1.0-1.noarch.rpmrpm -Uvh erlang-solutions-1.0-1.noarch.rpmrpm --import https://packages.erlang-solutions.com/rpm/erlang_solutions.asc 此时，查看/etc/yum.repos.d/erlang_solutions.repo，应该是这个样子： 123456[erlang-solutions]name=CentOS $releasever - $basearch - Erlang Solutionsbaseurl=https://packages.erlang-solutions.com/rpm/centos/$releasever/$basearchgpgcheck=1gpgkey=https://packages.erlang-solutions.com/rpm/erlang_solutions.ascenabled=1 这个时候可以yum安装了： 1yum install -y esl-erlang 此时得到的erlang就是20.0版本的了，如图： 如果不想使用这个办法，可以使用源码安装的方式，https://packages.erlang-solutions.com/erlang/ 这里面有Erlang官方的下载包，拆包解压缩然后make &amp;&amp; make install即可。 安装RabbitMQ安装RabbitMQ跟其他普通软件差不多，先去官网下载目前较稳定的rpm包，然后安装，步骤如下： 12wget https://dl.bintray.com/rabbitmq/all/rabbitmq-server/3.7.4/rabbitmq-server-3.7.4-1.el7.noarch.rpmyum install -y rabbitmq-server-3.7.4-1.el7.noarch.rpm 如果出现了Transaction Check Error的错误： 可见是要安装的包与已有的包相冲突，此时需要yum list|grep erlang，如图： 再yum remove esl-erlang.x86_64，然后重新执行yum install那一步即可。 如果出现Requires: socat的错误，如图： 此时需要执行如下命令即可： 12yum -y install epel-releaseyum -y install socat 配置RabbitMQRabbitMQ安装完毕，先chkconfig rabbitmq-server on设置开机启动。然后，配置一下用户名。我这个机器的用户名不规范，需要把hostname里的中文去掉，比如改成：3-dvl-hlsproxy-001，那么就要在/etc/hosts里添加一句： 内网IP地址 3-dvl-hlsproxy-001 然后执行rabbitmq-plugins enable rabbitmq_management来安装WEB图形界面，然后拷贝rabbitmq.config.example到/etc/rabbitmq/里，并且改名叫rabbitmq.config，命令如下： 123cp /usr/share/doc/rabbitmq-server-3.7.4/rabbitmq.config.example /etc/rabbitmq/cd /etc/rabbitmq/mv rabbitmq.config.example rabbitmq.config 编辑rabbitmq.config这个文件，把%%{loopback_users, []}.改成{loopback_users, []}，保存之后，执行service rabbitmq-server restart来启动RabbitMQ。 如果启动之后，执行rabbitmqctl status不断的刷Error when reading /var/lib/rabbitmq/.erlang.cookie: eacces的错误的话，执行chown rabbitmq:rabbitmq /var/lib/rabbitmq/.erlang.cookie。 在浏览器里登录外网IP:15672就会看到RabbitMQ的WEB配置界面了， 账号和密码都是guest，输入之后就会看到如下的界面，可以在界面里看到3-dvl-hlsproxy-001的情况了，如图： RabbitMQ 3.0以后版本的WEB端口是15672,服务的端口是5672,这俩都可以在配置文件里面更改。至此RabbitMQ的安装与配置结束了，但是这个仅仅是最简单的配置，RabbitMQ自身有一套很详细的用户管理规则以及它支持Python等很多语言的管理，这些内容以后再详细说明。 参考资料https://packages.erlang-solutions.com/erlang/https://laucyun.com/9849587ce75f31d534d52f906c94368f.htmlhttps://www.rabbitmq.com/access-control.html]]></content>
@@ -91,8 +103,8 @@
         <category>工作与技术</category>
       </categories>
       <tags>
-        <tag>运维技术</tag>
         <tag>mysql</tag>
+        <tag>运维技术</tag>
       </tags>
   </entry>
   <entry>
@@ -1084,8 +1096,8 @@
         <category>博客搭建</category>
       </categories>
       <tags>
-        <tag>hexo</tag>
         <tag>github</tag>
+        <tag>hexo</tag>
         <tag>博客搭建</tag>
       </tags>
   </entry>

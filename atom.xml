@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2018-03-19T03:35:49.323Z</updated>
+  <updated>2018-03-22T15:27:38.557Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -15,6 +15,33 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>使用python调用echart画图</title>
+    <link href="http://yoursite.com/2018/03/22/%E4%BD%BF%E7%94%A8python%E8%B0%83%E7%94%A8echart%E7%94%BB%E5%9B%BE/"/>
+    <id>http://yoursite.com/2018/03/22/使用python调用echart画图/</id>
+    <published>2018-03-22T15:24:32.000Z</published>
+    <updated>2018-03-22T15:27:38.557Z</updated>
+    
+    <content type="html"><![CDATA[<script src="\assets\js\APlayer.min.js"> </script><h2><span id="前言">前言</span></h2><p>之前说了如何使用阿里云的SDK获取云存储的值然后发送表格邮件，但是最近领导又发话了，说这个邮件每天一封看的有点审美疲劳，要响应“数据可视化”的要求，于是就要求画图。我之前用<code>python</code>的<code>matplotlib</code>画过，这一次尝试用<code>echart</code>来做图！</p><p><code>echart</code>是不太良心的百度良心的开源作品，提供各种各样精美的作图方案，分分钟把图片做的高大上，吸引周围人的目光。不过我对前端的了解非常浅薄，但是没关系。这次使用<code>pyechart</code>插件！这个插件可以让<code>python</code>直接调用<code>echart</code>接口，选择需要的图形之后，直接往里查数据就好，简单粗暴见效快，而且支持3D，可以说是居家旅行常备物品。可以说，有了它，作图能力顶呱呱。感谢开发者大神们的辛苦工作！</p><h2><span id="作图">作图</span></h2><p>首先先需要安装<code>pyecharts</code>插件，命令是<code>pip install pyecharts</code>。</p><p>然后我们就可以写一个简单的案例，如下：<br>    <figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/usr/bin/env python</span></span><br><span class="line">#coding=utf-8</span><br><span class="line">from pyecharts import Bar    #导入第三方库</span><br><span class="line"></span><br><span class="line">#attr = ["&#123;&#125;day".format(i) for i in range(1, 8)]    #这样的话X坐标就是1day、2day、3day...</span><br><span class="line">attr = ["Mon", "Feb", "Wed", "Thu", "Fri", "Sat", "Sun"]    #这样X坐标就是星期</span><br><span class="line">v1 = [<span class="number">1.49</span>, <span class="number">2.09</span>, <span class="number">4.03</span>, <span class="number">2.23</span>, <span class="number">5.26</span>, <span class="number">7.71</span>, <span class="number">7.56</span>]        </span><br><span class="line">v2 = [<span class="number">0.3</span>, <span class="number">0.9</span>, <span class="number">0.2</span>, <span class="number">0.4</span>, <span class="number">0.7</span>, <span class="number">0.7</span>, <span class="number">0.6</span>]</span><br><span class="line">v3 = [<span class="number">18.15</span>, <span class="number">13.22</span>, <span class="number">11.28</span>, <span class="number">17.99</span>, <span class="number">18.7</span>, <span class="number">19.7</span>, <span class="number">15.6</span>]</span><br><span class="line"></span><br><span class="line">bar = Bar("乐橙云存储情况总览", "本图表展示过去一周的云存储情况")        #这里是主标题和副标题</span><br><span class="line">bar.add("录像分享文件", attr, v1, mark_line=["average"], mark_point=["max", "min"])    #每一个值的名称以及要展现平均值和最大最小值</span><br><span class="line">bar.add(<span class="string">"视频直播文件"</span>, attr, v2, mark_line=[<span class="string">"average"</span>], mark_point=[<span class="string">"max"</span>, <span class="string">"min"</span>])</span><br><span class="line">bar.add(<span class="string">"云录像、报警图片、全景图片"</span>, attr, v3, mark_line=[<span class="string">"average"</span>], mark_point=[<span class="string">"max"</span>, <span class="string">"min"</span>])    </span><br><span class="line">bar.render('/tmp/111.html')        #在/tmp文件夹里生成一个111.html文件</span><br></pre></td></tr></table></figure></p><p>如果服务器里有<code>nginx</code>，那么把这个html文件放到<code>nginx/html</code>路径里，再在浏览器里打开就会看到这样的图：<br><img src="/images/pyechart.png" alt="paradin"></p><p>而且还可以通过点击网页上“A值”、“B值”、“C值”就可以达到屏蔽相应值的效果，而且如果点击红色箭头的“数据视图”，还可以直接看到对应的数据，非常贴心非常屌，如图：<br><img src="/images/pyechart2.png" alt="paradin"></p><p>如果想要在一个html里做多个图，比如要做三个柱状图，那么example如下：<br>    <figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/usr/bin/env python</span></span><br><span class="line">#coding=utf-8</span><br><span class="line"><span class="keyword">from</span> pyecharts <span class="keyword">import</span> Bar, Grid</span><br><span class="line"></span><br><span class="line">attr = [<span class="string">"一班"</span>, <span class="string">"二班"</span>, <span class="string">"三班"</span>, <span class="string">"四班"</span>]</span><br><span class="line">v1 = [<span class="number">54</span>, <span class="number">81</span>, <span class="number">32</span>, <span class="number">32</span>] </span><br><span class="line">v2 = [<span class="number">68</span>, <span class="number">69</span>, <span class="number">27</span>, <span class="number">32</span>] </span><br><span class="line">bar = Bar(<span class="string">"赞成票"</span>,<span class="string">"本图表展示赞成票情况"</span>)</span><br><span class="line">bar.add(<span class="string">"年纪长"</span>, attr, v1, mark_point=[<span class="string">"max"</span>, <span class="string">"min"</span>])</span><br><span class="line">bar.add(<span class="string">"副年纪长"</span>, attr, v2, mark_point=[<span class="string">"max"</span>, <span class="string">"min"</span>])</span><br><span class="line"></span><br><span class="line">attr2 = [<span class="string">"一班"</span>, <span class="string">"二班"</span>, <span class="string">"三班"</span>, <span class="string">"四班"</span>]</span><br><span class="line">x1 = [<span class="number">2</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>]</span><br><span class="line">x2 = [<span class="number">1</span>, <span class="number">3</span>, <span class="number">0</span>, <span class="number">2</span>]</span><br><span class="line">bar2 = Bar("反对票","本图表展示反对票情况",title_top='bottom',title_color='#1d12eb')            #title_color是标题颜色，这个跟html的颜色取值一样</span><br><span class="line">bar2.add(<span class="string">"年纪长"</span>, attr2, x1, mark_point=[<span class="string">"max"</span>, <span class="string">"min"</span>])</span><br><span class="line">bar2.add(<span class="string">"副年纪长"</span>, attr2, x2, mark_point=[<span class="string">"max"</span>, <span class="string">"min"</span>])</span><br><span class="line"></span><br><span class="line">attr3 = [<span class="string">"一班"</span>, <span class="string">"二班"</span>, <span class="string">"三班"</span>, <span class="string">"四班"</span>]</span><br><span class="line">y1 = [<span class="number">2</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>]</span><br><span class="line">y2 = [<span class="number">2</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>]</span><br><span class="line">bar3 = Bar("弃权票","本图表展示弃权票情况",title_pos='right',title_color='#eb1212')             #title_pos是标题的位置，如果不特殊说明，会重叠</span><br><span class="line">bar3.add(<span class="string">"年纪长"</span>, attr3, y1, mark_point=[<span class="string">"max"</span>, <span class="string">"min"</span>])    </span><br><span class="line">bar3.add(<span class="string">"副年纪长"</span>, attr3, y1, mark_point=[<span class="string">"max"</span>, <span class="string">"min"</span>])</span><br><span class="line"></span><br><span class="line">grid = Grid()    </span><br><span class="line">grid.add(bar, grid_width="40%", grid_height="30%", grid_bottom="60%", grid_right="55%")        #grid_height和grid_width是每一个小图的大小</span><br><span class="line">grid.add(bar2, grid_width="40%", grid_height="30%", grid_bottom="60%", grid_left="55%")        #grid_bottom和grid_top是垂直位置</span><br><span class="line">grid.add(bar3, grid_width="40%", grid_height="30%", grid_top="60%", grid_right="55%")        #grid_right和grid_left是水平位置</span><br><span class="line">grid.render('/tmp/grid.html')    #在/tmp文件夹里生成一个grid.html文件</span><br></pre></td></tr></table></figure></p><p><img src="/images/pyechart3.png" alt="paradin"></p><p>例子中的数字都是我虚拟的，实际情况中，这些数字都应该是存储在redis这样的数据库里，然后取出来使用。</p><p>上面的两个例子仅仅是<code>pyechart</code>使用的冰山一角，如果想更多的了解，请去看一下文末<code>pyechart</code>的中文说明文档，里面内容特别丰富！我这篇文章就是一个宣传稿，有了<code>pyechart</code>加持，准保你的大数据图案美观简洁又大方！</p><h2><span id="参考资料">参考资料</span></h2><p><a href="http://echarts.baidu.com" target="_blank" rel="noopener">http://echarts.baidu.com</a><br><a href="http://pyecharts.org/#/zh-cn/prepare" target="_blank" rel="noopener">http://pyecharts.org/#/zh-cn/prepare</a></p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;script src=&quot;\assets\js\APlayer.min.js&quot;&gt; &lt;/script&gt;&lt;h2&gt;&lt;span id=&quot;前言&quot;&gt;前言&lt;/span&gt;&lt;/h2&gt;&lt;p&gt;之前说了如何使用阿里云的SDK获取云存储的值然后发送表格邮件，但是最近领导又发话了，说这个邮件每天一封看的有点
+      
+    
+    </summary>
+    
+      <category term="工作与技术" scheme="http://yoursite.com/categories/%E5%B7%A5%E4%BD%9C%E4%B8%8E%E6%8A%80%E6%9C%AF/"/>
+    
+    
+      <category term="python" scheme="http://yoursite.com/tags/python/"/>
+    
+      <category term="echart" scheme="http://yoursite.com/tags/echart/"/>
+    
+  </entry>
   
   <entry>
     <title>RabbitMQ的安装、配置与启动</title>
@@ -200,9 +227,9 @@
       <category term="工作与技术" scheme="http://yoursite.com/categories/%E5%B7%A5%E4%BD%9C%E4%B8%8E%E6%8A%80%E6%9C%AF/"/>
     
     
-      <category term="运维技术" scheme="http://yoursite.com/tags/%E8%BF%90%E7%BB%B4%E6%8A%80%E6%9C%AF/"/>
-    
       <category term="mysql" scheme="http://yoursite.com/tags/mysql/"/>
+    
+      <category term="运维技术" scheme="http://yoursite.com/tags/%E8%BF%90%E7%BB%B4%E6%8A%80%E6%9C%AF/"/>
     
   </entry>
   
@@ -457,28 +484,6 @@
     
     
       <category term="python" scheme="http://yoursite.com/tags/python/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>解决https证书在赛门铁克认证失败的问题</title>
-    <link href="http://yoursite.com/2018/02/26/%E8%A7%A3%E5%86%B3https%E8%AF%81%E4%B9%A6%E5%9C%A8%E8%B5%9B%E9%97%A8%E9%93%81%E5%85%8B%E8%AE%A4%E8%AF%81%E5%A4%B1%E8%B4%A5%E7%9A%84%E9%97%AE%E9%A2%98/"/>
-    <id>http://yoursite.com/2018/02/26/解决https证书在赛门铁克认证失败的问题/</id>
-    <published>2018-02-26T14:40:03.000Z</published>
-    <updated>2018-02-27T06:57:58.892Z</updated>
-    
-    <content type="html"><![CDATA[<script src="\assets\js\APlayer.min.js"> </script><h2><span id="问题描述">问题描述</span></h2><p>今天电子商城的市场接到一个故障，说更换了.lechange.com的https证书（原有的证书到期了，新买了一个依旧还是.lehcange.com域名证书）之后，订单在支付宝支付的时候提示支付失败。我把<code>request id</code>提供给支付宝的客服请他们查看一下后台，支付宝客服说我们电商的https证书没有认证成功。于是我就登陆<a href="https://cryptoreport.websecurity.symantec.com/checker/" target="_blank" rel="noopener">https://cryptoreport.websecurity.symantec.com/checker/</a> 去检查一下电商的域名，果不其然，赛门铁克的反馈是错误的，如图：<br><img src="/images/saimentieke1.png" alt="paradin"></p><p>但是登陆网站，在浏览器里却显示https证书是OK的，如图：<br><img src="/images/saimentieke2.png" alt="paradin"></p><p>然后我用<code>symantec</code>的那个网站测试了一下电商平台开发环境的域名，发现也是OK的，如图：<br><img src="/images/saimentieke3.png" alt="paradin"></p><p>这就郁闷了，到底哪里出问题了？</p><h2><span id="问题排查">问题排查</span></h2><p>首先跟研发确认，开发环境与线上环境在涉及到证书的代码是否一致，得到研发的确认之后。就检查服务器里的<code>nginx</code>，发现服务器<code>nginx</code>的配置文件里是没有涉及到<code>ssl</code>，无论是开发环境和线上环境都是通过阿里云slb配置的https证书。而且两者的证书指纹一模一样，如图：<br><img src="/images/saimentieke4.png" alt="paradin"></p><p>既然都是用的一样的证书，为啥一个检验通过，另一个检验不通过呢？这个时候我想到线上环境与开发环境唯一的不同就是线上环境多了一个cdn，于是就登陆到cdn的控制页面，找到对应的https证书，发现cdn的https证书指纹也是跟上面的指纹一样，如图：<br><img src="/images/saimentieke5.png" alt="paradin"></p><p>既然指纹一样，那证书也应该是一样的，场面又进入了一个僵局。</p><p>于是我就到一台服务器里使用<code>curl -vv https://www.lechange.com</code>，看到的结果如下：<br><img src="/images/saimentieke6.png" alt="paradin"></p><p>提示<code>未配置签发者根证书</code>，我这时候想起来了，<font color="red">首先证书指纹一致不能说明证书是完全一致的，只能说明key文件是一样的！</font>其次这个https证书是中级机构证书，那么中级机构颁发的证书链规则是这样的：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">-----BEGIN CERTIFICATE-----</span><br><span class="line"></span><br><span class="line">-----END CERTIFICATE-----</span><br><span class="line"></span><br><span class="line">-----BEGIN CERTIFICATE-----</span><br><span class="line"></span><br><span class="line">-----END CERTIFICATE-----</span><br></pre></td></tr></table></figure></p><p>那么我怀疑就是https证书链那部分可能在cdn配置错误了，或许在slb配置错误了，甚至两个都配置错误了！</p><p>于是干脆删除掉线上电商原有的https证书，重新导入cdn和slb的https证书，返回到<code>symantec</code>刷新，这次的检验结果就OK了。<br><img src="/images/saimentieke7.png" alt="paradin"></p><h2><span id="补充">补充</span></h2><p>虽然这个问题解决了，但是我还是不明白，为什么在网页端查看证书是绿色OK的呢？在<code>sf.gg</code>上提问之后，一个叫Avro的朋友是这么回答我的：</p><blockquote><p>以chrome为例，他信任了[所在平台的信任证书列表][1]，而这些平台集成了一系列信任的根证书，如iOS 11 中可用的受信任根证书列表可以找到你的根证书“04 00 00 00 00 01 15 4B 5A C3 94 ”(序列号)，因此验证过程中没有问题，而对于其他的工具，如果未使用这些平台根证书信任列表依然需要完整的证书链（这个证书链在ssl握手过程中被下发）进行校验。</p></blockquote><h2><span id="参考资料">参考资料</span></h2><p><a href="https://openclub.alipay.com/read.php?tid=3451&amp;fid=57&amp;page=1" target="_blank" rel="noopener">https://openclub.alipay.com/read.php?tid=3451&amp;fid=57&amp;page=1</a><br><a href="https://www.jianshu.com/p/84af353f43c5" target="_blank" rel="noopener">https://www.jianshu.com/p/84af353f43c5</a><br><a href="https://help.aliyun.com/knowledge_detail/39468.html?spm=a2c4g.11186631.2.2.w2qcWT" target="_blank" rel="noopener">https://help.aliyun.com/knowledge_detail/39468.html?spm=a2c4g.11186631.2.2.w2qcWT</a></p>]]></content>
-    
-    <summary type="html">
-    
-      搞了半天其实就是https证书没弄对...
-    
-    </summary>
-    
-      <category term="工作与技术" scheme="http://yoursite.com/categories/%E5%B7%A5%E4%BD%9C%E4%B8%8E%E6%8A%80%E6%9C%AF/"/>
-    
-    
-      <category term="https证书" scheme="http://yoursite.com/tags/https%E8%AF%81%E4%B9%A6/"/>
     
   </entry>
   
