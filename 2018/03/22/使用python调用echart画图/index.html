@@ -88,21 +88,21 @@
 
 
 
-<meta name="description" content="有了`pyechart`加持，准保你的大数据图案美观简洁又大方！">
+<meta name="description" content="有了pyechart加持，准保你的大数据图案美观简洁又大方！">
 <meta name="keywords" content="python,echart">
 <meta property="og:type" content="article">
 <meta property="og:title" content="使用python调用echart画图">
 <meta property="og:url" content="http://yoursite.com/2018/03/22/使用python调用echart画图/index.html">
 <meta property="og:site_name" content="Chris Chan&#39;s BLOG">
-<meta property="og:description" content="有了`pyechart`加持，准保你的大数据图案美观简洁又大方！">
+<meta property="og:description" content="有了pyechart加持，准保你的大数据图案美观简洁又大方！">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://yoursite.com/images/pyechart.png">
 <meta property="og:image" content="http://yoursite.com/images/pyechart2.png">
 <meta property="og:image" content="http://yoursite.com/images/pyechart3.png">
-<meta property="og:updated_time" content="2018-03-22T15:37:27.110Z">
+<meta property="og:updated_time" content="2018-03-23T10:58:06.851Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="使用python调用echart画图">
-<meta name="twitter:description" content="有了`pyechart`加持，准保你的大数据图案美观简洁又大方！">
+<meta name="twitter:description" content="有了pyechart加持，准保你的大数据图案美观简洁又大方！">
 <meta name="twitter:image" content="http://yoursite.com/images/pyechart.png">
 
 
@@ -429,7 +429,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  1,109
+                  1,171
                 </span>
               
 
@@ -453,7 +453,7 @@
 
           
               <div class="post-description">
-                  有了`pyechart`加持，准保你的大数据图案美观简洁又大方！
+                  有了pyechart加持，准保你的大数据图案美观简洁又大方！
               </div>
           
 
@@ -476,6 +476,7 @@
 <p>然后我们就可以写一个简单的案例，如下：<br>    <figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/usr/bin/env python</span></span><br><span class="line">#coding=utf-8</span><br><span class="line">from pyecharts import Bar    #导入第三方库</span><br><span class="line"></span><br><span class="line">#attr = ["&#123;&#125;day".format(i) for i in range(1, 8)]    #这样的话X坐标就是1day、2day、3day...</span><br><span class="line">attr = ["Mon", "Feb", "Wed", "Thu", "Fri", "Sat", "Sun"]    #这样X坐标就是星期</span><br><span class="line">v1 = [<span class="number">1.49</span>, <span class="number">2.09</span>, <span class="number">4.03</span>, <span class="number">2.23</span>, <span class="number">5.26</span>, <span class="number">7.71</span>, <span class="number">7.56</span>]        </span><br><span class="line">v2 = [<span class="number">0.3</span>, <span class="number">0.9</span>, <span class="number">0.2</span>, <span class="number">0.4</span>, <span class="number">0.7</span>, <span class="number">0.7</span>, <span class="number">0.6</span>]</span><br><span class="line">v3 = [<span class="number">18.15</span>, <span class="number">13.22</span>, <span class="number">11.28</span>, <span class="number">17.99</span>, <span class="number">18.7</span>, <span class="number">19.7</span>, <span class="number">15.6</span>]</span><br><span class="line"></span><br><span class="line">bar = Bar("乐橙云存储情况总览", "本图表展示过去一周的云存储情况")        #这里是主标题和副标题</span><br><span class="line">bar.add("录像分享文件", attr, v1, mark_line=["average"], mark_point=["max", "min"])    #每一个值的名称以及要展现平均值和最大最小值</span><br><span class="line">bar.add(<span class="string">"视频直播文件"</span>, attr, v2, mark_line=[<span class="string">"average"</span>], mark_point=[<span class="string">"max"</span>, <span class="string">"min"</span>])</span><br><span class="line">bar.add(<span class="string">"云录像、报警图片、全景图片"</span>, attr, v3, mark_line=[<span class="string">"average"</span>], mark_point=[<span class="string">"max"</span>, <span class="string">"min"</span>])    </span><br><span class="line">bar.render('/tmp/111.html')        #在/tmp文件夹里生成一个111.html文件</span><br></pre></td></tr></table></figure></p>
 <p>如果服务器里有<code>nginx</code>，那么把这个html文件放到<code>nginx/html</code>路径里，再在浏览器里打开就会看到这样的图：<br><img src="/images/pyechart.png" alt="paradin"></p>
 <p>而且还可以通过点击网页上“A值”、“B值”、“C值”就可以达到屏蔽相应值的效果，而且如果点击红色箭头的“数据视图”，还可以直接看到对应的数据，非常贴心非常屌，如图：<br><img src="/images/pyechart2.png" alt="paradin"></p>
+<p>如果你觉得图片有点小，那么可以修改这个地方：<code>bar = Bar(&quot;XXX情况总览&quot;, &quot;本图表展示过去一周的ABC情况&quot;，width=1000,height=900)</code>，我这里把宽和高分别从默认值调成了1000和900。</p>
 <p>如果想要在一个html里做多个图，比如要做三个柱状图，那么example如下：<br>    <figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/usr/bin/env python</span></span><br><span class="line">#coding=utf-8</span><br><span class="line"><span class="keyword">from</span> pyecharts <span class="keyword">import</span> Bar, Grid</span><br><span class="line"></span><br><span class="line">attr = [<span class="string">"一班"</span>, <span class="string">"二班"</span>, <span class="string">"三班"</span>, <span class="string">"四班"</span>]</span><br><span class="line">v1 = [<span class="number">54</span>, <span class="number">81</span>, <span class="number">32</span>, <span class="number">32</span>] </span><br><span class="line">v2 = [<span class="number">68</span>, <span class="number">69</span>, <span class="number">27</span>, <span class="number">32</span>] </span><br><span class="line">bar = Bar(<span class="string">"赞成票"</span>,<span class="string">"本图表展示赞成票情况"</span>)</span><br><span class="line">bar.add(<span class="string">"年纪长"</span>, attr, v1, mark_point=[<span class="string">"max"</span>, <span class="string">"min"</span>])</span><br><span class="line">bar.add(<span class="string">"副年纪长"</span>, attr, v2, mark_point=[<span class="string">"max"</span>, <span class="string">"min"</span>])</span><br><span class="line"></span><br><span class="line">attr2 = [<span class="string">"一班"</span>, <span class="string">"二班"</span>, <span class="string">"三班"</span>, <span class="string">"四班"</span>]</span><br><span class="line">x1 = [<span class="number">2</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>]</span><br><span class="line">x2 = [<span class="number">1</span>, <span class="number">3</span>, <span class="number">0</span>, <span class="number">2</span>]</span><br><span class="line">bar2 = Bar("反对票","本图表展示反对票情况",title_top='bottom',title_color='#1d12eb')            #title_color是标题颜色，这个跟html的颜色取值一样</span><br><span class="line">bar2.add(<span class="string">"年纪长"</span>, attr2, x1, mark_point=[<span class="string">"max"</span>, <span class="string">"min"</span>])</span><br><span class="line">bar2.add(<span class="string">"副年纪长"</span>, attr2, x2, mark_point=[<span class="string">"max"</span>, <span class="string">"min"</span>])</span><br><span class="line"></span><br><span class="line">attr3 = [<span class="string">"一班"</span>, <span class="string">"二班"</span>, <span class="string">"三班"</span>, <span class="string">"四班"</span>]</span><br><span class="line">y1 = [<span class="number">2</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>]</span><br><span class="line">y2 = [<span class="number">2</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>]</span><br><span class="line">bar3 = Bar("弃权票","本图表展示弃权票情况",title_pos='right',title_color='#eb1212')             #title_pos是标题的位置，如果不特殊说明，会重叠</span><br><span class="line">bar3.add(<span class="string">"年纪长"</span>, attr3, y1, mark_point=[<span class="string">"max"</span>, <span class="string">"min"</span>])    </span><br><span class="line">bar3.add(<span class="string">"副年纪长"</span>, attr3, y1, mark_point=[<span class="string">"max"</span>, <span class="string">"min"</span>])</span><br><span class="line"></span><br><span class="line">grid = Grid()    </span><br><span class="line">grid.add(bar, grid_width="40%", grid_height="30%", grid_bottom="60%", grid_right="55%")        #grid_height和grid_width是每一个小图的大小</span><br><span class="line">grid.add(bar2, grid_width="40%", grid_height="30%", grid_bottom="60%", grid_left="55%")        #grid_bottom和grid_top是垂直位置</span><br><span class="line">grid.add(bar3, grid_width="40%", grid_height="30%", grid_top="60%", grid_right="55%")        #grid_right和grid_left是水平位置</span><br><span class="line">grid.render('/tmp/grid.html')    #在/tmp文件夹里生成一个grid.html文件</span><br></pre></td></tr></table></figure></p>
 <p><img src="/images/pyechart3.png" alt="paradin"></p>
 <p>例子中的数字都是我虚拟的，实际情况中，这些数字都应该是存储在redis这样的数据库里，然后取出来使用。</p>
@@ -928,7 +929,7 @@ show_date_time();
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">博客全站共105.1k字</span>
+  <span class="post-count">博客全站共105.2k字</span>
 </div>
         
 
