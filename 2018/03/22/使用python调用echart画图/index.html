@@ -99,7 +99,7 @@
 <meta property="og:image" content="http://yoursite.com/images/pyechart.png">
 <meta property="og:image" content="http://yoursite.com/images/pyechart2.png">
 <meta property="og:image" content="http://yoursite.com/images/pyechart3.png">
-<meta property="og:updated_time" content="2018-03-23T10:58:06.851Z">
+<meta property="og:updated_time" content="2018-03-23T11:02:46.366Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="使用python调用echart画图">
 <meta name="twitter:description" content="有了pyechart加持，准保你的大数据图案美观简洁又大方！">
@@ -429,7 +429,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  1,171
+                  1,203
                 </span>
               
 
@@ -470,7 +470,7 @@
       
 
       
-        <script src="\assets\js\APlayer.min.js"> </script><h2><span id="前言">前言</span></h2><p>之前说了如何使用阿里云的SDK获取云存储的值然后发送表格邮件，但是最近领导又发话了，说这个邮件每天一封看的有点审美疲劳，要响应“数据可视化”的要求，于是就要求画图。我之前用<code>python</code>的<code>matplotlib</code>画过，这一次尝试用<code>echart</code>来做图！</p>
+        <script src="\assets\js\APlayer.min.js"> </script><h2><span id="前言">前言</span></h2><p>之前说了如何使用阿里云的SDK获取云存储的值然后发送表格邮件，但是最近领导又发话了，说这个邮件每天一封看的有点审美疲劳，要顺应“数据可视化”的趋势，于是就要求画图，力求直观，要做到“从众多数据中突出特别数据，从特别数据中突出高价值数据”。我之前用<code>python</code>的<code>matplotlib</code>画过，这一次尝试用<code>echart</code>来做图！</p>
 <p><code>echart</code>是不太良心的百度良心的开源作品，提供各种各样精美的作图方案，分分钟把图片做的高大上，吸引周围人的目光。不过我对前端的了解非常浅薄，但是没关系。这次使用<code>pyechart</code>插件！这个插件可以让<code>python</code>直接调用<code>echart</code>接口，选择需要的图形之后，直接往里查数据就好，简单粗暴见效快，而且支持3D，可以说是居家旅行常备物品。可以说，有了它，作图能力顶呱呱。感谢开发者大神们的辛苦工作！</p>
 <h2><span id="作图">作图</span></h2><p>首先先需要安装<code>pyecharts</code>插件，命令是<code>pip install pyecharts</code>。</p>
 <p>然后我们就可以写一个简单的案例，如下：<br>    <figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/usr/bin/env python</span></span><br><span class="line">#coding=utf-8</span><br><span class="line">from pyecharts import Bar    #导入第三方库</span><br><span class="line"></span><br><span class="line">#attr = ["&#123;&#125;day".format(i) for i in range(1, 8)]    #这样的话X坐标就是1day、2day、3day...</span><br><span class="line">attr = ["Mon", "Feb", "Wed", "Thu", "Fri", "Sat", "Sun"]    #这样X坐标就是星期</span><br><span class="line">v1 = [<span class="number">1.49</span>, <span class="number">2.09</span>, <span class="number">4.03</span>, <span class="number">2.23</span>, <span class="number">5.26</span>, <span class="number">7.71</span>, <span class="number">7.56</span>]        </span><br><span class="line">v2 = [<span class="number">0.3</span>, <span class="number">0.9</span>, <span class="number">0.2</span>, <span class="number">0.4</span>, <span class="number">0.7</span>, <span class="number">0.7</span>, <span class="number">0.6</span>]</span><br><span class="line">v3 = [<span class="number">18.15</span>, <span class="number">13.22</span>, <span class="number">11.28</span>, <span class="number">17.99</span>, <span class="number">18.7</span>, <span class="number">19.7</span>, <span class="number">15.6</span>]</span><br><span class="line"></span><br><span class="line">bar = Bar("乐橙云存储情况总览", "本图表展示过去一周的云存储情况")        #这里是主标题和副标题</span><br><span class="line">bar.add("录像分享文件", attr, v1, mark_line=["average"], mark_point=["max", "min"])    #每一个值的名称以及要展现平均值和最大最小值</span><br><span class="line">bar.add(<span class="string">"视频直播文件"</span>, attr, v2, mark_line=[<span class="string">"average"</span>], mark_point=[<span class="string">"max"</span>, <span class="string">"min"</span>])</span><br><span class="line">bar.add(<span class="string">"云录像、报警图片、全景图片"</span>, attr, v3, mark_line=[<span class="string">"average"</span>], mark_point=[<span class="string">"max"</span>, <span class="string">"min"</span>])    </span><br><span class="line">bar.render('/tmp/111.html')        #在/tmp文件夹里生成一个111.html文件</span><br></pre></td></tr></table></figure></p>
