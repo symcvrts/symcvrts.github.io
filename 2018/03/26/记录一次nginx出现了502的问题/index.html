@@ -98,7 +98,7 @@
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://yoursite.com/images/nginx5021.png">
 <meta property="og:image" content="http://yoursite.com/images/nginx5022.png">
-<meta property="og:updated_time" content="2018-03-26T11:04:50.165Z">
+<meta property="og:updated_time" content="2018-03-26T11:12:29.110Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="记录一次nginx出现了502的问题">
 <meta name="twitter:description" content="据说php可以改变数据表结构？？？">
@@ -428,7 +428,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  673
+                  688
                 </span>
               
 
@@ -473,12 +473,11 @@
 <p>nginx 502的错误，一般来说就是<code>php-fpm</code>的问题，我登陆到电商服务器发现，<code>php-fpm</code>运行正常而且<code>php-fpm</code>的进程数也很正常。但是查看到mysql，发现mysql的CPU飙升，如图：<br><img src="/images/nginx5021.png" alt="paradin"></p>
 <p>于是登陆到数据库里，使用<code>show processlist</code>一看，数据库里有大量的语句处于<code>sending data</code>状态，而且执行时间令人发指（<code>command</code>项处于<code>Sleep</code>状态的进程表示其正在等待接受查询，因此它并没有消耗任何资源，是无害的）：<br><img src="/images/nginx5022.png" alt="paradin"></p>
 <p>先赶快通知运营先把推送的消息界面停用掉，不要让更多的用户登陆失败。然后写了一个脚本批量的kill掉这些进程，看看能不能让数据库恢复正常，过程如下。</p>
-<p>首先先得到<code>show processlist</code>展现的所有的情况：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql -uroot -p密码 -h数据库地址 -e <span class="string">"show processlist"</span> | grep -i <span class="string">'Locked'</span> &gt; locked_log.txt</span><br></pre></td></tr></table></figure></p>
-<p>然后获得前面的进程号，并且加上kill的指令<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">#/bin/bash</span><br><span class="line"><span class="keyword">for</span> line <span class="keyword">in</span> <span class="string">`cat locked_log.txt | awk '&#123;print $1&#125;'`</span></span><br><span class="line"><span class="keyword">do</span> </span><br><span class="line">   echo <span class="string">"kill $line;"</span> &gt;&gt; kill_thread_id.sql</span><br><span class="line">done</span><br></pre></td></tr></table></figure></p>
-<p>在登陆到数据库，然后执行上面生成的<code>kill_thread_id.sql</code>：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt;source kill_thread_id.sql</span><br></pre></td></tr></table></figure></p>
-<p>但是发现，kill掉一批之后，又有了新的慢sql出现，CPU依旧高居不下，于是只能跟产品经理说明情况，在征得了产品经理无奈的同意之后，重启了数据库，幸好时间没有很长，就耽误二三分钟而已。</p>
-<p>服务器重启完毕之后，叫开发在线补充一个索引给用户等级的表来解决这个慢sql问题。</p>
-<p>补充nginx499<br>nginx如果爆错499的话，代表<code>客户端主动关闭连接</code>，原因就是后端脚本执行的时间太长了or数据库有慢mysql，调用方超出了<code>timeout</code>的时间，关闭了连接。</p>
+<p>首先先得到<code>show processlist</code>展现的所有的情况:<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql -uroot -p密码 -h数据库地址 -e <span class="string">"show processlist"</span> | grep -i <span class="string">'Locked'</span> &gt; locked_log.txt</span><br></pre></td></tr></table></figure></p>
+<p>然后获得前面的进程号，并且加上kill的指令:<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">#/bin/bash</span><br><span class="line"><span class="keyword">for</span> line <span class="keyword">in</span> <span class="string">`cat locked_log.txt | awk '&#123;print $1&#125;'`</span></span><br><span class="line"><span class="keyword">do</span> </span><br><span class="line">   echo <span class="string">"kill $line;"</span> &gt;&gt; kill_thread_id.sql</span><br><span class="line">done</span><br></pre></td></tr></table></figure></p>
+<p>在登陆到数据库，然后执行上面生成的<code>kill_thread_id.sql</code>：:<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt;source kill_thread_id.sql</span><br></pre></td></tr></table></figure></p>
+<p>但是发现，kill掉一批之后，又有了新的慢sql出现，CPU依旧高居不下，于是只能跟产品经理说明情况，在征得了产品经理无奈的同意之后，重启了数据库，幸好时间没有很长，就耽误二三分钟而已。重启了之后，CPU就降下去了。赶快叫开发童鞋在线补充一个索引给用户登录的表来解决这个慢sql问题，没有了慢sql就没有了502。</p>
+<h2><span id="补充nginx499">补充nginx499</span></h2><p>nginx如果爆错499的话，代表<code>客户端主动关闭连接</code>，原因就是后端脚本执行的时间太长了or数据库有慢mysql，调用方超出了<code>timeout</code>的时间，关闭了连接。</p>
 <p>这个时候需要更改一下<code>nginx.conf</code>:<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">proxy_read_timeout <span class="number">10</span>s;</span><br><span class="line">proxy_send_timeout <span class="number">10</span>s;</span><br></pre></td></tr></table></figure></p>
 <p>把上面两个值适度调大然后重启nginx即可。或者就是<code>proxy_ignore_client_abort  on;</code>，这话就是让代理服务端不要主动关闭客户端的连接。</p>
 <h2><span id="参考资料">参考资料</span></h2><p><a href="https://blog.csdn.net/zhuxineli/article/details/14455029" target="_blank" rel="noopener">https://blog.csdn.net/zhuxineli/article/details/14455029</a><br><a href="https://segmentfault.com/a/1190000012326158" target="_blank" rel="noopener">https://segmentfault.com/a/1190000012326158</a></p>
@@ -874,7 +873,7 @@ show_date_time();
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text"><span id="&#x80CC;&#x666F;&#x4EA4;&#x5F85;">&#x80CC;&#x666F;&#x4EA4;&#x5F85;</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">2.</span> <span class="nav-text"><span id="&#x53C2;&#x8003;&#x8D44;&#x6599;">&#x53C2;&#x8003;&#x8D44;&#x6599;</span></span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text"><span id="&#x80CC;&#x666F;&#x4EA4;&#x5F85;">&#x80CC;&#x666F;&#x4EA4;&#x5F85;</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">2.</span> <span class="nav-text"><span id="&#x8865;&#x5145;nginx499">&#x8865;&#x5145;nginx499</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">3.</span> <span class="nav-text"><span id="&#x53C2;&#x8003;&#x8D44;&#x6599;">&#x53C2;&#x8003;&#x8D44;&#x6599;</span></span></a></li></ol></div>
             
 
           </div>
