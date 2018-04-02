@@ -98,7 +98,7 @@
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://yoursite.com/images/checkphp.png">
 <meta property="og:image" content="http://yoursite.com/images/checkphp2.png">
-<meta property="og:updated_time" content="2018-04-02T03:28:26.912Z">
+<meta property="og:updated_time" content="2018-04-02T03:38:54.547Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="使用zabbix去监控php-fpm">
 <meta name="twitter:description" content="php-fpm得多一点了解，不然即使有报警了也不知道怎么办">
@@ -428,7 +428,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  426
+                  434
                 </span>
               
 
@@ -470,17 +470,10 @@
 
       
         <script src="\assets\js\APlayer.min.js"> </script><h2><span id="开启状态统计">开启状态统计</span></h2><p>nginx有一个status来获取nginx处理信息的总览情况，php-fpm也有一个状态统计。要打开这个状态统计，需要先打开php-fpm.conf，将<code>pm.status_path = /status</code>前面的注释去掉。</p>
-<p>然后跑到nginx里，在<code>nginx.conf</code>里添加一个location：</p>
-<pre><code>location ~ ^/(status|ping) {    
-    fastcgi_pass 127.0.0.1:9000;
-    include fastcgi.conf;
-    access_log off;
-    allow 127.0.0.1;
-    deny all;
-  }
-</code></pre><p>然后重启一下php-fpm和nginx，在命令行里输入<code>curl -s http://127.0.0.1:80/status</code>，就会看到php的状态统计，如下图：<br><img src="/images/checkphp.png" alt="paradin"></p>
-<h2><span id="php-fpm-status详解">php-fpm status详解</span></h2><p>pool - fpm池子名称，大多数为www<br>process manager – 进程管理方式,值：static, dynamic<br>start time – 启动日期,如果reload了php-fpm，时间会更新<br>start since – 运行时长<br>accepted conn – 当前池子接受的请求数<br>listen queue – 请求等待队列，如果这个值不为0，那么要增加FPM的进程数量<br>max listen queue – 请求等待队列最高的数量<br>listen queue len – socket等待队列长度<br>idle processes – 空闲进程数量<br>active processes – 活跃进程数量<br>total processes – 总进程数量<br>max active processes – 最大的活跃进程数量（FPM启动开始算）<br>max children reached - 大道进程最大数量限制的次数，如果这个数量不为0，那说明你的最大进程数量太小了，请改大一点。<br>slow requests – 启用了php-fpm slow-log，缓慢请求的数量 </p>
-<h2><span id="配置监控">配置监控</span></h2><p>跑到<code>zabbix-agentd.conf</code>里添加一个自定义监控项，如下：<br>    UserParameter=php-fpm.status[*],/usr/bin/curl -s “<a href="http://127.0.0.1/php-fpm_status?xml" target="_blank" rel="noopener">http://127.0.0.1/php-fpm_status?xml</a>“ | grep “&lt;$1&gt;” | awk -F’&gt;|&lt;’ ‘{ print $$3}’</p>
+<p>然后跑到nginx里，在<code>nginx.conf</code>里添加一个location：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">   location ~ ^<span class="regexp">/(status|ping) &#123;	</span></span><br><span class="line"><span class="regexp">       fastcgi_pass 127.0.0.1:9000;</span></span><br><span class="line"><span class="regexp">       include fastcgi.conf;</span></span><br><span class="line"><span class="regexp">       access_log off;</span></span><br><span class="line"><span class="regexp">       allow 127.0.0.1;</span></span><br><span class="line"><span class="regexp">       deny all;</span></span><br><span class="line"><span class="regexp">&#125;</span></span><br></pre></td></tr></table></figure></p>
+<p>然后重启一下php-fpm和nginx，在命令行里输入<code>curl -s http://127.0.0.1:80/status</code>，就会看到php的状态统计，如下图：<br><img src="/images/checkphp.png" alt="paradin"></p>
+<h2><span id="php-fpm-status详解">php-fpm status详解</span></h2><p><code>pool</code> - fpm池子名称，大多数为www<br><code>process manager</code> – 进程管理方式,值：static, dynamic<br><code>start time</code>– 启动日期,如果reload了php-fpm，时间会更新<br><code>start since</code> – 运行时长<br><code>accepted conn</code> – 当前池子接受的请求数<br><code>listen queue</code> – 请求等待队列，如果这个值不为0，那么要增加FPM的进程数量<br><code>max listen queue</code> – 请求等待队列最高的数量<br><code>listen queue len</code> – socket等待队列长度<br><code>idle processes</code> – 空闲进程数量<br><code>active processes</code> – 活跃进程数量<br><code>total processes</code> – 总进程数量<br><code>max active processes</code> – 最大的活跃进程数量（FPM启动开始算）<br><code>max children reached</code> - 大道进程最大数量限制的次数，如果这个数量不为0，那说明你的最大进程数量太小了，请改大一点。<br><code>slow requests</code> – 启用了php-fpm slow-log，缓慢请求的数量 </p>
+<h2><span id="配置监控">配置监控</span></h2><p>跑到<code>zabbix-agentd.conf</code>里添加一个自定义监控项，如下：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">UserParameter=php-fpm.status[*],/usr/bin/curl -s <span class="string">"http://127.0.0.1/php-fpm_status?xml"</span> | grep <span class="string">"&lt;$1&gt;"</span> | awk -F<span class="string">'&gt;|&lt;'</span> <span class="string">'&#123; print $$3&#125;'</span></span><br></pre></td></tr></table></figure></p>
 <p>然后重启一下<code>zabbix-agent</code>，模板就是<a href="https://gitee.com/careyjike_173/zabbix/tree/master/template" target="_blank" rel="noopener">https://gitee.com/careyjike_173/zabbix/tree/master/template</a> 里的<code>zbx_php-fpm_templates.xml</code>，直接导入即可！</p>
 <p>效果如下图：<br><img src="/images/checkphp2.png" alt="paradin"></p>
 
