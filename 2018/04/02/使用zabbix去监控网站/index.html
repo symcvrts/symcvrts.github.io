@@ -75,7 +75,7 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="zabbix,web监控,tcp连接," />
 
 
 
@@ -88,14 +88,23 @@
 
 
 
+<meta name="description" content="我可算是那个zabbix监控模板扒个精光...">
+<meta name="keywords" content="zabbix,web监控,tcp连接">
 <meta property="og:type" content="article">
-<meta property="og:title" content="使用zabbix去监控网站">
+<meta property="og:title" content="使用zabbix去监控网站和tcp连接">
 <meta property="og:url" content="http://yoursite.com/2018/04/02/使用zabbix去监控网站/index.html">
 <meta property="og:site_name" content="Chris Chan&#39;s BLOG">
+<meta property="og:description" content="我可算是那个zabbix监控模板扒个精光...">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-04-02T01:42:45.206Z">
+<meta property="og:image" content="http://yoursite.com/images/checkweb1.png">
+<meta property="og:image" content="http://yoursite.com/images/checkweb2.png">
+<meta property="og:image" content="http://yoursite.com/images/checkweb4.png">
+<meta property="og:image" content="http://yoursite.com/images/checkweb3.png">
+<meta property="og:updated_time" content="2018-04-02T08:55:07.294Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="使用zabbix去监控网站">
+<meta name="twitter:title" content="使用zabbix去监控网站和tcp连接">
+<meta name="twitter:description" content="我可算是那个zabbix监控模板扒个精光...">
+<meta name="twitter:image" content="http://yoursite.com/images/checkweb1.png">
 
 
 
@@ -131,7 +140,7 @@
 
 
 
-  <title>使用zabbix去监控网站 | Chris Chan's BLOG</title>
+  <title>使用zabbix去监控网站和tcp连接 | Chris Chan's BLOG</title>
   
 
 
@@ -331,7 +340,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">使用zabbix去监控网站</h1>
+          <h1 class="post-title" itemprop="name headline">使用zabbix去监控网站和tcp连接</h1>
         
 
         <div class="post-meta">
@@ -354,6 +363,28 @@
           </span>
 
           
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/工作与技术/" itemprop="url" rel="index">
+                    <span itemprop="name">工作与技术</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
 
           
             
@@ -373,7 +404,7 @@
 
           
           
-             <span id="/2018/04/02/使用zabbix去监控网站/" class="leancloud_visitors" data-flag-title="使用zabbix去监控网站">
+             <span id="/2018/04/02/使用zabbix去监控网站/" class="leancloud_visitors" data-flag-title="使用zabbix去监控网站和tcp连接">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -399,7 +430,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  0
+                  254
                 </span>
               
 
@@ -422,6 +453,10 @@
           
 
           
+              <div class="post-description">
+                  我可算是那个zabbix监控模板扒个精光...
+              </div>
+          
 
         </div>
       </header>
@@ -436,7 +471,13 @@
       
 
       
-        <script src="\assets\js\APlayer.min.js"> </script>
+        <script src="\assets\js\APlayer.min.js"> </script><h2><span id="网页状态码监控">网页状态码监控</span></h2><p>在zabbix的web界面，<code>配置</code>–<code>主机</code>–选择一个有外网权限的服务器，比如选择zabbix server–<code>Web检测</code>，如图：<br><img src="/images/checkweb1.png" alt="paradin"></p>
+<p>然后点击右上角的<code>创建Web场景</code>，然后依次填入<code>名称</code>，<code>间隔</code>，<code>客户端</code>等等，如图：<br><img src="/images/checkweb2.png" alt="paradin"></p>
+<p>然后编辑<code>步骤</code>，先<code>添加</code>，填入对应的url，然后写上200状态码，意思就是返回200是OK的。<br><img src="/images/checkweb4.png" alt="paradin"><br>保存即可，如果还有http认证，那么就继续填写认证。</p>
+<p>至此，一个简单的监控官网状态码的配置过程就结束了，剩下就是增添一下触发器，如下：<br><img src="/images/checkweb3.png" alt="paradin"></p>
+<h2><span id="tcp连接监控">tcp连接监控</span></h2><p>首先在<code>zabbix-agentd.conf</code>里添加一个新的自定义监控项：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">UserParameter=tcp.status[*],netstat -a | awk <span class="string">'/^tcp/ &#123;++y[$NF]&#125; END &#123;for(i in y) print i,y[i]&#125;'</span> |  grep $<span class="number">1</span> | awk <span class="string">'&#123;print $NF&#125;'</span></span><br></pre></td></tr></table></figure></p>
+<p>然后<code>service zabbix-agent restart</code>重启客户端，模板就是<a href="https://gitee.com/careyjike_173/zabbix/tree/master/template" target="_blank" rel="noopener">https://gitee.com/careyjike_173/zabbix/tree/master/template</a> 里的<code>zbx_tcp_status_templates.xml</code>，直接导入即可,然后自己配置一下<code>time_wait</code>/<code>close_wait</code>的告警阈值。</p>
+
       
     </div>
     
@@ -500,7 +541,7 @@
 
 				<li class="post-copyright-link">
 					<strong>本文标题：</strong>
-					<a href="http://yoursite.com/2018/04/02/使用zabbix去监控网站/" title="使用zabbix去监控网站">使用zabbix去监控网站</a>
+					<a href="http://yoursite.com/2018/04/02/使用zabbix去监控网站/" title="使用zabbix去监控网站和tcp连接">使用zabbix去监控网站和tcp连接</a>
 				</li>
 
 				<li class="post-copyright-date">
@@ -515,6 +556,16 @@
 			
 		</div>
 	
+      
+        <div class="post-tags">
+          
+            <a href="/tags/zabbix/" rel="tag"><i class="fa fa-tag"></i> zabbix</a>
+          
+            <a href="/tags/web监控/" rel="tag"><i class="fa fa-tag"></i> web监控</a>
+          
+            <a href="/tags/tcp连接/" rel="tag"><i class="fa fa-tag"></i> tcp连接</a>
+          
+        </div>
       
 
       
@@ -629,8 +680,17 @@ var jiathis_config={
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -673,7 +733,7 @@ var jiathis_config={
               
               <div class="site-state-item site-state-tags">
                 
-                  <span class="site-state-item-count">96</span>
+                  <span class="site-state-item-count">98</span>
                   <span class="site-state-item-name">标签</span>
                 
               </div>
@@ -804,6 +864,22 @@ show_date_time();
       </section>
 
       
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text"><span id="&#x7F51;&#x9875;&#x72B6;&#x6001;&#x7801;&#x76D1;&#x63A7;">&#x7F51;&#x9875;&#x72B6;&#x6001;&#x7801;&#x76D1;&#x63A7;</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">2.</span> <span class="nav-text"><span id="tcp&#x8FDE;&#x63A5;&#x76D1;&#x63A7;">tcp&#x8FDE;&#x63A5;&#x76D1;&#x63A7;</span></span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
 
       
 
@@ -850,7 +926,7 @@ show_date_time();
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">博客全站共109.7k字</span>
+  <span class="post-count">博客全站共110.0k字</span>
 </div>
         
 
