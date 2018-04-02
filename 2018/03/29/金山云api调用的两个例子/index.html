@@ -100,7 +100,7 @@
 <meta property="og:image" content="http://yoursite.com/images/ksapi1.png">
 <meta property="og:image" content="http://yoursite.com/images/ksapi3.png">
 <meta property="og:image" content="http://yoursite.com/images/ksapi2.png">
-<meta property="og:updated_time" content="2018-03-29T15:22:59.110Z">
+<meta property="og:updated_time" content="2018-03-29T15:26:45.306Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="金山云api调用的两个例子">
 <meta name="twitter:description" content="留下两个例子，日后说不定用得着">
@@ -472,7 +472,7 @@
 
       
         <script src="\assets\js\APlayer.min.js"> </script><p>今天另外一个运维要看一下金山云API返回的格式，于是就临时写了两个demo，也顺便记录下来，说不定以后开发脚本的时候可能用的着。</p>
-<h2><span id="查询云数据库脚本">查询云数据库脚本</span></h2><p>需要先获取<code>https://github.com/kscdb/krds_openapi_sdk.git</code>，然后执行<code>python setup.py install</code>安装所用的金山库。</p>
+<h2><span id="查询数据库的脚本">查询数据库的脚本</span></h2><p>需要先获取<code>https://github.com/kscdb/krds_openapi_sdk.git</code>，然后执行<code>python setup.py install</code>安装所用的金山库。</p>
 <p>这个脚本是查询某个数据库的具体情况：<br><img src="/images/ksapi4.png" alt="paradin"></p>
 <p>脚本如下：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/usr/bin/env python</span></span><br><span class="line"># -*- encoding:utf-8 -*-</span><br><span class="line"><span class="keyword">from</span> kscore.session <span class="keyword">import</span> get_session</span><br><span class="line"><span class="keyword">from</span> krds_client <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line">#密钥</span><br><span class="line">ACCESS_KEY_ID = <span class="string">"这里填写ak"</span></span><br><span class="line">SECRET_ACCESS_KEY = <span class="string">"这里填写sk"</span></span><br><span class="line"></span><br><span class="line">#连接</span><br><span class="line">s = get_session()</span><br><span class="line">krds_client = KRDSClient(ACCESS_KEY_ID, SECRET_ACCESS_KEY, <span class="string">'地域名'</span>)</span><br><span class="line">r = krds_client.DescribeDBInstances(DBInstanceIdentifier='5c664b16-fbfe-4373-8a00-67c9476e7386',DBInstanceType='HA')	#DBInstanceIdentifier后面是实例ID</span><br><span class="line">print r</span><br></pre></td></tr></table></figure></p>
 <p>执行脚本之后，可以看到返回的结果包括数据库里很多的资料，如图：<br><img src="/images/ksapi1.png" alt="paradin" title="执行效果"></p>
@@ -603,6 +603,10 @@
 
           <div class="post-nav-prev post-nav-item">
             
+              <a href="/2018/04/02/使用zabbix去监控nginx/" rel="prev" title="使用zabbix去监控nginx">
+                使用zabbix去监控nginx <i class="fa fa-chevron-right"></i>
+              </a>
+            
           </div>
         </div>
       
@@ -715,7 +719,7 @@ var jiathis_config={
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">106</span>
+                  <span class="site-state-item-count">109</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -877,7 +881,7 @@ show_date_time();
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text"><span id="&#x67E5;&#x8BE2;&#x4E91;&#x6570;&#x636E;&#x5E93;&#x811A;&#x672C;">&#x67E5;&#x8BE2;&#x4E91;&#x6570;&#x636E;&#x5E93;&#x811A;&#x672C;</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">2.</span> <span class="nav-text"><span id="&#x67E5;&#x8BE2;&#x670D;&#x52A1;&#x5668;&#x7684;&#x811A;&#x672C;">&#x67E5;&#x8BE2;&#x670D;&#x52A1;&#x5668;&#x7684;&#x811A;&#x672C;</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">3.</span> <span class="nav-text"><span id="&#x53C2;&#x8003;&#x8D44;&#x6599;">&#x53C2;&#x8003;&#x8D44;&#x6599;</span></span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text"><span id="&#x67E5;&#x8BE2;&#x6570;&#x636E;&#x5E93;&#x7684;&#x811A;&#x672C;">&#x67E5;&#x8BE2;&#x6570;&#x636E;&#x5E93;&#x7684;&#x811A;&#x672C;</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">2.</span> <span class="nav-text"><span id="&#x67E5;&#x8BE2;&#x670D;&#x52A1;&#x5668;&#x7684;&#x811A;&#x672C;">&#x67E5;&#x8BE2;&#x670D;&#x52A1;&#x5668;&#x7684;&#x811A;&#x672C;</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">3.</span> <span class="nav-text"><span id="&#x53C2;&#x8003;&#x8D44;&#x6599;">&#x53C2;&#x8003;&#x8D44;&#x6599;</span></span></a></li></ol></div>
             
 
           </div>
@@ -930,7 +934,7 @@ show_date_time();
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">博客全站共108.8k字</span>
+  <span class="post-count">博客全站共109.3k字</span>
 </div>
         
 
