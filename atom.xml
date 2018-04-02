@@ -42,19 +42,22 @@
     <link href="http://yoursite.com/2018/04/02/%E4%BD%BF%E7%94%A8zabbix%E5%8E%BB%E7%9B%91%E6%8E%A7php-fpm/"/>
     <id>http://yoursite.com/2018/04/02/使用zabbix去监控php-fpm/</id>
     <published>2018-04-02T01:42:36.000Z</published>
-    <updated>2018-04-02T01:42:36.756Z</updated>
+    <updated>2018-04-02T03:28:26.912Z</updated>
     
-    <content type="html"><![CDATA[<script src="\assets\js\APlayer.min.js"> </script>]]></content>
+    <content type="html"><![CDATA[<script src="\assets\js\APlayer.min.js"> </script><h2><span id="开启状态统计">开启状态统计</span></h2><p>nginx有一个status来获取nginx处理信息的总览情况，php-fpm也有一个状态统计。要打开这个状态统计，需要先打开php-fpm.conf，将<code>pm.status_path = /status</code>前面的注释去掉。</p><p>然后跑到nginx里，在<code>nginx.conf</code>里添加一个location：</p><pre><code>location ~ ^/(status|ping) {        fastcgi_pass 127.0.0.1:9000;    include fastcgi.conf;    access_log off;    allow 127.0.0.1;    deny all;  }</code></pre><p>然后重启一下php-fpm和nginx，在命令行里输入<code>curl -s http://127.0.0.1:80/status</code>，就会看到php的状态统计，如下图：<br><img src="/images/checkphp.png" alt="paradin"></p><h2><span id="php-fpm-status详解">php-fpm status详解</span></h2><p>pool - fpm池子名称，大多数为www<br>process manager – 进程管理方式,值：static, dynamic<br>start time – 启动日期,如果reload了php-fpm，时间会更新<br>start since – 运行时长<br>accepted conn – 当前池子接受的请求数<br>listen queue – 请求等待队列，如果这个值不为0，那么要增加FPM的进程数量<br>max listen queue – 请求等待队列最高的数量<br>listen queue len – socket等待队列长度<br>idle processes – 空闲进程数量<br>active processes – 活跃进程数量<br>total processes – 总进程数量<br>max active processes – 最大的活跃进程数量（FPM启动开始算）<br>max children reached - 大道进程最大数量限制的次数，如果这个数量不为0，那说明你的最大进程数量太小了，请改大一点。<br>slow requests – 启用了php-fpm slow-log，缓慢请求的数量 </p><h2><span id="配置监控">配置监控</span></h2><p>跑到<code>zabbix-agentd.conf</code>里添加一个自定义监控项，如下：<br>    UserParameter=php-fpm.status[*],/usr/bin/curl -s “<a href="http://127.0.0.1/php-fpm_status?xml" target="_blank" rel="noopener">http://127.0.0.1/php-fpm_status?xml</a>“ | grep “&lt;$1&gt;” | awk -F’&gt;|&lt;’ ‘{ print $$3}’</p><p>然后重启一下<code>zabbix-agent</code>，模板就是<a href="https://gitee.com/careyjike_173/zabbix/tree/master/template" target="_blank" rel="noopener">https://gitee.com/careyjike_173/zabbix/tree/master/template</a> 里的<code>zbx_php-fpm_templates.xml</code>，直接导入即可！</p><p>效果如下图：<br><img src="/images/checkphp2.png" alt="paradin"></p>]]></content>
     
     <summary type="html">
     
-      
-      
-        &lt;script src=&quot;\assets\js\APlayer.min.js&quot;&gt; &lt;/script&gt;
-      
+      php-fpm得多一点了解，不然即使有报警了也不知道怎么办
     
     </summary>
     
+      <category term="工作与技术" scheme="http://yoursite.com/categories/%E5%B7%A5%E4%BD%9C%E4%B8%8E%E6%8A%80%E6%9C%AF/"/>
+    
+    
+      <category term="zabbix" scheme="http://yoursite.com/tags/zabbix/"/>
+    
+      <category term="php-fpm" scheme="http://yoursite.com/tags/php-fpm/"/>
     
   </entry>
   
