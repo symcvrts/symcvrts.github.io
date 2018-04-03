@@ -1,6 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[使用zabbix监控memcache]]></title>
+    <url>%2F2018%2F04%2F03%2F%E4%BD%BF%E7%94%A8zabbix%E7%9B%91%E6%8E%A7memcache%2F</url>
+    <content type="text"><![CDATA[监控memcache的原理跟监控redis差不多，都是通过一个类似info的东西可以查询到memcache的状态值，然后通过脚本去获取这些值给zabbix，当发现某值不正常就发出告警。 查询当年memcache状态的命令是echo stats |nc 127.0.0.1 11211，如果没有nc命令，那就yum install -y nc。 获得到的结果是这个样子的： 12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455[root@lconline-ec2 ~]# echo stats |nc 127.0.0.1 11211STAT pid 1859 memcache服务进程IDSTAT uptime 491093 服务器已运行秒数STAT time 1522740969 服务器当前Unix时间戳STAT version 1.4.25 memcache版本STAT libevent 1.4.13-stableSTAT pointer_size 64 操作系统指针大小STAT rusage_user 14.321822 进程累计用户时间STAT rusage_system 14.095857 进程累计系统时间STAT curr_connections 5 当前连接数量STAT total_connections 51010 Memcached运行以来连接总数STAT connection_structures 8 Memcached分配的连接结构数量STAT reserved_fds 20STAT cmd_get 0 get命令请求次数STAT cmd_set 0 set命令请求次数STAT cmd_flush 0 flush命令请求次数STAT cmd_touch 0 touch命令请求次数STAT get_hits 0 get命令命中次数STAT get_misses 0 get命令未命中次数STAT delete_misses 0 delete命令未命中次数STAT delete_hits 0 delete命令命中次数STAT incr_misses 0 incr命令未命中次数STAT incr_hits 0 incr命令命中次数STAT decr_misses 0 decr命令未命中次数STAT decr_hits 0 decr命令命中次数STAT cas_misses 0 cas命令未命中次数STAT cas_hits 0 cas命令命中次数STAT cas_badval 0 使用擦拭次数STAT touch_hits 0STAT touch_misses 0STAT auth_cmds 0 认证命令处理的次数 STAT auth_errors 0 认证失败数目STAT bytes_read 357040 读取总字节数 STAT bytes_written 60197691 发送总字节数STAT limit_maxbytes 1073741824 分配的内存总大小（字节）STAT accepting_conns 1 服务器是否达到过最大连接（0/1）STAT listen_disabled_num 0 失效的监听数STAT time_in_listen_disabled_us 0STAT threads 4 当前线程数STAT conn_yields 0 连接操作主动放弃数目STAT hash_power_level 16STAT hash_bytes 524288 当前存储占用的字节数STAT hash_is_expanding 0STAT malloc_fails 0 STAT bytes 0 当前存储占用的字节数STAT curr_items 0 当前存储的数据总数STAT total_items 0 启动以来存储的数据总数STAT expired_unfetched 0 STAT evicted_unfetched 0STAT evictions 0 LRU释放的对象数目STAT reclaimed 0 已过期的数据条目来存储新数据的数目STAT crawler_reclaimed 0STAT crawler_items_checked 0STAT lrutail_reflocked 0 END 修改zabbix_agentd.conf，添加一个新的自定义项： 1UserParameter=memcached.stat[*],(echo stats; sleep 1) | telnet 127.0.0.1 11211 2&gt;&amp;1 | awk '/STAT $1 / &#123;print $NF&#125;' 然后重启zabbix-agent，模板就用github里的就好，看到的效果如下：]]></content>
+      <categories>
+        <category>工作与技术</category>
+      </categories>
+      <tags>
+        <tag>zabbix</tag>
+        <tag>memcached</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[使用zabbix去监控网站和tcp连接]]></title>
     <url>%2F2018%2F04%2F02%2F%E4%BD%BF%E7%94%A8zabbix%E5%8E%BB%E7%9B%91%E6%8E%A7%E7%BD%91%E7%AB%99%2F</url>
     <content type="text"><![CDATA[网页状态码监控在zabbix的web界面，配置–主机–选择一个有外网权限的服务器，比如选择zabbix server–Web检测，如图： 然后点击右上角的创建Web场景，然后依次填入名称，间隔，客户端等等，如图： 然后编辑步骤，先添加，填入对应的url，然后写上200状态码，意思就是返回200是OK的。保存即可，如果还有http认证，那么就继续填写认证。 至此，一个简单的监控官网状态码的配置过程就结束了，剩下就是增添一下触发器，如下： tcp连接监控首先在zabbix-agentd.conf里添加一个新的自定义监控项： 1UserParameter=tcp.status[*],netstat -a | awk '/^tcp/ &#123;++y[$NF]&#125; END &#123;for(i in y) print i,y[i]&#125;' | grep $1 | awk '&#123;print $NF&#125;' 然后service zabbix-agent restart重启客户端，模板就是https://gitee.com/careyjike_173/zabbix/tree/master/template 里的zbx_tcp_status_templates.xml，直接导入即可。如图： 然后自己配置一下time_wait/close_wait的告警阈值。]]></content>
@@ -188,8 +200,8 @@
         <category>工作与技术</category>
       </categories>
       <tags>
-        <tag>mysql</tag>
         <tag>运维技术</tag>
+        <tag>mysql</tag>
       </tags>
   </entry>
   <entry>
@@ -443,8 +455,8 @@
         <category>工作与技术</category>
       </categories>
       <tags>
-        <tag>运维技术</tag>
         <tag>linux</tag>
+        <tag>运维技术</tag>
       </tags>
   </entry>
   <entry>
@@ -503,8 +515,8 @@
         <category>工作与技术</category>
       </categories>
       <tags>
-        <tag>crontab</tag>
         <tag>linux</tag>
+        <tag>crontab</tag>
       </tags>
   </entry>
   <entry>
@@ -1133,8 +1145,8 @@
         <category>工作与技术</category>
       </categories>
       <tags>
-        <tag>运维技术</tag>
         <tag>nginx</tag>
+        <tag>运维技术</tag>
       </tags>
   </entry>
   <entry>
