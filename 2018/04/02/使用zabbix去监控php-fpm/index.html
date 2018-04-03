@@ -99,7 +99,7 @@
 <meta property="og:image" content="http://yoursite.com/images/checkphp.png">
 <meta property="og:image" content="http://yoursite.com/images/checkphp2.png">
 <meta property="og:image" content="http://yoursite.com/images/百年美洲杯对委内瑞拉助攻伊瓜因.gif">
-<meta property="og:updated_time" content="2018-04-02T06:22:52.288Z">
+<meta property="og:updated_time" content="2018-04-03T11:58:46.168Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="使用zabbix去监控php-fpm">
 <meta name="twitter:description" content="php-fpm得多一点了解，不然即使有报警了也不知道怎么办">
@@ -477,7 +477,7 @@
 <h2><span id="配置监控">配置监控</span></h2><p>跑到<code>zabbix-agentd.conf</code>里添加一个自定义监控项，如下：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">UserParameter=php-fpm.status[*],/usr/bin/curl -s <span class="string">"http://127.0.0.1/php-fpm_status?xml"</span> | grep <span class="string">"&lt;$1&gt;"</span> | awk -F<span class="string">'&gt;|&lt;'</span> <span class="string">'&#123; print $$3&#125;'</span></span><br></pre></td></tr></table></figure></p>
 <p>然后重启一下<code>zabbix-agent</code>，模板就是<a href="https://gitee.com/careyjike_173/zabbix/tree/master/template" target="_blank" rel="noopener">https://gitee.com/careyjike_173/zabbix/tree/master/template</a> 里的<code>zbx_php-fpm_templates.xml</code>，直接导入即可！</p>
 <p>效果如下图：<br><img src="/images/checkphp2.png" alt="paradin"></p>
-<p><img src="/images/百年美洲杯对委内瑞拉助攻伊瓜因.gif" alt="paradin"></p>
+<p><img src="/images/百年美洲杯对委内瑞拉助攻伊瓜因.gif" alt="paradin" title="梅西百年美洲杯对委内瑞拉助攻伊瓜因"></p>
 
       
     </div>

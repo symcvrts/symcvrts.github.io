@@ -102,7 +102,7 @@
 <meta property="og:image" content="http://yoursite.com/images/checkweb3.png">
 <meta property="og:image" content="http://yoursite.com/images/checkweb5.png">
 <meta property="og:image" content="http://yoursite.com/images/裤子卡世界波.gif">
-<meta property="og:updated_time" content="2018-04-02T09:15:16.865Z">
+<meta property="og:updated_time" content="2018-04-03T11:58:22.848Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="使用zabbix去监控网站和tcp连接">
 <meta name="twitter:description" content="我可算是那个zabbix监控模板扒个精光...">
@@ -480,7 +480,7 @@
 <h2><span id="tcp连接监控">tcp连接监控</span></h2><p>首先在<code>zabbix-agentd.conf</code>里添加一个新的自定义监控项：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">UserParameter=tcp.status[*],netstat -a | awk <span class="string">'/^tcp/ &#123;++y[$NF]&#125; END &#123;for(i in y) print i,y[i]&#125;'</span> |  grep $<span class="number">1</span> | awk <span class="string">'&#123;print $NF&#125;'</span></span><br></pre></td></tr></table></figure></p>
 <p>然后<code>service zabbix-agent restart</code>重启客户端，模板就是<a href="https://gitee.com/careyjike_173/zabbix/tree/master/template" target="_blank" rel="noopener">https://gitee.com/careyjike_173/zabbix/tree/master/template</a> 里的<code>zbx_tcp_status_templates.xml</code>，直接导入即可。如图：<br><img src="/images/checkweb5.png" alt="paradin"></p>
 <p>然后自己配置一下<code>time_wait</code>/<code>close_wait</code>的告警阈值。</p>
-<p><img src="/images/裤子卡世界波.gif" alt="akb48"></p>
+<p><img src="/images/裤子卡世界波.gif" alt="akb48" title="裤子卡中圈世界波"></p>
 
       
     </div>
