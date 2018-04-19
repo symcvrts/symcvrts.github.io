@@ -75,7 +75,7 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="centos,运维安全," />
 
 
 
@@ -88,14 +88,22 @@
 
 
 
+<meta name="description" content="chmod u+s 就是给某个程序的所有者以suid权限，可以像root用户一样操作">
+<meta name="keywords" content="centos,运维安全">
 <meta property="og:type" content="article">
-<meta property="og:title" content="使用普通用户启动tomcat">
-<meta property="og:url" content="http://yoursite.com/2018/04/19/使用普通用户启动tomcat/index.html">
+<meta property="og:title" content="用非root启动tomcat进程">
+<meta property="og:url" content="http://yoursite.com/2018/04/18/使用普通用户启动tomcat/index.html">
 <meta property="og:site_name" content="Chris Chan&#39;s BLOG">
+<meta property="og:description" content="chmod u+s 就是给某个程序的所有者以suid权限，可以像root用户一样操作">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-04-19T11:17:24.153Z">
+<meta property="og:image" content="http://yoursite.com/images/noroot2.png">
+<meta property="og:image" content="http://yoursite.com/images/noroot3.png">
+<meta property="og:image" content="http://yoursite.com/images/noroot4.png">
+<meta property="og:updated_time" content="2018-04-19T11:20:25.058Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="使用普通用户启动tomcat">
+<meta name="twitter:title" content="用非root启动tomcat进程">
+<meta name="twitter:description" content="chmod u+s 就是给某个程序的所有者以suid权限，可以像root用户一样操作">
+<meta name="twitter:image" content="http://yoursite.com/images/noroot2.png">
 
 
 
@@ -125,13 +133,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2018/04/19/使用普通用户启动tomcat/"/>
+  <link rel="canonical" href="http://yoursite.com/2018/04/18/使用普通用户启动tomcat/"/>
 
 
 
 
 
-  <title>使用普通用户启动tomcat | Chris Chan's BLOG</title>
+  <title>用非root启动tomcat进程 | Chris Chan's BLOG</title>
   
 
 
@@ -314,7 +322,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/04/19/使用普通用户启动tomcat/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/04/18/使用普通用户启动tomcat/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Chris Chan">
@@ -331,7 +339,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">使用普通用户启动tomcat</h1>
+          <h1 class="post-title" itemprop="name headline">用非root启动tomcat进程</h1>
         
 
         <div class="post-meta">
@@ -343,8 +351,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-04-19T19:17:24+08:00">
-                2018-04-19
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-04-18T22:19:34+08:00">
+                2018-04-18
               </time>
             
 
@@ -353,6 +361,28 @@
             
           </span>
 
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/工作与技术/" itemprop="url" rel="index">
+                    <span itemprop="name">工作与技术</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
           
 
           
@@ -363,8 +393,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2018/04/19/使用普通用户启动tomcat/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count hc-comment-count" data-xid="2018/04/19/使用普通用户启动tomcat/" itemprop="commentsCount"></span>
+                <a href="/2018/04/18/使用普通用户启动tomcat/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count hc-comment-count" data-xid="2018/04/18/使用普通用户启动tomcat/" itemprop="commentsCount"></span>
                 </a>
               </span>
               <!--/noindex-->
@@ -373,7 +403,7 @@
 
           
           
-             <span id="/2018/04/19/使用普通用户启动tomcat/" class="leancloud_visitors" data-flag-title="使用普通用户启动tomcat">
+             <span id="/2018/04/18/使用普通用户启动tomcat/" class="leancloud_visitors" data-flag-title="用非root启动tomcat进程">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -399,7 +429,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  0
+                  1,003
                 </span>
               
 
@@ -415,12 +445,16 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  1
+                  4
                 </span>
               
             </div>
           
 
+          
+              <div class="post-description">
+                  chmod u+s 就是给某个程序的所有者以suid权限，可以像root用户一样操作
+              </div>
           
 
         </div>
@@ -436,7 +470,22 @@
       
 
       
-        <script src="\assets\js\APlayer.min.js"> </script>
+        <script src="\assets\js\APlayer.min.js"> </script><p>使用非root用户启动进程是运维安全的一个主要环节，拿tomcat进程来说，如果是使用root用户去启动了tomcat，那么有一个严重的问题，那就是tomcat具有root权限。这意味着你的任何一个jsp脚本都具有root权限，所以那些不怀好意的人可以轻易地用jsp脚本去搞破坏，甚至删除你整个硬盘里的东西！所以为了活着，我们要极力避免这种现象。很多的软件都自带的用户/用户组，比如nginx、zabbix、elasticsearch，但是也有很多的软件没有这么贴心的服务，这就需要我们手动的更改了。</p>
+<h2><span id="使用非root用户启动tomcat">使用非root用户启动tomcat</span></h2><p>以tomcat为例，打算用chris账号(属于chan这个group)启动。那么首先先创建账号和组，如下：<br>    [root@chen-docker ~]groupadd chen    #创建chen这个组<br>    [root@chen-docker ~]useradd -s /bin/bash -g chen chris    #在这个组里面添加chris这个用户<br>    [root@chen-docker ~]passwd chris    #给这个用户设定密码<br>    [root@chen-docker ~]# id chris<br>    uid=1000(chris) gid=1002(chen) groups=1002(chen)    #可见添加成功</p>
+<p><code>su chris</code>切换到chris用户，在<code>/home/chris</code>里使用<code>wget http://apache.fayea.com/tomcat/tomcat-9/v9.0.7/bin/apache-tomcat-9.0.7.tar.gz</code>下载tomcat。然后解压缩在/home/chris里，因为chris用户在这里是有权限的。然后进行如下的操作：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">cd  ~<span class="regexp">/ 代表用户所在目录</span></span><br><span class="line"><span class="regexp">mkdir -p ~/</span>shell-script</span><br><span class="line">cd ~<span class="regexp">/shell-script/</span></span><br><span class="line">touch start.sh</span><br><span class="line">toush stop.sh</span><br></pre></td></tr></table></figure></p>
+<p>这个<code>start.sh</code>的内容很简单，如下：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">#/bin/bash</span><br><span class="line">if [ "root" == "$USER" ]    #不让root启动</span><br><span class="line">then</span><br><span class="line">    echo <span class="string">"can't start with user 'root',retry after change user!"</span></span><br><span class="line">    exit <span class="number">1</span></span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">    cd /home/chris/apache-tomcat<span class="number">-9.0</span><span class="number">.7</span>/bin/    &amp;&amp; ./start.sh</span><br><span class="line">fi</span><br></pre></td></tr></table></figure></p>
+<p><code>shutdown.sh</code>的内容同理：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">#/bin/bash</span><br><span class="line">if [ "root" == "$USER" ]    #不让root启动</span><br><span class="line">then</span><br><span class="line">    echo <span class="string">"can't start with user 'root',retry after change user!"</span></span><br><span class="line">    exit <span class="number">1</span></span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">    cd /home/chris/apache-tomcat<span class="number">-9.0</span><span class="number">.7</span>/bin/    &amp;&amp; ./shutdown.sh</span><br><span class="line">fi</span><br></pre></td></tr></table></figure></p>
+<p><code>chmod +x *.sh</code>给上面两个脚本可执行权限，但是现在执行startup.sh或者shutdown.sh会出现一个问题：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Neither the JAVA_HOME nor the JRE_HOME environment variable is defined</span><br><span class="line">At least one <span class="keyword">of</span> these environment variable is needed to run <span class="keyword">this</span> program</span><br></pre></td></tr></table></figure></p>
+<p>这是因为chris用户没有权限去启动java这个可执行程序，如果使用<code>java -version</code>回答是<code>bash: java: command not found</code>，这个时候怎么办？</p>
+<p>编辑<code>~/.bash_profile</code>，在末尾处加上如下的内容：<br><img src="/images/noroot2.png" alt="paradin"></p>
+<p>然后<code>source .bash_profile</code>，再使用<code>java -version</code>确认一下应该是OK了。这个时候也是可以使用chris用户去启动刚刚的那个start.sh和shutdown.sh的。<br><img src="/images/noroot3.png" alt="paradin"></p>
+<p>由于我们的tomcat是源码解压缩，所以要使用root用户去创建一下<code>/etc/init.d/tomcat</code>。里面内容如下：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"><span class="keyword">case</span> $<span class="number">1</span> <span class="keyword">in</span></span><br><span class="line">start)</span><br><span class="line">su - uchris -lc "sh /home/chris/shell-script/start.sh";;     #如果要root启动，那就是su - root -lc "sh /home/utomcat/shell-script/start.sh";;</span><br><span class="line">stop)</span><br><span class="line">su - uchirs -lc <span class="string">"sh /home/chris/shell-script/shutdown.sh"</span>;;</span><br><span class="line">*)</span><br><span class="line">echo <span class="string">"parameter error, usage:(start|stop)"</span>;;</span><br><span class="line">esac</span><br></pre></td></tr></table></figure></p>
+<p>保存之后，执行一下<code>service tomcat start</code>看看效果。<br><img src="/images/noroot4.png" alt="paradin"></p>
+<p>如果要设置开机自启动，别忘了<code>chkconfig --add tomcat</code>和<code>chkconfig tomcat on</code>。</p>
+<h2><span id="当普通用户要使用1024以下的端口">当普通用户要使用1024以下的端口</span></h2><p>众所周知，linux默认是不准许普通用户调用1024以下的端口的，那么遇到这样的需求怎么办呢？最好的方法是使用iptables。</p>
+<p>首先让程序运行在非root帐户下，并绑定高于1024的端口，在确保能正常工作的时候，将低端口通过端口转发，将低端口转到高端口，从而实现非root运行的程序绑定低端口。要使用此方法可以使用下面的方式：<br>    <figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">sysctl -w net.ipv4.ip_forward=1        #要长久保存，需要在/etc/sysctl.conf文件内修改，然后sysctl -p /etc/sysctl.conf</span><br><span class="line">iptables -F -t nat</span><br><span class="line">iptables -t nat -A PREROUTING -p tcp --dport 80 -j DNAT --to:8088    #将80端口转发到8088</span><br><span class="line">iptables -t nat -A PREROUTING -p tcp --dport 80 -j REDIRECT --to-port 8080    #这句话也可以</span><br></pre></td></tr></table></figure></p>
+<p>这么操作在速度上没有任何影响。</p>
+
       
     </div>
     
@@ -500,11 +549,11 @@
 
 				<li class="post-copyright-link">
 					<strong>本文标题：</strong>
-					<a href="http://yoursite.com/2018/04/19/使用普通用户启动tomcat/" title="使用普通用户启动tomcat">使用普通用户启动tomcat</a>
+					<a href="http://yoursite.com/2018/04/18/使用普通用户启动tomcat/" title="用非root启动tomcat进程">用非root启动tomcat进程</a>
 				</li>
 
 				<li class="post-copyright-date">
-					<strong>发布时间：</strong>2018年4月19日 - 19时04分
+					<strong>发布时间：</strong>2018年4月18日 - 22时04分
 				</li>  
 
 				<li class="post-copyright-license">
@@ -515,6 +564,14 @@
 			
 		</div>
 	
+      
+        <div class="post-tags">
+          
+            <a href="/tags/centos/" rel="tag"><i class="fa fa-tag"></i> centos</a>
+          
+            <a href="/tags/运维安全/" rel="tag"><i class="fa fa-tag"></i> 运维安全</a>
+          
+        </div>
       
 
       
@@ -538,8 +595,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/04/19/在Grafana里添加worldping插件/" rel="next" title="在Grafana里添加worldping插件">
-                <i class="fa fa-chevron-left"></i> 在Grafana里添加worldping插件
+              <a href="/2018/04/18/使用docker做一个主从同步的redis集群/" rel="next" title="使用docker做一个主从同步的redis集群">
+                <i class="fa fa-chevron-left"></i> 使用docker做一个主从同步的redis集群
               </a>
             
           </div>
@@ -547,6 +604,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/04/19/在Grafana里添加worldping插件/" rel="prev" title="在Grafana里添加worldping插件">
+                在Grafana里添加worldping插件 <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -629,8 +690,17 @@ var jiathis_config={
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -673,7 +743,7 @@ var jiathis_config={
               
               <div class="site-state-item site-state-tags">
                 
-                  <span class="site-state-item-count">101</span>
+                  <span class="site-state-item-count">102</span>
                   <span class="site-state-item-name">标签</span>
                 
               </div>
@@ -804,6 +874,22 @@ show_date_time();
       </section>
 
       
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text"><span id="&#x4F7F;&#x7528;&#x975E;root&#x7528;&#x6237;&#x542F;&#x52A8;tomcat">&#x4F7F;&#x7528;&#x975E;root&#x7528;&#x6237;&#x542F;&#x52A8;tomcat</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">2.</span> <span class="nav-text"><span id="&#x5F53;&#x666E;&#x901A;&#x7528;&#x6237;&#x8981;&#x4F7F;&#x7528;1024&#x4EE5;&#x4E0B;&#x7684;&#x7AEF;&#x53E3;">&#x5F53;&#x666E;&#x901A;&#x7528;&#x6237;&#x8981;&#x4F7F;&#x7528;1024&#x4EE5;&#x4E0B;&#x7684;&#x7AEF;&#x53E3;</span></span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
 
       
 
@@ -850,7 +936,7 @@ show_date_time();
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">博客全站共112.2k字</span>
+  <span class="post-count">博客全站共113.2k字</span>
 </div>
         
 
@@ -985,7 +1071,7 @@ show_date_time();
 		_hcwp.push({widget:"Bloggerstream", widget_id: 99594, selector:".hc-comment-count", label: "{\%COUNT%\}" });
 
 		
-		_hcwp.push({widget:"Stream", widget_id: 99594, xid: "2018/04/19/使用普通用户启动tomcat/"});
+		_hcwp.push({widget:"Stream", widget_id: 99594, xid: "2018/04/18/使用普通用户启动tomcat/"});
 		
 
 		(function() {
