@@ -100,7 +100,7 @@
 <meta property="og:image" content="http://yoursite.com/images/docker6.png">
 <meta property="og:image" content="http://yoursite.com/images/docker5.png">
 <meta property="og:image" content="http://yoursite.com/images/docker7.png">
-<meta property="og:updated_time" content="2018-04-17T16:33:32.564Z">
+<meta property="og:updated_time" content="2018-04-19T03:51:26.430Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="使用docker做一个主从同步的redis集群">
 <meta name="twitter:description" content="从《容器与容器云》 的第19页开始...">
@@ -430,7 +430,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  1,106
+                  1,108
                 </span>
               
 
@@ -488,7 +488,7 @@
 <h2><span id="如何让容器一直启动">如何让容器一直启动</span></h2><p>如果用了一段时间的docker就会发现，我们的容器经常用了一段时间就自动退出了，<code>docker ps</code>已经找不到了，在<code>docker ps -a</code>里面了，如图：<br><img src="/images/docker7.png" alt="paradin"></p>
 <p>然后我们<code>docker start containerId</code>想重新开启这个容器，可能这次来的更快，没几分钟容器又自己关了，由这个问题又可能引发其它很多的问题。</p>
 <p><code>docker run</code>指定的命令如果不是那些一直挂起的命令（比如运行top，不断echo），就是会自动退出的。<code>-d</code>命令是设置detach为<code>true</code>，根据官方的文档，意思是让这个命令在后台运行，但并不是一直运行，Docker容器后台运行,就必须有一个前台进程。主线程结束，容器会退出。</p>
-<p>我们启动容器的时候不要<code>-d</code>命令启动，用<code>-dit</code>就好了，例如：<br>    docker run -d hello-world(不要这么做)<br>    docker run -dit hello-world(推荐)</p>
+<p>我们启动容器的时候不要<code>-d</code>命令启动，用<code>-dit</code>就好了，例如：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">docker run -d hello-world(不要这么做)</span><br><span class="line">docker run -dit hello-world(推荐)</span><br></pre></td></tr></table></figure></p>
 
       
     </div>
