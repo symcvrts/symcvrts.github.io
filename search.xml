@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[使用普通用户启动tomcat]]></title>
+    <url>%2F2018%2F04%2F19%2F%E4%BD%BF%E7%94%A8%E6%99%AE%E9%80%9A%E7%94%A8%E6%88%B7%E5%90%AF%E5%8A%A8tomcat%2F</url>
+    <content type="text"><![CDATA[]]></content>
+  </entry>
+  <entry>
     <title><![CDATA[在Grafana里添加worldping插件]]></title>
     <url>%2F2018%2F04%2F19%2F%E5%9C%A8Grafana%E9%87%8C%E6%B7%BB%E5%8A%A0worldping%E6%8F%92%E4%BB%B6%2F</url>
     <content type="text"><![CDATA[安装插件worldping是一个监控网站的dns、ping、http响应、https响应的插件，要安装它很简单，在granafa服务器里执行如下命令： 12grafana-cli plugins install raintank-worldping-appsystemctl restart grafana-server.service 执行完毕之后在grafana的界面里选择Plugins，然后在APP里找到worldping，启动它，但是此时发现需要一个api，如图： 此时你需要登录grafana的官网，然后点击api keys和ADD API KEY，就可以生成一个API KEY，名字可以随便起，如下： 将生成的api key保存好，并且填回到grafana的api key里，这样worldping插件就可以使用了，如图： 监控网站节点此时点击黄色旋涡，发现多了worldping的选项，点击worldping Home，如图： 然后点击+ New Endpoint，这里我输入我公司的官网域名，然后begin auto-discovery，如图： 生成了结果之后，点击add，此时开始检查几个大城市，如芝加哥、东京、纽约、巴黎等大城市连接到刚刚输入的域名的情况，如图： 大约需要1~2分钟后，数据检查完成，可以点击GO to Summary Dashboard，就会看到图像了： 为什么我这个图里没有http?因为在nginx里我们做了http强制rewrite跳转到https，所以是读不到值的。 删除网站节点如果要删除网站节点，还是在worldping里点击要删除网站后面的齿轮图标，如图： 然后选择configuration，这里可以修改网站域名，要删除的话，选择最下面的destory，输入DELETE确认，然后就可以点击DELETE删除了，如图：]]></content>
@@ -10,18 +15,6 @@
       <tags>
         <tag>grafana</tag>
         <tag>图像监控</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title><![CDATA[用非root启动进程以及启动docker]]></title>
-    <url>%2F2018%2F04%2F18%2F%E7%94%A8%E9%9D%9Eroot%E5%90%AF%E5%8A%A8%E8%BF%9B%E7%A8%8B%E4%BB%A5%E5%8F%8A%E5%90%AF%E5%8A%A8docker%2F</url>
-    <content type="text"><![CDATA[使用非root用户启动普通进程使用非root用户启动进程是运维安全的一个主要环节，拿tomcat进程来说，如果是使用root用户去启动了tomcat，那么有一个严重的问题，那就是tomcat具有root权限。这意味着你的任何一个jsp脚本都具有root权限，所以那些不怀好意的人可以轻易地用jsp脚本去搞破坏，甚至删除你整个硬盘里的东西！所以为了活着，我们要极力避免这种现象。 很多的软件都自带的用户/用户组，比如nginx、zabbix、elasticsearch ，但是也有更多的软件没有这么贴心的服务，这就需要我们手动的更改了。比如我这个机器里有一个redis，它是用root启动的： 当普通用户要使用1024以下的端口众所周知，linux默认是不准许普通用户调用1024以下的端口的，那么遇到这样的需求怎么办呢？最好的方法 docker不应该使用root启动首先先说明一下，docker容器里的用户虽然是root，但是仅仅是这样就认为容器完全有能力去操作宿主机是大错特错的，这两个root是完全隔离的（不然docker还混个屁）。 1.8版本之前的docker是不支持user namespace的，所以那样的话，如果在docker容器内部使用root运行app，那么不可否认，这个root和宿主机的root是同一个UID。但是，需要特别注意的是，容器内的root与宿主机上的root权限并不一定是相等的。 但是为了绝对的安全，还是推荐把docker升级到1.8以上，然后彻底避免用root去启动容器，在http://www.projectatomic.io/docs/docker-image-author-guidance/里最下面一段也明文说了---不要用root用户去启动docker!!! 使用非root用户启动docker参考资料https://www.zhihu.com/question/25580965]]></content>
-      <categories>
-        <category>工作与技术</category>
-      </categories>
-      <tags>
-        <tag>运维技术</tag>
-        <tag>服务器安全</tag>
       </tags>
   </entry>
   <entry>
