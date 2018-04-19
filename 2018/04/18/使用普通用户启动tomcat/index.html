@@ -99,7 +99,7 @@
 <meta property="og:image" content="http://yoursite.com/images/noroot2.png">
 <meta property="og:image" content="http://yoursite.com/images/noroot3.png">
 <meta property="og:image" content="http://yoursite.com/images/noroot4.png">
-<meta property="og:updated_time" content="2018-04-19T11:20:25.058Z">
+<meta property="og:updated_time" content="2018-04-19T11:33:25.169Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="用非root启动tomcat进程">
 <meta name="twitter:description" content="chmod u+s 就是给某个程序的所有者以suid权限，可以像root用户一样操作">
@@ -429,7 +429,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  1,003
+                  1,008
                 </span>
               
 
@@ -471,7 +471,7 @@
 
       
         <script src="\assets\js\APlayer.min.js"> </script><p>使用非root用户启动进程是运维安全的一个主要环节，拿tomcat进程来说，如果是使用root用户去启动了tomcat，那么有一个严重的问题，那就是tomcat具有root权限。这意味着你的任何一个jsp脚本都具有root权限，所以那些不怀好意的人可以轻易地用jsp脚本去搞破坏，甚至删除你整个硬盘里的东西！所以为了活着，我们要极力避免这种现象。很多的软件都自带的用户/用户组，比如nginx、zabbix、elasticsearch，但是也有很多的软件没有这么贴心的服务，这就需要我们手动的更改了。</p>
-<h2><span id="使用非root用户启动tomcat">使用非root用户启动tomcat</span></h2><p>以tomcat为例，打算用chris账号(属于chan这个group)启动。那么首先先创建账号和组，如下：<br>    [root@chen-docker ~]groupadd chen    #创建chen这个组<br>    [root@chen-docker ~]useradd -s /bin/bash -g chen chris    #在这个组里面添加chris这个用户<br>    [root@chen-docker ~]passwd chris    #给这个用户设定密码<br>    [root@chen-docker ~]# id chris<br>    uid=1000(chris) gid=1002(chen) groups=1002(chen)    #可见添加成功</p>
+<h2><span id="使用非root用户启动tomcat">使用非root用户启动tomcat</span></h2><p>以tomcat为例，打算用chris账号(属于chan这个group)启动。那么首先先创建账号和组，如下：<br>    <figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[root@chen-docker ~]groupadd chen    #创建chen这个组</span><br><span class="line">[root@chen-docker ~]useradd -s /bin/bash -g chen chris    #在这个组里面添加chris这个用户</span><br><span class="line">[root@chen-docker ~]passwd chris    #给这个用户设定密码</span><br><span class="line">[root@chen-docker ~]# id chris</span><br><span class="line">uid=1000(chris) gid=1002(chen) groups=1002(chen)    #可见添加成功</span><br></pre></td></tr></table></figure></p>
 <p><code>su chris</code>切换到chris用户，在<code>/home/chris</code>里使用<code>wget http://apache.fayea.com/tomcat/tomcat-9/v9.0.7/bin/apache-tomcat-9.0.7.tar.gz</code>下载tomcat。然后解压缩在/home/chris里，因为chris用户在这里是有权限的。然后进行如下的操作：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">cd  ~<span class="regexp">/ 代表用户所在目录</span></span><br><span class="line"><span class="regexp">mkdir -p ~/</span>shell-script</span><br><span class="line">cd ~<span class="regexp">/shell-script/</span></span><br><span class="line">touch start.sh</span><br><span class="line">toush stop.sh</span><br></pre></td></tr></table></figure></p>
 <p>这个<code>start.sh</code>的内容很简单，如下：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">#/bin/bash</span><br><span class="line">if [ "root" == "$USER" ]    #不让root启动</span><br><span class="line">then</span><br><span class="line">    echo <span class="string">"can't start with user 'root',retry after change user!"</span></span><br><span class="line">    exit <span class="number">1</span></span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">    cd /home/chris/apache-tomcat<span class="number">-9.0</span><span class="number">.7</span>/bin/    &amp;&amp; ./start.sh</span><br><span class="line">fi</span><br></pre></td></tr></table></figure></p>
 <p><code>shutdown.sh</code>的内容同理：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">#/bin/bash</span><br><span class="line">if [ "root" == "$USER" ]    #不让root启动</span><br><span class="line">then</span><br><span class="line">    echo <span class="string">"can't start with user 'root',retry after change user!"</span></span><br><span class="line">    exit <span class="number">1</span></span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">    cd /home/chris/apache-tomcat<span class="number">-9.0</span><span class="number">.7</span>/bin/    &amp;&amp; ./shutdown.sh</span><br><span class="line">fi</span><br></pre></td></tr></table></figure></p>
