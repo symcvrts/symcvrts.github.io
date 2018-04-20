@@ -67,8 +67,8 @@
         <category>工作与技术</category>
       </categories>
       <tags>
-        <tag>redis</tag>
         <tag>docker</tag>
+        <tag>redis</tag>
         <tag>主从同步</tag>
       </tags>
   </entry>
@@ -142,8 +142,8 @@
       </categories>
       <tags>
         <tag>python</tag>
-        <tag>大数据分析</tag>
         <tag>pandas</tag>
+        <tag>大数据分析</tag>
       </tags>
   </entry>
   <entry>
@@ -165,8 +165,8 @@
         <category>工作与技术</category>
       </categories>
       <tags>
-        <tag>redis</tag>
         <tag>python</tag>
+        <tag>redis</tag>
       </tags>
   </entry>
   <entry>
@@ -272,8 +272,8 @@
         <category>工作与技术</category>
       </categories>
       <tags>
-        <tag>mysql</tag>
         <tag>运维技术</tag>
+        <tag>mysql</tag>
       </tags>
   </entry>
   <entry>
@@ -527,8 +527,8 @@
         <category>工作与技术</category>
       </categories>
       <tags>
-        <tag>linux</tag>
         <tag>运维技术</tag>
+        <tag>linux</tag>
       </tags>
   </entry>
   <entry>
@@ -563,8 +563,8 @@
       </categories>
       <tags>
         <tag>redis</tag>
-        <tag>elk</tag>
         <tag>大数据分析</tag>
+        <tag>elk</tag>
       </tags>
   </entry>
   <entry>
@@ -587,8 +587,8 @@
         <category>工作与技术</category>
       </categories>
       <tags>
-        <tag>linux</tag>
         <tag>crontab</tag>
+        <tag>linux</tag>
       </tags>
   </entry>
   <entry>
@@ -1217,8 +1217,8 @@
         <category>工作与技术</category>
       </categories>
       <tags>
-        <tag>nginx</tag>
         <tag>运维技术</tag>
+        <tag>nginx</tag>
       </tags>
   </entry>
   <entry>
