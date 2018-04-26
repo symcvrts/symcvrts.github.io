@@ -100,7 +100,8 @@
 <meta property="og:image" content="http://yoursite.com/images/openssl2.png">
 <meta property="og:image" content="http://yoursite.com/images/openssl3.png">
 <meta property="og:image" content="http://yoursite.com/images/openssl4.png">
-<meta property="og:updated_time" content="2018-04-20T17:27:09.220Z">
+<meta property="og:image" content="http://yoursite.com/images/agirl.gif">
+<meta property="og:updated_time" content="2018-04-26T15:30:53.852Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="在安装docker私有仓库的时候遇到的openssl问题">
 <meta name="twitter:description" content="这破玩意查了半天...">
@@ -478,6 +479,7 @@
 <p>既然说<code>/usr/include/openssl/opensslconf.h</code>这个第44行有错误，那我们就打开这个文件去看看第44行写的是啥：<br>    <figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">41 #elif defined(__x86_64__)</span><br><span class="line">42 #include "opensslconf-x86_64.h"</span><br><span class="line">43 #else</span><br><span class="line">44 #error "This openssl-devel package does not work your architecture?"</span><br><span class="line">45 #endif</span><br><span class="line"><span class="number">46</span> </span><br><span class="line">47 #undef openssl_opensslconf_multilib_redirection_h</span><br></pre></td></tr></table></figure></p>
 <p>这里我把第44行改成了这样：<br>    <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">41 #elif defined(__x86_64__)</span><br><span class="line">42 #include &quot;opensslconf-x86_64.h&quot;</span><br><span class="line">43 #else</span><br><span class="line">44 #include &quot;opensslconf.h&quot;    #去掉了原来的error提示，改成了安装opensslconf.h文件。</span><br><span class="line">45 #endif</span><br><span class="line">46 </span><br><span class="line">47 #undef openssl_opensslconf_multilib_redirection_h</span><br></pre></td></tr></table></figure></p>
 <p>这一次重新执行<code>sudo pip install docker-registry</code>，终于成功…<br><img src="/images/openssl4.png" alt="paradin"></p>
+<p><img src="/images/agirl.gif" alt="akb48"></p>
 
       
     </div>

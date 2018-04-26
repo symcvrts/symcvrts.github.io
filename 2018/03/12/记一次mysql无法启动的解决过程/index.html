@@ -96,7 +96,7 @@
 <meta property="og:site_name" content="Chris Chan&#39;s BLOG">
 <meta property="og:description" content="一次启动，三个问题">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-03-12T13:45:39.226Z">
+<meta property="og:updated_time" content="2018-04-22T14:03:10.571Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="记一次mysql无法启动的解决过程">
 <meta name="twitter:description" content="一次启动，三个问题">
@@ -425,7 +425,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  1,016
+                  1,026
                 </span>
               
 
@@ -475,7 +475,7 @@
 <p>这就是文件权限问题了，我再次打开<code>my.cnf</code>发现里面的<code>user</code>填写的是<code>mysql</code>，那么把<code>/data/mysql/data/sock/mysql.sock</code>这一系列的文件的所属人都改成了<code>mysql</code>用户，这一次重启mysql就OK了。</p>
 <p>为什么这个<code>mysql</code>会好好的突然自动死掉呢？我发现日志里面有这样的字样：<code>InnoDB: Database was not shutdown normally!</code>，于是我猜想很有可能是<code>php-fpm</code>这进程不断地增长，占用的内存太大，导致<code>mysql</code>被<code>linux</code>的内核杀死了。于是查看<code>/var/log/message</code>的文件，结合mysql的错误日志时间找到了如下的字样：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Mar <span class="number">10</span> <span class="number">00</span>:<span class="number">26</span>:<span class="number">22</span> iZ2373j9xivZ kernel: Out <span class="keyword">of</span> memory: Kill process <span class="number">1883</span> (mysqld) score <span class="number">53</span> or sacrifice child</span><br><span class="line">Mar <span class="number">10</span> <span class="number">00</span>:<span class="number">26</span>:<span class="number">22</span> iZ2373j9xivZ kernel: Killed process <span class="number">1883</span>, UID <span class="number">501</span>, (mysqld) total-vm:<span class="number">6849508</span>kB, anon-rss:<span class="number">429368</span>kB, file-rss:<span class="number">176</span>kB</span><br><span class="line">Mar <span class="number">10</span> <span class="number">04</span>:<span class="number">11</span>:<span class="number">38</span> iZ2373j9xivZ kernel: php-fpm invoked oom-killer: gfp_mask=<span class="number">0x201da</span>, order=<span class="number">0</span>, oom_adj=<span class="number">0</span>, oom_score_adj=<span class="number">0</span></span><br><span class="line">Mar <span class="number">10</span> <span class="number">04</span>:<span class="number">11</span>:<span class="number">38</span> iZ2373j9xivZ kernel: php-fpm cpuset=<span class="regexp">/ mems_allowed=0</span></span><br><span class="line"><span class="regexp">Mar 10 04:11:38 iZ2373j9xivZ kernel: Pid: 4375, comm: php-fpm Not tainted 2.6.32-431.23.3.el6.x86_64 #1</span></span><br></pre></td></tr></table></figure></p>
 <p>证据确凿，<code>php-fpm</code>的无休止增长导致服务器的可用内存变小，最后内核把<code>mysql</code>杀死，修改<code>php-fpm</code>的文件之后，暂时好了点…</p>
-<h2><span id="参考资料">参考资料</span></h2><p><a href="http://robinchen.me/tech/2016/03/14/tech-aliyun-centos-mysql-shutdown-itself-irregularly.html" target="_blank" rel="noopener">http://robinchen.me/tech/2016/03/14/tech-aliyun-centos-mysql-shutdown-itself-irregularly.html</a></p>
+<h2><span id="参考资料">参考资料</span></h2><p><a href="http://robinchen.me/tech/2016/03/14/tech-aliyun-centos-mysql-shutdown-itself-irregularly.html" target="_blank" rel="noopener">http://robinchen.me/tech/2016/03/14/tech-aliyun-centos-mysql-shutdown-itself-irregularly.html</a><br><a href="http://www.wisedream.net/2017/12/20/traps/mysql-corrupt/" target="_blank" rel="noopener">http://www.wisedream.net/2017/12/20/traps/mysql-corrupt/</a></p>
 
       
     </div>
