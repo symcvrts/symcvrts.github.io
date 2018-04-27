@@ -88,13 +88,13 @@
 
 
 
-<meta name="description" content="金三胖和文在寅，">
+<meta name="description" content="这一周六天班通宵了三次...">
 <meta name="keywords" content="阿里云">
 <meta property="og:type" content="article">
 <meta property="og:title" content="记一次阿里云oss云存储删除失败的问题">
 <meta property="og:url" content="http://yoursite.com/2018/04/27/记一次阿里云oss云存储删除失败的问题/index.html">
 <meta property="og:site_name" content="Chris Chan&#39;s BLOG">
-<meta property="og:description" content="金三胖和文在寅，">
+<meta property="og:description" content="这一周六天班通宵了三次...">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://yoursite.com/images/oss6.png">
 <meta property="og:image" content="http://yoursite.com/images/oss1.png">
@@ -106,10 +106,10 @@
 <meta property="og:image" content="http://yoursite.com/images/oss5.png">
 <meta property="og:image" content="http://yoursite.com/images/oss9.png">
 <meta property="og:image" content="http://yoursite.com/images/朝韩会面.png">
-<meta property="og:updated_time" content="2018-04-27T14:37:57.212Z">
+<meta property="og:updated_time" content="2018-04-27T14:40:30.274Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="记一次阿里云oss云存储删除失败的问题">
-<meta name="twitter:description" content="金三胖和文在寅，">
+<meta name="twitter:description" content="这一周六天班通宵了三次...">
 <meta name="twitter:image" content="http://yoursite.com/images/oss6.png">
 
 
@@ -436,7 +436,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  522
+                  523
                 </span>
               
 
@@ -460,7 +460,7 @@
 
           
               <div class="post-description">
-                  金三胖和文在寅，
+                  这一周六天班通宵了三次...
               </div>
           
 
@@ -479,7 +479,7 @@
       
         <script src="\assets\js\APlayer.min.js"> </script><p>公司每天云存储都要删除过期的内容，工作细节是这样的：每天零点，采集模块开始收集应该删除掉的内容，然后把这个消息传给阿里云MQ，阿里云MQ又把消息传给删除模块，删除模块拿到名单之后，开始调用阿里云OSS的删除API进行删除。架构如图：<br><img src="/images/oss6.png" alt="paradin"></p>
 <p>但是今天登陆监控平台发现，昨天oss没有删除，上涨了80多个T，如图：<br><img src="/images/oss1.png" alt="paradin"></p>
-<p>老板一看，我操这怎么可以，80多个T的存储费用可是不容小视的，于是责令追查一下为啥会发生这样的情况。</p>
+<p>老板一看，卧槽这怎么可以，80多个T的云存储费用可是不容小视的，于是责令追查一下为啥会发生这样的情况。</p>
 <p>昨天我的手机又没有收到任何阿里云消息队列告警的信息，可见MQ应该是没问题的，查看一下是否有MQ的产生和消费情况，如下图：<br><img src="/images/oss2.png" alt="paradin" title="这个是消息产生情况"></p>
 <p><img src="/images/oss3.png" alt="paradin" title="这个是消息消费情况"></p>
 <p>产生的消息基本都消费掉了，之前的过程都应该是OK的，查看一下会不会是删除模块外网带宽到期的问题，此时发现两天的流量有显著的不同：<br><img src="/images/oss7.png" alt="paradin" title="这个是正常的流量情况"></p>
