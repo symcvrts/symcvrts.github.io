@@ -98,7 +98,7 @@
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://yoursite.com/images/django3.png">
 <meta property="og:image" content="http://yoursite.com/images/django5.png">
-<meta property="og:updated_time" content="2018-05-07T14:16:21.645Z">
+<meta property="og:updated_time" content="2018-05-07T14:18:19.703Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="通过阿里云服务器ID添加服务器资料到django的脚本">
 <meta name="twitter:description" content="最近我又把django捡起来了">
@@ -428,7 +428,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  854
+                  976
                 </span>
               
 
@@ -476,6 +476,7 @@
 <p>正常来说应该是先建立一个def来获取阿里云服务器配置，再来一个def来将各配置录入到数据库里，同时让阿里云服务器的id作为变量，而且还要加上如果sql执行失败就回滚的语句。而我由于是临时使用，所以这个脚本按照流水式写下来的，不过不影响阅读。</p>
 <p>比如现在要添加一个服务器，这个服务器的id是：i-bp12ego6x9srzsytxeqo，如图：<br><img src="/images/django3.png" alt="akb48"></p>
 <p>那么对应填写好脚本里的ak/sk之后，就把i-bp12ego6x9srzsytxeqo填写到“服务器ID”的位置 ，执行这个脚本，结果如下：<br><img src="/images/django5.png" alt="akb48"></p>
+<p>不过这个脚本有两个缺点：<br>第一：如果阿里云服务器是中文名称，那么使用api查询出现的是十六进制的符号；<br>第二：如果服务器里没有外网IP或者是后开的临时带宽，那么在outIP的地方得到的值是空，sql语句会因为少一项而报错；<br>第三：这个api没有查询服务器带宽值的功能，还需要另外写一个脚本搭配。</p>
 
       
     </div>
@@ -898,7 +899,7 @@ show_date_time();
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">博客全站共118.0k字</span>
+  <span class="post-count">博客全站共118.2k字</span>
 </div>
         
 
