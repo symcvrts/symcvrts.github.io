@@ -96,10 +96,12 @@
 <meta property="og:site_name" content="Chris Chan&#39;s BLOG">
 <meta property="og:description" content="据说mysql的容器坑很多...">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-05-12T02:37:26.826Z">
+<meta property="og:image" content="http://yoursite.com/images/rondopass1.gif">
+<meta property="og:updated_time" content="2018-05-12T02:47:42.128Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="创建Mysql容器过程">
 <meta name="twitter:description" content="据说mysql的容器坑很多...">
+<meta name="twitter:image" content="http://yoursite.com/images/rondopass1.gif">
 
 
 
@@ -472,6 +474,7 @@
 <p>那么就<code>docker exec -it 容器ID号 env LANG=C.UTF-8 /bin/bash</code>进入到容器里，使用<code>mysql -uroot -p123456</code>，看一下在容器里是否可以正常登录，如果可以的话，那么就在mysql的命令行里执行<code>ALTER USER &#39;root&#39;@&#39;%&#39; IDENTIFIED WITH mysql_native_password BY &#39;123456&#39;;</code>。  </p>
 <p>退出容器在宿主机上重新连接，这样就OK了。至于原因就是，mysql的客户端是yum安装的，虽然是centos 7，但是安装的版本也是5.5版本的，所以8.0的客户端有一个新的密码加密方式：<code>caching_sha2_password</code>，客户端不支持，所以需要手动到命令行里更改一下。</p>
 <h2><span id="参考资料">参考资料</span></h2><p><a href="http://binary-space.iteye.com/blog/2412769" target="_blank" rel="noopener">http://binary-space.iteye.com/blog/2412769</a></p>
+<p><img src="/images/rondopass1.gif" alt="paradin"></p>
 
       
     </div>
