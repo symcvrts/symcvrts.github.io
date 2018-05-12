@@ -99,7 +99,7 @@
 <meta property="og:image" content="http://yoursite.com/images/css0.png">
 <meta property="og:image" content="http://yoursite.com/images/css1.png">
 <meta property="og:image" content="http://yoursite.com/images/css2.png">
-<meta property="og:updated_time" content="2018-05-12T10:27:44.686Z">
+<meta property="og:updated_time" content="2018-05-12T10:31:58.645Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="加载css样式的两个方法">
 <meta name="twitter:description" content="如果html里没有header这个标签，就需要在模板文件里面新加一个块，在块里声明css的地址">
@@ -429,7 +429,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  864
+                  863
                 </span>
               
 
@@ -489,12 +489,12 @@
 <p>这样就达到了引用css所在的static文件夹的目的。</p>
 <h2><span id="django内部的加载css方法">Django内部的加载css方法</span></h2><p>上面说的是普通html加载css的方法，而django内部也有自己的一套方法，再次打开settings.py里看到有如下的内容：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">INSTALLED_APPS = [   </span><br><span class="line">	 <span class="string">'django.contrib.admin'</span>,   </span><br><span class="line">	 <span class="string">'django.contrib.auth'</span>,   </span><br><span class="line">	 <span class="string">'django.contrib.contenttypes'</span>,   </span><br><span class="line">	 <span class="string">'django.contrib.sessions'</span>,   </span><br><span class="line">	 <span class="string">'django.contrib.messages'</span>,    </span><br><span class="line">	 <span class="string">'django.contrib.staticfiles'</span>,   </span><br><span class="line">	 <span class="string">'blog'</span>,</span><br><span class="line">]</span><br></pre></td></tr></table></figure></p>
 <p>上面的django.contrib.staticfiles就是django的css加载方法，使用这个方法也很简单。</p>
-<p>首先要在html文件最上面先声明要调用这个方法:<br>    <figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&#123;% load staticfiles %&#125;</span><br><span class="line">&#123;# 这个staticfiles是django自带的，可以在settings文件里看到 #&#125;</span><br></pre></td></tr></table></figure></p>
-<p>然后把link标签改成如下：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;link  rel=<span class="string">"stylesheet"</span> href=<span class="string">"&#123;% static 'base.css' %&#125;"</span>&gt;</span><br></pre></td></tr></table></figure></p>
+<p>首先要在html文件最上面先声明要调用这个方法:<br>    <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&#123;% load staticfiles %&#125;</span><br><span class="line">&#123;# 这个staticfiles是django自带的，可以在settings文件里看到 #&#125;</span><br></pre></td></tr></table></figure></p>
+<p>然后把link标签改成如下：<br>    <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;link  rel=&quot;stylesheet&quot; href=&quot;&#123;% static &apos;base.css&apos; %&#125;&quot;&gt;</span><br></pre></td></tr></table></figure></p>
 <p>保存文件刷新即可，而且用了这种方法，在chrome浏览器里F12 查看，会解析成普通模式的方法，如图：<br><img src="/images/css2.png" alt="akb48"></p>
 <p>在django项目里，还是更推荐用django的方法。</p>
 <h2><span id="额外补充">额外补充</span></h2><p>如果html文件开头声明引用了某个模板，比如：</p>
-<pre><code>```js
+<pre><code>```
 {% extends 'base.html' %}    #声明引用了base.html这个模板
 {% load staticfiles %}    
 ```    
