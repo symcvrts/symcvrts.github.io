@@ -99,7 +99,7 @@
 <meta property="og:image" content="http://yoursite.com/images/css0.png">
 <meta property="og:image" content="http://yoursite.com/images/css1.png">
 <meta property="og:image" content="http://yoursite.com/images/css2.png">
-<meta property="og:updated_time" content="2018-05-12T10:31:58.645Z">
+<meta property="og:updated_time" content="2018-05-12T10:36:53.336Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="加载css样式的两个方法">
 <meta name="twitter:description" content="如果html里没有header这个标签，就需要在模板文件里面新加一个块，在块里声明css的地址">
@@ -429,7 +429,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  863
+                  865
                 </span>
               
 
@@ -493,12 +493,8 @@
 <p>然后把link标签改成如下：<br>    <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;link  rel=&quot;stylesheet&quot; href=&quot;&#123;% static &apos;base.css&apos; %&#125;&quot;&gt;</span><br></pre></td></tr></table></figure></p>
 <p>保存文件刷新即可，而且用了这种方法，在chrome浏览器里F12 查看，会解析成普通模式的方法，如图：<br><img src="/images/css2.png" alt="akb48"></p>
 <p>在django项目里，还是更推荐用django的方法。</p>
-<h2><span id="额外补充">额外补充</span></h2><p>如果html文件开头声明引用了某个模板，比如：</p>
-<pre><code>```
-{% extends 'base.html' %}    #声明引用了base.html这个模板
-{% load staticfiles %}    
-```    
-</code></pre><p>那么<code>extends</code>语句必须在最上面，不然就会报错：TemplateSyntaxError at /</p>
+<h2><span id="额外补充">额外补充</span></h2><p>如果html文件开头声明引用了某个模板，比如：<br>    <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&#123;% extends &apos;base.html&apos; %&#125;	#声明引用了base.html这个模板</span><br><span class="line">&#123;% load staticfiles %&#125;</span><br></pre></td></tr></table></figure></p>
+<p>那么<code>extends</code>语句必须在最上面，不然就会报错：TemplateSyntaxError at /</p>
 <p><extendsnode: extends="" 'base.html'=""> must be the first tag in the template.</extendsnode:></p>
 
       
