@@ -1,6 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[python报错：importError: No module named bz2]]></title>
+    <url>%2F2018%2F05%2F12%2Fpython%E6%8A%A5%E9%94%99%EF%BC%9A%E2%80%98mportError-No-module-named-bz2%E2%80%99%2F</url>
+    <content type="text"><![CDATA[每日统计阿里云同步延迟的邮件早就编写完毕了，现在要放到专门跑脚本的服务器里，进去到这个服务器里发现这个机器已经被人装了两个python，分别是python 2.7.5（默认路径）和python 2.7.13（路径是/usr/local/python/bin/python），说实话我个人不太明白这么做的原因何在。 但是既然已经被人搞成这样了，那就适应环境吧，把脚本拷贝过来，把依赖库都安装好，但是在执行matplotlib的库的时候，爆了一个错误：ImportError: No module named bz2。 这就是因为两个python，但是启动的那个python文件夹里面是没有bz2.so这个文件的，于是就需要把系统里默认的2.7.5的bz2.so拷贝到2.7.13的lib路径里。 首先find / -name bz2.so找一下文件，如下： 1234[root@dvl-stun-002 GETDTS]# find / -name bz2.so/usr/local/aegis/PythonLoader/lib/python2.7/lib-dynload/bz2.so/usr/local/aegis/SecureCheck/lib/python2.7/lib-dynload/bz2.so/usr/lib64/python2.7/lib-dynload/bz2.so 然后cd /usr/local/python/lib/python2.7/，把/usr/lib64/python2.7/lib-dynload/bz2.so复制到这个文件夹里即可。]]></content>
+      <categories>
+        <category>工作与技术</category>
+      </categories>
+      <tags>
+        <tag>python</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[Mysql容器出现Authentication plugin ‘caching_sha2_password’ cannot be loaded]]></title>
+    <url>%2F2018%2F05%2F12%2FMysql%E5%AE%B9%E5%99%A8%E5%87%BA%E7%8E%B0Authentication-plugin-%E2%80%98caching-sha2-password%E2%80%99-cannot-be-loaded%2F</url>
+    <content type="text"><![CDATA[]]></content>
+  </entry>
+  <entry>
     <title><![CDATA[在已经运行的docker容器里面使用中文]]></title>
     <url>%2F2018%2F05%2F10%2F%E5%9C%A8%E5%B7%B2%E7%BB%8F%E8%BF%90%E8%A1%8C%E7%9A%84docker%E5%AE%B9%E5%99%A8%E9%87%8C%E9%9D%A2%E4%BD%BF%E7%94%A8%E4%B8%AD%E6%96%87%2F</url>
     <content type="text"><![CDATA[公司搭建的gitlab现在需要开启ldap服务，也就是这样就可以用公司的域账号登陆gitlab，而不用开发一个一个去注册账号了。 开启ldap登陆的任务光荣了落到了我的身上，于是我就登陆到gitlab服务器一看，嚯，这还是在容器下启动的，如图： 于是我就docker exec -it 容器ID号 /bin/bash登陆到这个容器里，编辑/opt/gitlab/embedded/service/gitlab-rails/config/gitlab.yml，如下： 1234567891011121314ldap: enabled: true sync_time: host: '公司域账号服务器IP地址' port: 389 uid: 'sAMAccountName' method: 'plain' # "tls" or "ssl" or "plain" bind_dn: 'dahuatech\Ldap_System' password: '对应的密码' active_directory: allow_username_or_email_login: lowercase_usernames: base: user_filter: 但是在填写到base的时候发现了一个问题，公司的base是中文的，是&#39;OU=大数据研究院,OU=研发中心,OU=大华技术,DC=dahuatech,DC=com&#39;，但是在文件里输入中文却是乱码，如图： 容器默认是不支持中文的，在容器里的命令行输入中文也是空白。那么面对一个已经运行的容器，如何正常的输入中文呢？ 答案是：使用docker exec -it 容器ID号 env LANG=C.UTF-8 /bin/bash登陆，这样就能正常使用中文了，如图： 修改好配置文件之后，gitlab-ctl restart，登陆到gitlab页面一看，已经添加ldap访问方式：]]></content>
@@ -113,8 +129,8 @@
         <category>工作与技术</category>
       </categories>
       <tags>
-        <tag>docker</tag>
         <tag>redis</tag>
+        <tag>docker</tag>
         <tag>主从同步</tag>
       </tags>
   </entry>
@@ -573,8 +589,8 @@
         <category>工作与技术</category>
       </categories>
       <tags>
-        <tag>运维技术</tag>
         <tag>linux</tag>
+        <tag>运维技术</tag>
       </tags>
   </entry>
   <entry>
@@ -633,8 +649,8 @@
         <category>工作与技术</category>
       </categories>
       <tags>
-        <tag>crontab</tag>
         <tag>linux</tag>
+        <tag>crontab</tag>
       </tags>
   </entry>
   <entry>
