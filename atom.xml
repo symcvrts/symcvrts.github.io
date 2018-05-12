@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2018-05-12T02:23:11.176Z</updated>
+  <updated>2018-05-12T02:37:26.826Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -17,9 +17,33 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>创建Mysql容器过程</title>
+    <link href="http://yoursite.com/2018/05/12/%E5%88%9B%E5%BB%BAMysql%E5%AE%B9%E5%99%A8%E8%BF%87%E7%A8%8B/"/>
+    <id>http://yoursite.com/2018/05/12/创建Mysql容器过程/</id>
+    <published>2018-05-12T02:28:46.000Z</published>
+    <updated>2018-05-12T02:37:26.826Z</updated>
+    
+    <content type="html"><![CDATA[<script src="\assets\js\APlayer.min.js"> </script><h2><span id="过程记录">过程记录</span></h2><p>先<code>docker pull mysql</code>，当前最近的版本是8.0，然后<code>docker images</code>查看一下效果。</p><p>然后就是启动一个容器，命令是：<code>docker run --name test-mysql -p 3306:3306 -e MYSQL\_ROOT\_PASSWORD=123456 -d mysql</code>,这句话的意思是：启动一个叫test-mysql的容器， 端口影射是3306到宿主机的3306，同时设置root的密码是123456，然后以守护进程的形式启动。</p><p>但是如果在宿主机上使用<code>mysql -h127.0.0.1 -uroot -p123456</code>可能会报错，报错内容是：“Authentication plugin ‘caching_sha2_password’ cannot be loaded:”</p><p>那么就<code>docker exec -it 容器ID号 env LANG=C.UTF-8 /bin/bash</code>进入到容器里，使用<code>mysql -uroot -p123456</code>，看一下在容器里是否可以正常登录，如果可以的话，那么就在mysql的命令行里执行<code>ALTER USER &#39;root&#39;@&#39;%&#39; IDENTIFIED WITH mysql_native_password BY &#39;123456&#39;;</code>。  </p><p>退出容器在宿主机上重新连接，这样就OK了。至于原因就是，mysql的客户端是yum安装的，虽然是centos 7，但是安装的版本也是5.5版本的，所以8.0的客户端有一个新的密码加密方式：<code>caching_sha2_password</code>，客户端不支持，所以需要手动到命令行里更改一下。</p><h2><span id="参考资料">参考资料</span></h2><p><a href="http://binary-space.iteye.com/blog/2412769" target="_blank" rel="noopener">http://binary-space.iteye.com/blog/2412769</a></p>]]></content>
+    
+    <summary type="html">
+    
+      据说mysql的容器坑很多...
+    
+    </summary>
+    
+      <category term="工作与技术" scheme="http://yoursite.com/categories/%E5%B7%A5%E4%BD%9C%E4%B8%8E%E6%8A%80%E6%9C%AF/"/>
+    
+    
+      <category term="mysql" scheme="http://yoursite.com/tags/mysql/"/>
+    
+      <category term="docker容器" scheme="http://yoursite.com/tags/docker%E5%AE%B9%E5%99%A8/"/>
+    
+  </entry>
+  
+  <entry>
     <title>python报错：importError: No module named bz2</title>
-    <link href="http://yoursite.com/2018/05/12/python%E6%8A%A5%E9%94%99%EF%BC%9A%E2%80%98mportError-No-module-named-bz2%E2%80%99/"/>
-    <id>http://yoursite.com/2018/05/12/python报错：‘mportError-No-module-named-bz2’/</id>
+    <link href="http://yoursite.com/2018/05/12/python%E6%8A%A5%E9%94%99%EF%BC%9A&#39;mportError-No-module-named-bz2&#39;/"/>
+    <id>http://yoursite.com/2018/05/12/python报错：&#39;mportError-No-module-named-bz2&#39;/</id>
     <published>2018-05-12T02:08:07.000Z</published>
     <updated>2018-05-12T02:23:11.176Z</updated>
     
@@ -35,27 +59,6 @@
     
     
       <category term="python" scheme="http://yoursite.com/tags/python/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Mysql容器出现Authentication plugin ‘caching_sha2_password’ cannot be loaded</title>
-    <link href="http://yoursite.com/2018/05/12/Mysql%E5%AE%B9%E5%99%A8%E5%87%BA%E7%8E%B0Authentication-plugin-%E2%80%98caching-sha2-password%E2%80%99-cannot-be-loaded/"/>
-    <id>http://yoursite.com/2018/05/12/Mysql容器出现Authentication-plugin-‘caching-sha2-password’-cannot-be-loaded/</id>
-    <published>2018-05-12T02:02:32.000Z</published>
-    <updated>2018-05-12T02:02:32.342Z</updated>
-    
-    <content type="html"><![CDATA[<script src="\assets\js\APlayer.min.js"> </script>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;script src=&quot;\assets\js\APlayer.min.js&quot;&gt; &lt;/script&gt;
-      
-    
-    </summary>
-    
     
   </entry>
   
