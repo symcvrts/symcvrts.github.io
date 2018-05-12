@@ -14,7 +14,7 @@
   </entry>
   <entry>
     <title><![CDATA[python报错：importError: No module named bz2]]></title>
-    <url>%2F2018%2F05%2F12%2Fpython%E6%8A%A5%E9%94%99%EF%BC%9A'mportError-No-module-named-bz2'%2F</url>
+    <url>%2F2018%2F05%2F12%2Fpython%E6%8A%A5%E9%94%99%EF%BC%9A'importError-No-module-named-bz2'%2F</url>
     <content type="text"><![CDATA[每日统计阿里云同步延迟的邮件早就编写完毕了，现在要放到专门跑脚本的服务器里，进去到这个服务器里发现这个机器已经被人装了两个python，分别是python 2.7.5（默认路径）和python 2.7.13（路径是/usr/local/python/bin/python），说实话我个人不太明白这么做的原因何在。 但是既然已经被人搞成这样了，那就适应环境吧，把脚本拷贝过来，把依赖库都安装好，但是在执行matplotlib的库的时候，爆了一个错误：ImportError: No module named bz2。 这就是因为两个python，但是启动的那个python文件夹里面是没有bz2.so这个文件的，于是就需要把系统里默认的2.7.5的bz2.so拷贝到2.7.13的lib路径里。 首先find / -name bz2.so找一下文件，如下： 1234[root@dvl-stun-002 GETDTS]# find / -name bz2.so/usr/local/aegis/PythonLoader/lib/python2.7/lib-dynload/bz2.so/usr/local/aegis/SecureCheck/lib/python2.7/lib-dynload/bz2.so/usr/lib64/python2.7/lib-dynload/bz2.so 然后cd /usr/local/python/lib/python2.7/，把/usr/lib64/python2.7/lib-dynload/bz2.so复制到这个文件夹里即可。]]></content>
       <categories>
         <category>工作与技术</category>
