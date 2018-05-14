@@ -103,9 +103,9 @@
 <meta property="og:image" content="http://yoursite.com/images/gitlab8.png">
 <meta property="og:image" content="http://yoursite.com/images/gitlab9.png">
 <meta property="og:image" content="http://yoursite.com/images/gitlab5.jpg">
-<meta property="og:image" content="http://yoursite.com/images/gitlab7.jpg">
+<meta property="og:image" content="http://yoursite.com/images/gitlab7.png">
 <meta property="og:image" content="http://yoursite.com/images/gitlab6.jpg">
-<meta property="og:updated_time" content="2018-05-14T14:20:52.865Z">
+<meta property="og:updated_time" content="2018-05-14T14:27:43.370Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="在已经运行的docker容器里面使用中文">
 <meta name="twitter:description" content="如果要是dockerfile里都直接使用中文就更好了">
@@ -488,7 +488,7 @@
 <p>然后再点击最下面的<code>settings</code>，选择<code>Sign-up restrictions</code>，然后把<code>Sign-up enabled</code>前面的勾点掉，如图：<br><img src="/images/gitlab9.png" alt="paradin"></p>
 <p>保存改变之后，退出root账号，重新看一下，gitlab的注册功能就暂时被取消了，需要的时候再开即可。</p>
 <h2><span id="配置域名">配置域名</span></h2><p>为了方便记忆，给gitlab服务配置一个域名，在阿里云的域名解析控制台给gitlab配置了域名之后，还要在<code>gitlab.yml</code>手动更改hostanme，把hostname改成域名的样子，如图：<br><img src="/images/gitlab5.jpg" alt="paradin"></p>
-<p>这样没有结束，因为网页里的url还是显示外网IP而非域名,如下：<br><img src="/images/gitlab7.jpg" alt="paradin"></p>
+<p>这样没有结束，因为网页里的url还是显示外网IP而非域名,如下：<br><img src="/images/gitlab7.png" alt="paradin"></p>
 <p>此时需要重启，重启的命令是<code>gitlab-ctl restart</code>，重启完了之后url也会发生变化。这样才算完整的配置了域名：<br><img src="/images/gitlab6.jpg" alt="paradin"></p>
 
       

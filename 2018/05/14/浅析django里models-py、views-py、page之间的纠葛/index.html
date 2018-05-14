@@ -88,21 +88,20 @@
 
 
 
-<meta name="description" content="环境：django 2.0 + python 3.6 + pycharm 2018   django建立一个app之后就会有models.py、views.py、admin.py这几个文件，他们三个分别的用途如下：   models.py主要是用来设置数据在数据库的存储格式（比如默认值，字段类型和字段长度等等）;   admin.py是用来设置在/admin/后台里面的显示样式;   views">
+<meta name="description" content="搞明白这个，就算明白django之间几个核心文件的关系了。">
 <meta name="keywords" content="django">
 <meta property="og:type" content="article">
-<meta property="og:title" content="浅析django里models.py、views.py、page之间的纠葛">
+<meta property="og:title" content="浅析django里models.py、views.py与网页之间的爱恨纠葛">
 <meta property="og:url" content="http://yoursite.com/2018/05/14/浅析django里models-py、views-py、page之间的纠葛/index.html">
 <meta property="og:site_name" content="Chris Chan&#39;s BLOG">
-<meta property="og:description" content="环境：django 2.0 + python 3.6 + pycharm 2018   django建立一个app之后就会有models.py、views.py、admin.py这几个文件，他们三个分别的用途如下：   models.py主要是用来设置数据在数据库的存储格式（比如默认值，字段类型和字段长度等等）;   admin.py是用来设置在/admin/后台里面的显示样式;   views">
+<meta property="og:description" content="搞明白这个，就算明白django之间几个核心文件的关系了。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="http://yoursite.com/images/type_name1.png">
 <meta property="og:image" content="http://yoursite.com/images/type_name2.png">
-<meta property="og:updated_time" content="2018-05-14T14:09:49.299Z">
+<meta property="og:updated_time" content="2018-05-14T14:27:01.257Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="浅析django里models.py、views.py、page之间的纠葛">
-<meta name="twitter:description" content="环境：django 2.0 + python 3.6 + pycharm 2018   django建立一个app之后就会有models.py、views.py、admin.py这几个文件，他们三个分别的用途如下：   models.py主要是用来设置数据在数据库的存储格式（比如默认值，字段类型和字段长度等等）;   admin.py是用来设置在/admin/后台里面的显示样式;   views">
-<meta name="twitter:image" content="http://yoursite.com/images/type_name1.png">
+<meta name="twitter:title" content="浅析django里models.py、views.py与网页之间的爱恨纠葛">
+<meta name="twitter:description" content="搞明白这个，就算明白django之间几个核心文件的关系了。">
+<meta name="twitter:image" content="http://yoursite.com/images/type_name2.png">
 
 
 
@@ -138,7 +137,7 @@
 
 
 
-  <title>浅析django里models.py、views.py、page之间的纠葛 | Chris Chan's BLOG</title>
+  <title>浅析django里models.py、views.py与网页之间的爱恨纠葛 | Chris Chan's BLOG</title>
   
 
 
@@ -338,7 +337,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">浅析django里models.py、views.py、page之间的纠葛</h1>
+          <h1 class="post-title" itemprop="name headline">浅析django里models.py、views.py与网页之间的爱恨纠葛</h1>
         
 
         <div class="post-meta">
@@ -402,7 +401,7 @@
 
           
           
-             <span id="/2018/05/14/浅析django里models-py、views-py、page之间的纠葛/" class="leancloud_visitors" data-flag-title="浅析django里models.py、views.py、page之间的纠葛">
+             <span id="/2018/05/14/浅析django里models-py、views-py、page之间的纠葛/" class="leancloud_visitors" data-flag-title="浅析django里models.py、views.py与网页之间的爱恨纠葛">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -428,7 +427,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  567
+                  589
                 </span>
               
 
@@ -451,6 +450,10 @@
           
 
           
+              <div class="post-description">
+                  搞明白这个，就算明白django之间几个核心文件的关系了。
+              </div>
+          
 
         </div>
       </header>
@@ -468,56 +471,40 @@
         <script src="\assets\js\APlayer.min.js"> </script><p>环境：<code>django 2.0</code> + <code>python 3.6</code> + <code>pycharm 2018</code>  </p>
 <p>django建立一个app之后就会有models.py、views.py、admin.py这几个文件，他们三个分别的用途如下： </p>
 <ol>
-<li><p>models.py主要是用来设置数据在数据库的存储格式（比如默认值，字段类型和字段长度等等）; </p>
-</li>
-<li><p>admin.py是用来设置在/admin/后台里面的显示样式; </p>
-</li>
-<li><p>views.py是用来设置在前台网页里的显示样式； </p>
-</li>
-<li><p>urls.py是用来编辑域名规则；</p>
-</li>
+<li>models.py主要是用来设置数据在数据库的存储格式（比如默认值，字段类型和字段长度等等）; </li>
+<li>admin.py是用来设置在/admin/后台里面的显示样式; </li>
+<li>views.py是用来设置在前台网页里的显示样式； </li>
+<li>urls.py是用来编辑域名规则；</li>
 </ol>
 <p><code>admin.py</code>是后台配置的文件，所以对前台网页来说，它不重要，而真正与前端网页相关的就是三个部分：<code>models.py</code>、<code>views.py</code>和对应的网页。  </p>
-<p>举个例子，假设有一个<code>models.py</code>，内容如下：     </p>
-<pre><code>```     
-from django.db import models     
-from django.contrib.auth.models import User      
-class BlogType(models.Model):         
-type_name = models.CharField(max_length=15)    #规定type_name是一个最大为15字节的charfield          
-def __str__(self):             
-    return &apos;&lt;BlogType:%s&gt;&apos; % self.type_name     
-```  
-</code></pre><p>然后随便加入一些内容，如图： <img src="/images/type_name1.png" alt="paradin">   </p>
-<p>而在<code>views.py</code>里，要求在前端网页里如此的显示：     </p>
-<pre><code>```     
-from django.shortcuts import render_to_response,get_object_or_404     
-from .models import Blog,BlogType    #这里引用了models.py里的那两个class      
+<p>举个例子，假设有一个<code>models.py</code>，内容如下：<br>    <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">	from django.db import models     </span><br><span class="line">	from django.contrib.auth.models import User   </span><br><span class="line">	   </span><br><span class="line">	class BlogType(models.Model):         </span><br><span class="line">	type_name = models.CharField(max_length=15)    #规定type_name是一个最大为15字节的charfield          </span><br><span class="line">	def __str__(self):             </span><br><span class="line">		return &apos;&lt;BlogType:%s&gt;&apos; % self.type_name     </span><br><span class="line">	```  </span><br><span class="line">	</span><br><span class="line">然后随便加入一些内容，如图： ![paradin](/images/type_name1.png)   </span><br><span class="line">	</span><br><span class="line">而在`views.py`里，要求在前端网页里如此的显示：</span><br></pre></td></tr></table></figure></p>
+<pre><code>from django.shortcuts import render_to_response,get_object_or_404     
+from .models import Blog,BlogType    #这里引用了models.py里的那两个class 
+
 def blog_list(request):         
     context = {}         
     context[&apos;blog_types&apos;] = BlogType.objects.all()         
     return render_to_response(&apos;pageblog/blog_list.html&apos;,context)     
-``` 
-</code></pre><p>在<code>views.py</code>里规定，如果有访问域名是<code>/blog_list/</code>的网页，就返回<code>pageblog/blog_list.html</code>这个页面，而这个<code>blog_list.html</code>只是一个框架，里面的内容是<code>context</code>。<code>context</code>本身是一个字典，里面的里面的key对应的value是用ojbects这个函数获得的，<code>objects.all()</code>就是获取全部的意思。用来填充blog_list.html的context里面有blogs和blog_types两个key。</p>
-<p>那么现在就可以在<code>blog_list.html</code>里使用<code>blog_types</code>这个key了，如下：     </p>
-<pre><code>```     
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">在`views.py`里规定，如果有访问域名是`/blog_list/`的网页，就返回`pageblog/blog_list.html`这个页面，而这个`blog_list.html`只是一个框架，里面的内容是`context`。`context`本身是一个字典，里面的里面的key对应的value是用ojbects这个函数获得的，`objects.all()`就是获取全部的意思。用来填充blog_list.html的context里面有blogs和blog_types两个key。</span><br><span class="line"></span><br><span class="line">那么现在就可以在`blog_list.html`里使用`blog_types`这个key了，如下：</span><br></pre></td></tr></table></figure>
+
 &lt;!-- 前面略 --&gt;     
 &lt;h4&gt;博客分类&lt;/h4&gt;     
 &lt;h3&gt; {{ blog_types}} &lt;/h3&gt;     
 &lt;!-- 后面略 --&gt;     
-```  
-</code></pre><p>这样的效果如下： <img src="/images/type_name2.png" alt="paradin">  </p>
-<p>返回的是QuerySet类型，QuerySet是Django的查询集，可以通过QuerySet条件查询得到对应模型的对象集合。由此看出<code>blog_types</code>已经成功的引入到了<code>blog_list.html</code>里。</p>
+```
+</code></pre><p>这样的效果如下：<br><img src="/images/type_name2.png" alt="paradin">  </p>
+<p>返回的是<code>QuerySet</code>类型，<code>QuerySet</code>是Django的查询集，可以通过<code>QuerySet</code>条件查询得到对应模型的对象集合。由此看出<code>blog_types</code>已经成功的引入到了<code>blog_list.html</code>里。</p>
 <p>至于拆成每一个“博客类型”就很简单了，html部分如下：    </p>
 <pre><code>```     
 &lt;h4&gt;博客分类&lt;/h4&gt;                 
 &lt;!-- ul是无项目的标签 --&gt;                 
 &lt;ul&gt;                     
-{% for blog_type in blog_types%}    #开始一个for循环                         
-	<li><a href="{% url 'blogs_with_type' blog_type.pk %}">{{ blog_type.type_name }} </a></li>        #对每一个类型加上一个a链接                     
-	{% empty %}        #如果唯空就说“暂无分类”                         
-	<!--  li是具体的项目 -->                         
-	<li> 暂无分类 </li>                     
-	{% endfor %}                     
+    {% for blog_type in blog_types%}    #开始一个for循环                         
+			<li><a href="{% url 'blogs_with_type' blog_type.pk %}">{{ blog_type.type_name }} </a></li>        #对每一个类型加上一个a链接                     
+		{% empty %}        #如果唯空就说“暂无分类”                         
+			<!--  li是具体的项目 -->                         
+			<li> 暂无分类 </li>                     
+		{% endfor %}                     
 &lt;/ul&gt;     
 ```
 </code></pre>
@@ -584,7 +571,7 @@ def blog_list(request):
 
 				<li class="post-copyright-link">
 					<strong>本文标题：</strong>
-					<a href="http://yoursite.com/2018/05/14/浅析django里models-py、views-py、page之间的纠葛/" title="浅析django里models.py、views.py、page之间的纠葛">浅析django里models.py、views.py、page之间的纠葛</a>
+					<a href="http://yoursite.com/2018/05/14/浅析django里models-py、views-py、page之间的纠葛/" title="浅析django里models.py、views.py与网页之间的爱恨纠葛">浅析django里models.py、views.py与网页之间的爱恨纠葛</a>
 				</li>
 
 				<li class="post-copyright-date">
