@@ -1,6 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[浅析django里models.py、views.py、page之间的纠葛]]></title>
+    <url>%2F2018%2F05%2F14%2F%E6%B5%85%E6%9E%90django%E9%87%8Cmodels-py%E3%80%81views-py%E3%80%81page%E4%B9%8B%E9%97%B4%E7%9A%84%E7%BA%A0%E8%91%9B%2F</url>
+    <content type="text"><![CDATA[环境：django 2.0 + python 3.6 + pycharm 2018 django建立一个app之后就会有models.py、views.py、admin.py这几个文件，他们三个分别的用途如下： models.py主要是用来设置数据在数据库的存储格式（比如默认值，字段类型和字段长度等等）; admin.py是用来设置在/admin/后台里面的显示样式; views.py是用来设置在前台网页里的显示样式； urls.py是用来编辑域名规则； admin.py是后台配置的文件，所以对前台网页来说，它不重要，而真正与前端网页相关的就是三个部分：models.py、views.py和对应的网页。 举个例子，假设有一个models.py，内容如下： ``` from django.db import models from django.contrib.auth.models import User class BlogType(models.Model): type_name = models.CharField(max_length=15) #规定type_name是一个最大为15字节的charfield def __str__(self): return &apos;&lt;BlogType:%s&gt;&apos; % self.type_name ``` 然后随便加入一些内容，如图： 而在views.py里，要求在前端网页里如此的显示： ``` from django.shortcuts import render_to_response,get_object_or_404 from .models import Blog,BlogType #这里引用了models.py里的那两个class def blog_list(request): context = {} context[&apos;blog_types&apos;] = BlogType.objects.all() return render_to_response(&apos;pageblog/blog_list.html&apos;,context) ``` 在views.py里规定，如果有访问域名是/blog_list/的网页，就返回pageblog/blog_list.html这个页面，而这个blog_list.html只是一个框架，里面的内容是context。context本身是一个字典，里面的里面的key对应的value是用ojbects这个函数获得的，objects.all()就是获取全部的意思。用来填充blog_list.html的context里面有blogs和blog_types两个key。 那么现在就可以在blog_list.html里使用blog_types这个key了，如下： ``` &lt;!-- 前面略 --&gt; &lt;h4&gt;博客分类&lt;/h4&gt; &lt;h3&gt; {{ blog_types}} &lt;/h3&gt; &lt;!-- 后面略 --&gt; ``` 这样的效果如下： 返回的是QuerySet类型，QuerySet是Django的查询集，可以通过QuerySet条件查询得到对应模型的对象集合。由此看出blog_types已经成功的引入到了blog_list.html里。 至于拆成每一个“博客类型”就很简单了，html部分如下： ``` &lt;h4&gt;博客分类&lt;/h4&gt; &lt;!-- ul是无项目的标签 --&gt; &lt;ul&gt; {% for blog_type in blog_types%} #开始一个for循环 {{ blog_type.type_name }} #对每一个类型加上一个a链接 {% empty %} #如果唯空就说“暂无分类” 暂无分类 {% endfor %} &lt;/ul&gt; ```]]></content>
+      <categories>
+        <category>工作与技术</category>
+      </categories>
+      <tags>
+        <tag>django</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[加载css样式的两个方法]]></title>
     <url>%2F2018%2F05%2F12%2F%E5%8A%A0%E8%BD%BDcss%E6%A0%B7%E5%BC%8F%E7%9A%84%E4%B8%A4%E4%B8%AA%E6%96%B9%E6%B3%95%2F</url>
     <content type="text"><![CDATA[背景说明环境： django 2.0+python 3.6+pycharm 2018 project名称: blog 普通的网页加载css网页使用了css才会更好看更炫酷，一般情况下的网页是这样的： 上面这个html文件里用到了模板，而且又对div和 a标签做了class定义，最后分别对各自的class进行了css说明。整个文档看下来比较直观。 但是这样就会有一个问题，就是把html内容和css内容写到了一起，一般来说为了后期维护，都会把css单独写到一个文件夹里，然后让这个html来引用这个css文件夹的具体某个css文件。 于是，我们就在blog这个project目录下建立一个叫static的文件夹，用它来专门装css\js这样的静态文件。 首先，建立了这个static文件，肯定就涉及到引用的问题，而如何让django可以识别static呢？ 打开blog/settings.py这个文件，这个文件是整个project的配置文件，在文件末尾加上这样的话，如下： ​ 12345 #将项目根目录里的static制定成项目的静态文件夹,这样django就可以识别 #注意，static前面没有&apos;/&apos; STATICFILES_DIRS = [ os.path.join(BASE_DIR, &apos;static&apos;),]​ 这样blog这个根目录就可以识别了static文件夹了。 然后在pycharm里新建一个css文件叫base.css，如果是专业版的pycharm是可以直接建立css类型文件的，免费社区版是没有这个功能。再将原文里面的所有关于css的内容拷贝到这个base.css里，如下： 1234567891011121314151617181920*&#123;margin: 5px;padding: 10px;&#125; div.nav &#123;background-color: gold;border-bottom: 2px solid #ccc;&#125; div.nav a&#123;text-decoration:none;color: blue;padding: 5px 10px;&#125; div.nav a.logo&#123;display: inline-block;font-size: 120%;&#125; 保存之后，为了验证django是否成功的识别此文件，可以在浏览器里输入外网IP：端口号/static/base.css查看是否返回就是上面内容，如果是就代表识别成功，如果是404就要重新检查settings.py了。 在原有的html里删除掉&lt;style&gt;标签内css内容，还要在head里添加一句话：&lt;link rel=&quot;stylesheet&quot; href=&quot;/static/base.css&quot;&gt;,如下： 这样就达到了引用css所在的static文件夹的目的。 Django内部的加载css方法上面说的是普通html加载css的方法，而django内部也有自己的一套方法，再次打开settings.py里看到有如下的内容： 123456789INSTALLED_APPS = [ 'django.contrib.admin', 'django.contrib.auth', 'django.contrib.contenttypes', 'django.contrib.sessions', 'django.contrib.messages', 'django.contrib.staticfiles', 'blog',] 上面的django.contrib.staticfiles就是django的css加载方法，使用这个方法也很简单。 首先要在html文件最上面先声明要调用这个方法: 12&#123;% load staticfiles %&#125;&#123;# 这个staticfiles是django自带的，可以在settings文件里看到 #&#125; 然后把link标签改成如下： 1&lt;link rel=&quot;stylesheet&quot; href=&quot;&#123;% static &apos;base.css&apos; %&#125;&quot;&gt; 保存文件刷新即可，而且用了这种方法，在chrome浏览器里F12 查看，会解析成普通模式的方法，如图： 在django项目里，还是更推荐用django的方法。 额外补充如果html文件开头声明引用了某个模板，比如： 12&#123;% extends &apos;base.html&apos; %&#125; #声明引用了base.html这个模板&#123;% load staticfiles %&#125; 那么extends语句必须在最上面，不然就会报错：TemplateSyntaxError at / must be the first tag in the template.]]></content>
@@ -246,8 +257,8 @@
         <category>工作与技术</category>
       </categories>
       <tags>
-        <tag>python</tag>
         <tag>redis</tag>
+        <tag>python</tag>
       </tags>
   </entry>
   <entry>
@@ -1286,8 +1297,8 @@
         <category>工作与技术</category>
       </categories>
       <tags>
-        <tag>zabbix</tag>
         <tag>redis</tag>
+        <tag>zabbix</tag>
       </tags>
   </entry>
   <entry>
