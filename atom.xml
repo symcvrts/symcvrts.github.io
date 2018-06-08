@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2018-05-14T14:42:56.090Z</updated>
+  <updated>2018-06-06T11:35:41.683Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -15,6 +15,302 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Grafana配置smtp邮件</title>
+    <link href="http://yoursite.com/2018/06/06/Grafana%E9%85%8D%E7%BD%AEsmtp%E9%82%AE%E4%BB%B6/"/>
+    <id>http://yoursite.com/2018/06/06/Grafana配置smtp邮件/</id>
+    <published>2018-06-06T11:05:43.000Z</published>
+    <updated>2018-06-06T11:35:41.683Z</updated>
+    
+    <content type="html"><![CDATA[<script src="\assets\js\APlayer.min.js"> </script><h2><span id="配置smtp">配置smtp</span></h2><p>如果要通过grafana接收告警邮件，都需要配置邮箱。而相关配置文件就是<code>grafana.ini</code>，分别要修改如下几个地方：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">#################################### SMTP / Emailing ##########################</span><br><span class="line">[smtp]</span><br><span class="line">enabled = <span class="literal">true</span></span><br><span class="line">host = smtp<span class="number">.163</span>.com:<span class="number">465</span></span><br><span class="line">user = 邮箱前缀@<span class="number">163.</span>com</span><br><span class="line"># If the password contains # or ; you have to wrap it with trippel quotes. Ex """#password;"""</span><br><span class="line">password = 客户端授权密码</span><br><span class="line">;cert_file =</span><br><span class="line">;key_file =</span><br><span class="line">skip_verify = <span class="literal">true</span></span><br><span class="line">from_address = 邮箱前缀@<span class="number">163.</span>com</span><br><span class="line">from_name = Grafana</span><br><span class="line"># EHLO identity in SMTP dialog (defaults to instance_name)</span><br><span class="line">;ehlo_identity = dashboard.example.com</span><br><span class="line">#################################### Alerting ############################</span><br><span class="line">[alerting]</span><br><span class="line"># Disable alerting engine &amp; UI features</span><br><span class="line">;enabled = <span class="literal">true</span></span><br><span class="line"># Makes it possible to turn off alert rule execution but alerting UI is visible</span><br><span class="line">execute_alerts = <span class="literal">true</span></span><br></pre></td></tr></table></figure></p><p>我采用了网易邮箱，把文件保存退出之后，重启一下<code>grafana-server</code>。然后在页面的alatm页面里配置<code>Notification channels</code>，如图：<br><img src="/images/grafanasmtp3.png" alt="paradin"></p><p>如果发送不成功，去查看一下日志，日志地址是<code>/var/log/grafana/grafana.log</code>。如果发送成功了，那么邮箱会收到这样的一个邮件：<br><img src="/images/grafanasmtp4.png" alt="paradin"></p><h2><span id="邮箱密码问题问题">邮箱密码问题问题</span></h2><p>这里要注意几个问题！</p><ol><li>阿里云的服务器出于安全考虑默认是不会开放25端口的，如果你非要用阿里云的服务器去打开25端口，请移步<a href="https://www.alibabacloud.com/help/zh/doc-detail/56130.htm" target="_blank" rel="noopener">https://www.alibabacloud.com/help/zh/doc-detail/56130.htm</a> ；</li><li>如果不想麻烦阿里云那么就要使用其他端口，比如我配置文件里面写的加密的465端口，这个端口不能使用登陆邮箱的普通密码，而是需要填写“授权码”；</li><li>以网易邮箱为例，首先先要打开<code>POP3/SMTP服务</code>，如图：<br><img src="/images/grafanasmtp1.png" alt="paradin"></li></ol><p>其次然后在<code>客户端授权密码</code>里设置一个新的密码，如图：<br><img src="/images/grafanasmtp2.png" alt="paradin"></p><p>然后把这个授权码填写到<code>grafana.ini</code>里，填邮箱的登录密码是错误的。</p><h2><span id="参考资料">参考资料</span></h2><p><a href="http://www.kubiops.com/blog/2017/02/27/Grafana%E5%91%8A%E8%AD%A6%E9%85%8D%E7%BD%AE.html" target="_blank" rel="noopener">http://www.kubiops.com/blog/2017/02/27/Grafana%E5%91%8A%E8%AD%A6%E9%85%8D%E7%BD%AE.html</a></p>]]></content>
+    
+    <summary type="html">
+    
+      不仅是告警，grafana就是新建用户都要用邮箱邀请注册
+    
+    </summary>
+    
+      <category term="工作与技术" scheme="http://yoursite.com/categories/%E5%B7%A5%E4%BD%9C%E4%B8%8E%E6%8A%80%E6%9C%AF/"/>
+    
+    
+      <category term="grafana" scheme="http://yoursite.com/tags/grafana/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Gitlab给分支设定权限</title>
+    <link href="http://yoursite.com/2018/06/06/Gitlab%E7%BB%99%E5%88%86%E6%94%AF%E8%AE%BE%E5%AE%9A%E6%9D%83%E9%99%90/"/>
+    <id>http://yoursite.com/2018/06/06/Gitlab给分支设定权限/</id>
+    <published>2018-06-06T06:41:09.000Z</published>
+    <updated>2018-06-06T11:39:21.177Z</updated>
+    
+    <content type="html"><![CDATA[<script src="\assets\js\APlayer.min.js"> </script><p>给gitlab的各位开发设置权限是很重要的，不然他们就可能会偷偷的把执行分支合并甚至<code>git pull</code>来破坏线上环境。</p><p>首先先确定在project下各位人员的身份，在<code>设置（setting）</code>–<code>成员(members)</code>里面，可以看到projects现有的用户和用户组，如图：<br><img src="/images/gitlab29.png" alt="akb48"></p><p>由于我这个gitlab已经是汉化版的了，这里做一个简单的中英对比：<code>Master</code>是“主程序员”、<code>Developer</code>是“开发人员”、<code>Reporter</code>是“报告者”，这个身份只有读权限可以创建代码片段，一般来说都给测试人员，而<code>Guest</code>就是“访客”了，它只能提交问题和评论。</p><p>然后再到<code>版本库（Repository）</code>里选择<code>保护分支（Protected Branches）</code>，如图：<br><img src="/images/gitlab31.png" alt="akb48"></p><p><code>Allowed to merge</code>就是分支合并权限，<code>Allowed to push</code>就是推送权限，这两个可以根据不同人的身份进行控制。如果受保护，除了master权限的人员，其余人都不可以push、delete等操作。默认情况下<code>master</code>分支是处于被保护状态下的，<code>developer</code>角色的人是无法提交到<code>master</code>分支的。</p><p>如果是docker的话，那么gitlab权限问题修复会用到如下命令：<br>    <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">docker exec -it gitlab update-permissions</span><br><span class="line">docker restart gitlab容器的ID</span><br></pre></td></tr></table></figure></p><p><img src="/images/curry3p4.gif" alt="akb48"></p>]]></content>
+    
+    <summary type="html">
+    
+      这几天边吃瓜边关注崔永元和冯小刚、刘震云的爱恨情仇
+    
+    </summary>
+    
+      <category term="工作与技术" scheme="http://yoursite.com/categories/%E5%B7%A5%E4%BD%9C%E4%B8%8E%E6%8A%80%E6%9C%AF/"/>
+    
+    
+      <category term="git" scheme="http://yoursite.com/tags/git/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>解决Waiting(TTFB)过长的问题</title>
+    <link href="http://yoursite.com/2018/06/04/%E8%A7%A3%E5%86%B3Waiting-TTFB-%E8%BF%87%E9%95%BF%E7%9A%84%E9%97%AE%E9%A2%98/"/>
+    <id>http://yoursite.com/2018/06/04/解决Waiting-TTFB-过长的问题/</id>
+    <published>2018-06-04T08:51:13.000Z</published>
+    <updated>2018-06-04T10:22:57.314Z</updated>
+    
+    <content type="html"><![CDATA[<script src="\assets\js\APlayer.min.js"> </script><h2><span id="正文">正文</span></h2><p>电商平台整套系统是从上海商派公司（ecshop）那里购买的整套代码，结合我们公司自己的二开功能的3.0版本在上周几经波折终於部署上去了，经过了一个周末之后，今天市场运营的人在微信群里叫：“官方网站打开速度好慢。”果然整个官网首页要5~6秒钟才打得开，这个显然是不能忍受的，使用F12查看细节，发现<code>Waiting(TTFB)</code>的时间非常长，如图：<br><img src="/images/TTFB1.png" alt="akb48"></p><p>正常来说TFFB时间通常建议在200ms以下，如果超过推荐值，会引起队列中其他资源下载都跟着变慢。TFFB高主要有两个原因：一是客户端和服务器之前网络情况比较差；二是服务器应用响应比较慢；第三：重定向太多，重定向跟TFFB时间成正比。</p><p>于是乎检查网络情况以及各应用负载情况，都是OK的，重定向也很少。那么就减少DNS查询，把所有能用IP的地方都替换了域名，比如nginx的<code>localhost</code>里使用对应服务器的域名而不是127.0.0.1，比如在配置文件里的阿里云的数据库和redis都用IP地址替代。然而收效甚微，该慢依旧是慢。</p><p>这个时候就返回到后台去查看，左翻翻右翻翻，最后找到了这个地方，如图：<br><img src="/images/TTFB.jpg" alt="akb48"></p><p>启动全页缓存，一切就都好了…</p><h2><span id="参考资料">参考资料</span></h2><p><a href="https://www.oschina.net/question/244077_221319" target="_blank" rel="noopener">https://www.oschina.net/question/244077_221319</a></p>]]></content>
+    
+    <summary type="html">
+    
+      当你遇到一堆不听话的开发，就是这么辛苦
+    
+    </summary>
+    
+      <category term="工作与技术" scheme="http://yoursite.com/categories/%E5%B7%A5%E4%BD%9C%E4%B8%8E%E6%8A%80%E6%9C%AF/"/>
+    
+    
+      <category term="运维技术" scheme="http://yoursite.com/tags/%E8%BF%90%E7%BB%B4%E6%8A%80%E6%9C%AF/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Centos7安装zabbix3.4全过程</title>
+    <link href="http://yoursite.com/2018/06/04/Centos7%E5%AE%89%E8%A3%85zabbix3-4%E5%85%A8%E8%BF%87%E7%A8%8B/"/>
+    <id>http://yoursite.com/2018/06/04/Centos7安装zabbix3-4全过程/</id>
+    <published>2018-06-04T03:15:14.000Z</published>
+    <updated>2018-06-06T12:30:56.614Z</updated>
+    
+    <content type="html"><![CDATA[<script src="\assets\js\APlayer.min.js"> </script><h2><span id="安装zabbix-server-34">安装zabbix-server 3.4</span></h2><p>本文以<code>centos 7</code>为例。<br>    <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">systemctl stop firewalld.service#关闭防火墙</span><br><span class="line">systemctl disable firewalld.service #开机不启动防火墙</span><br><span class="line">setenforce 0 #清空selinux的配置</span><br><span class="line">yum install mariadb-server mariadb –y</span><br><span class="line">systemctl enable mariadb#设置开机启动</span><br><span class="line">systemctl start mariadb#启动MariaDB</span><br><span class="line">rpm -Uvh http://repo.zabbix.com/zabbix/3.4/rhel/7/x86_64/zabbix-agent-3.4.5-1.el7.x86_64.rpm</span><br><span class="line">yum install zabbix-server-mysql zabbix-web-mysql -y</span><br><span class="line">zcat /usr/share/doc/zabbix-server-mysql-3.4.9/create.sql.gz  |mysql -uzabbix -pzabbix zabbix#这里是设定zabbix数据库账号密码和database的地方，create.sql.gz这个文件位置要根据实际情况来</span><br><span class="line">vim /etc/httpd/conf.d/zabbix.conf#这里要修改文件里的时区，改成Asia/Shanghai</span><br><span class="line">systemctl start zabbix-server</span><br><span class="line">systemctl enable zabbix-server</span><br><span class="line">setsebool -P httpd_can_connect_zabbix on</span><br><span class="line">setsebool -P httpd_can_cetwork_connect_db on</span><br><span class="line">systemctl start httpd </span><br><span class="line">systemctl enable httpd</span><br><span class="line">chkconfig zabbix_agent on</span><br><span class="line">systemctl start zabbix-agent</span><br></pre></td></tr></table></figure></p><p>然后就是在浏览器输入<code>外网IP/zabbix/</code>进行页面安装了，剩下的就不多写了。</p><h2><span id="安装zabbix-agent-34">安装zabbix-agent 3.4</span></h2><p>如果是<code>centos 6</code>:<br>    <figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">rpm -Uvh http:<span class="comment">//repo.zabbix.com/zabbix/3.4/rhel/6/x86_64/zabbix-release-3.4-1.el6.noarch.rpm</span></span><br><span class="line">yum install -y zabbix-agent</span><br><span class="line">chkconfig zabbix_agent on;service zabbix_agent start#如果不对就使使zabbix-agent</span><br></pre></td></tr></table></figure></p><p>如果是<code>centos 7</code>:<br>    <figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">rpm -Uvh http:<span class="comment">//repo.zabbix.com/zabbix/3.4/rhel/7/x86_64/zabbix-agent-3.4.5-1.el7.x86_64.rpm</span></span><br><span class="line">chkconfig zabbix_agent on;service zabbix_agent start#如果不对就使使zabbix-agent</span><br></pre></td></tr></table></figure></p><h2><span id="其他资料">其他资料</span></h2><p><a href="https://www.kaijia.me/2014/11/zabbix-report-lack-of-free-swap-space-issue-on-server-without-swap-solved/" target="_blank" rel="noopener">https://www.kaijia.me/2014/11/zabbix-report-lack-of-free-swap-space-issue-on-server-without-swap-solved/</a></p><p><img src="/images/curry3p3.gif" alt="akb48"></p>]]></content>
+    
+    <summary type="html">
+    
+      这一次好好记录。
+    
+    </summary>
+    
+      <category term="工作与技术" scheme="http://yoursite.com/categories/%E5%B7%A5%E4%BD%9C%E4%B8%8E%E6%8A%80%E6%9C%AF/"/>
+    
+    
+      <category term="zabbix" scheme="http://yoursite.com/tags/zabbix/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>记录一次阿里云负载均衡端口监听不正确的过程</title>
+    <link href="http://yoursite.com/2018/05/31/%E8%AE%B0%E5%BD%95%E4%B8%80%E6%AC%A1%E9%98%BF%E9%87%8C%E4%BA%91%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%E7%AB%AF%E5%8F%A3%E7%9B%91%E5%90%AC%E4%B8%8D%E6%AD%A3%E7%A1%AE%E7%9A%84%E8%BF%87%E7%A8%8B/"/>
+    <id>http://yoursite.com/2018/05/31/记录一次阿里云负载均衡端口监听不正确的过程/</id>
+    <published>2018-05-30T19:49:06.000Z</published>
+    <updated>2018-05-30T20:28:45.142Z</updated>
+    
+    <content type="html"><![CDATA[<script src="\assets\js\APlayer.min.js"> </script><p>在阿里云上新配置了一个负载均衡，后面挂载的服务器上安装了一个nginx，分别开启了80端口和8080端口，其中80端口是给http访问的，8080端口是给https访问的，同时在8080端口上做了http跳转https的配置。</p><p>但是在负载均衡配置完毕之后，发现tcp的80转8080是OK的，但是https的443转80却始终不OK，网页也自然打不开，但是在nginx上看80端口的确是在stand by：<br><img src="/images/alislb1.png" alt="paradin"></p><p>而且安全组都做了配置，telnet端口也是完全没有问题的，如图：<br><img src="/images/alislb2.png" alt="paradin"></p><p>执行了一下<code>time curl -I -X HEAD SLB的域名  -x http://本机IP地址:80</code>看一下效果，如图：<br><img src="/images/alislb3.png" alt="paradin"></p><p>可见命令执行OK，但是耗时需要7秒，而默认的阿里云SLB在https监听的超时时间设定是5秒，怀疑是后端ECS上对head头响应慢导致的健康检查失败。然后在网页上使用“检查”功能，发现有几个js、css文件耗时很长，于是就叫前端的码农们配合查一下，在几位前端吭哧吭哧解决了这个问题之后，https访问恢复正常。</p><p><img src="/images/jpbook3.jpg" alt="paradin" title="霓虹书店一角，我表示只能看得懂图"></p>]]></content>
+    
+    <summary type="html">
+    
+      插播一句题外话，阿里云的SLB不用特别配置WS/WSS，但是必须要将实例升级为性能保障型实例，不然的话就GG
+    
+    </summary>
+    
+      <category term="工作与技术" scheme="http://yoursite.com/categories/%E5%B7%A5%E4%BD%9C%E4%B8%8E%E6%8A%80%E6%9C%AF/"/>
+    
+    
+      <category term="nginx" scheme="http://yoursite.com/tags/nginx/"/>
+    
+      <category term="阿里云" scheme="http://yoursite.com/tags/%E9%98%BF%E9%87%8C%E4%BA%91/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>苹果手机无信用卡注册区美国apple store的办法</title>
+    <link href="http://yoursite.com/2018/05/30/%E8%8B%B9%E6%9E%9C%E6%89%8B%E6%9C%BA%E6%97%A0%E4%BF%A1%E7%94%A8%E5%8D%A1%E6%B3%A8%E5%86%8C%E5%8C%BA%E7%BE%8E%E5%9B%BDapple-store%E7%9A%84%E5%8A%9E%E6%B3%95/"/>
+    <id>http://yoursite.com/2018/05/30/苹果手机无信用卡注册区美国apple-store的办法/</id>
+    <published>2018-05-30T12:14:46.000Z</published>
+    <updated>2018-05-30T20:11:25.876Z</updated>
+    
+    <content type="html"><![CDATA[<script src="\assets\js\APlayer.min.js"> </script><p>这次去霓虹国在心斋桥Apple体验店买了一个256G的iphone X，由于政府政策的原因，中国区的apple store有很多应用是没有的，于是乎我就打算注册一个美国版的账号，从而登录美国版的apple store去下载那些“你懂得”的app。</p><p>首先先登录<code>https://www.apple.com/</code> ，在网页最下面先确定国家是<code>United States</code>，然后点击<code>Manage Your Apple ID</code>，如图：<br><img src="/images/apple1.png" alt="paradin"></p><p>在<code>https://appleid.apple.com/#!&amp;page=signin</code>页面里，点击<code>Create your Apple ID</code>建立一个新的apple账号，名称正常写，国家还是<code>United States</code>不要动，生日如实填写，但是如果是未成年人的话，有些成人的app是不可以被下载的。然后就是写好自己的登陆问题，这个问题已经要记住，每次登陆都要输入，忘记的话就麻烦了。注册账号这里其他部分我就不多说了。</p><p>账号注册完毕之后，就直接在苹果网站上登录，登录之后，就会看到账号的详细信息，在<code>Payment &amp; Shipping</code>的地方点击<code>Add Payment Method…</code>，如图：<br><img src="/images/apple2.png" alt="paradin"></p><p>这里有一个<code>PAYMENT METHOD</code>的地方，要填写<code>none</code>，如果你用apple手机上登录这个账号的话，这里是不能选none的，无论是<code>Dr.</code>还是<code>Mr.</code>都没有none这个选项，所以说一定要在网页登录账号。然后就是需要你填写一些用户地址、邮编等信息，由于是账号注册时候选择的是美国，那么也需要填写美国的地址，可以在<code>http://www.haoweichi.com/Index/random</code>里生成一个身份信息填写。如图：<br><img src="/images/apple3.png" alt="paradin"></p><p>下面那个<code>SHIPPING ADDRESS</code>就是账单邮寄的地址，想填就填，不想填就放那。填写好了之后点击save，但是目前这个账号还是不能通过的，如果你在apple手机登录了这个账号然后登录apple store的话，会有一个提示：<code>该账号没有被使用过，请填写细节</code>。</p><p>这里如果你还手机上操作填写细节，发现你刚刚在电脑上填写的地址和邮编已经同步到手机的账号了，但是支付卡那一栏还是没有<code>none</code>，也就是说依旧要一个信用卡。此时请在电脑上下载itunes，然后在电脑的itunes里登录这个美国区账号，由于电脑itunes里的支付渠道依旧可以选择none，所以我们可以在这里绕一个弯，使用itunes这个渠道来完成这个美国区账号的彻底注册。</p><p>在itunes把整个账号完整过程都注册完毕之后，再登录到手机端，就可以在美国的apple store里尽情的下载app了！<br><img src="/images/apple4.jpg" alt="paradin"></p>]]></content>
+    
+    <summary type="html">
+    
+      现在的我离开了twitter和line简直不能活...
+    
+    </summary>
+    
+      <category term="坠乱花天" scheme="http://yoursite.com/categories/%E5%9D%A0%E4%B9%B1%E8%8A%B1%E5%A4%A9/"/>
+    
+    
+      <category term="apple" scheme="http://yoursite.com/tags/apple/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>超赞的京都大阪五日游</title>
+    <link href="http://yoursite.com/2018/05/25/%E8%B6%85%E8%B5%9E%E7%9A%84%E4%BA%AC%E9%83%BD%E5%A4%A7%E9%98%AA%E4%BA%94%E6%97%A5%E6%B8%B8/"/>
+    <id>http://yoursite.com/2018/05/25/超赞的京都大阪五日游/</id>
+    <published>2018-05-25T07:34:25.000Z</published>
+    <updated>2018-05-28T01:24:33.709Z</updated>
+    
+    <content type="html"><![CDATA[<script src="\assets\js\APlayer.min.js"> </script><p>说来惭愧，活了30年了这是我第一次出国旅行，借着公司有一次旅游的机会就跟女朋友一起到京都和大阪玩5天。</p><p>搞定了签证，在网上买好了USJ的快速通行票，又预定了随身WIFI，简单在穷游、知乎和马蜂窝上做了做自由行的攻略，18号晚上6点半从杭州萧山机场出发，两个小时后到达关西机场。之前在《miss pilot》里看到过ANA的航空，这一次亲自乘坐感觉还是不错，飞机场有吃有玩还有葡萄酒喝。</p><p>到关西机场之后，又按指纹又照相的通过了一连串的海关检查，就跟公司其他小伙伴兵分两路，他们去奈良看鹿，我跟女票直接去京都。凭借女票的三脚猫日语功力和她已经来过大阪的经验，我俩先办理了地铁卡，购买了一日游行卡，然后坐上了从大阪出发到京都。</p><p>从大阪到京都大约花了一个半小时左右，抵达京都已经是晚上11点了。路上下着细细小雨，再加上两人拖着箱子有点肚饿，就在路边的seven-eleven里简单买了一点水和东西，买东西之余发现在超市里有成人书籍出售。从便利店出来顺着google地图找之前在爱彼迎上预订的民宿，那是一个公寓型民宿，凭借店主之前在邮件里写的密码，我们从信箱里拿到房间钥匙。</p><h2><span id="日本的庙">日本的庙</span></h2><p>京都是一个充满寺庙和神社的地方，京都的旅行就是“从这个庙出来，到下一个庙去”，而清水寺正是京都众多庙里人气很旺的景点之一，日本的庙和神社有一个习惯，入寺前先用竹勺洗手，如果要入室参拜的话还要脱鞋。在京都穿和服是一个很常见的事情，而且我觉得一群人穿和服是一个蛮cool的风景，不过女票没有租，但是在寺里买了很多的御守。</p><p>昨晚到京都太晚，无法注意天空，到了白天才发现京都的天真的很蓝，看见远方的山轻而易举。从清水寺出来下一站是八坂神社，巧的是遇到了一对新婚夫妇在这里结婚拍照，不得不说日本新郎传统的黑和服加扇子的形象还是很帅的。</p><h2><span id="日本的玩">日本的玩</span></h2><p>水族馆一直都是我非常喜欢的地方，而大阪海游馆也是这一次游玩里安排的一个重要环节，但是比较让我失望的是它的海底隧道很短，大约也就杭州水族馆的一半长度。我俩没有看到喂食节目，而且海游馆也没有海豹顶球，海豚跳舞这样的节目。不过海游馆的鱼种类还是很多的，有些品种还可以亲手去摸一摸它们。出了海游馆就是一个蛮大的摩天轮，用一日通票的话可以免费上去坐一圈。</p><p>大阪的USJ是我们这次日本之行的最后一站也是最高潮的部分，去年圣诞节我跟女票在上海的迪士尼度过的。从迪士尼回来就一直碎碎念大阪的环球影城，我俩还特意挑选了一个工作日去玩就是为了尽可能的少排队，但是那天依旧很多很多人，真的超火爆。</p><p>环球影城的运营模式跟迪士尼差不多，通过IP分主题区，可以购物也有花车游行。但是整个乐园的玩法相对单一—-都是过山车：哈利波特是过山车、蜘蛛侠是过山车、小黄人是原地晃晃过山车、侏罗纪公园是水上过山车，至于翼龙飞行和好莱坞美梦更是超刺激的过山车…</p><p>这一次环球影城的特殊项目有四个：怪物猎人、美少女战士（看动画片）、柯南（密室逃脱）和最终幻想。我跟女票还有公司同事都选择了柯南，虽然通篇日语对白，不过还是能猜出来一个大概剧情，所以一个半小时玩下来感觉就像看了一遍柯南的剧场版，里面的解密就不剧透了，机关真的很难，想要在一个小时内完全逃脱几乎是一个不可能的任务。</p><p>上面把正经的娱乐说完了，下面来说一点不正经的娱乐。我和女票在大阪住在日本桥地铁站附近，那里距离道顿堀走路也就10分钟的路程，而道顿堀附近有一个街叫宗右卫门町，那里就是大阪有名的牛郎街，一路走过去各种牛郎宣传大海报和在路边搭讪的小哥，甚至那附近的小吃店里还有牛郎哥的宣传单。除了铺天盖地的牛郎哥哥外还有站街的妹妹，大多数都是黄发浓妆，但是仔细看脸都不算太好看的。这些人会跟过往的单身男女搭讪，邀请他们去店里坐坐喝点酒说说话，至于有没有更进一步的皮肉关系，那就不好说了。而且据说他们是不做不懂日语人的生意的，所以如果他们真的纠缠你了，就直接说我是外国人就好。</p><h2><span id="日本的购物">日本的购物</span></h2><p>到了日本，买东西是必然的。不过当地的大商场关门很早，基本晚上八点半左右就开始关门。在伏见稻荷大社甚至有的商铺五点半就打烊了，我很好奇，商场这么早关门，那日本人晚上的娱乐是什么呢？他们除了去居酒屋喝酒和广场溜达再加上回家看电视难道就没有其他的娱乐了吗？</p><p>不过，各大药妆店的营业时间很晚，甚至唐吉坷德是24小时营业。这种地方里充满了大陆人、香港人、台湾人、韩国人还有泰国人，在人群和背包中穿梭，拎着篮子买买买，买到5000就可以退税。我女票这次买了很多的卸妆水乳液面膜眼霜口红还有零食，作为一个在旁边无事可做的男人，深深地觉得陪女人逛街是一个很遭罪的事情。</p><h2><span id="日本的吃">日本的吃</span></h2><p>我是看过《深夜食堂》和《孤独的美食家》的，所以对日本的食物有一点好感，而且在杭州吃到日本料理也不是一个难事。不过这次到了日本，连续吃了五天当地的饭，发现日本的菜其实很单一。</p><p>日本普通的餐就是“米饭+猪肉\牛肉\鸡肉+沙拉+味增汤”，日本的米饭是很好吃的，但是他们的肉做法基本就是炸，炒是很少的。如果不是米饭的话就是炒面、拉面、寿司或者是煎饺。期间我跟女票吃了一次烤肉，里面有“最强牛里脊和牛肠”给我留下了很深的印象。此外在海游馆还吃到了我梦寐已久的大阪烧，插播一句话，吃大阪烧的时候还看到足球运动员郑大世，我女票一眼就认出他来了…</p><p>日本的消费能力不低，五天下来，基本上每一顿饭都大约花费了3000多日元，在吉野家吃算比较便宜的，2000不到就能搞定。在烤肉店要了套餐，每人是5000日元。这次在日本，觉得最好吃的是牛里脊，然后就是烤蟹壳。</p><p>说完了吃再说说喝，大阪和京都随处可见自动售卖机，售卖机里面基本就是五样饮品—水、绿茶、优酸乳、可乐和咖啡，价钱还都差不多。日本的水果很贵，一个不到6斤重的西瓜就要2200日元左右，橘子大约五块钱一个，但是他们的酒却相比较便宜。在日本我可没少喝梅子酒、气泡果酒和啤酒。</p><h2><span id="日本的电视">日本的电视</span></h2><p>我俩住的民宿有一个小电视，里面有12个频道，其中三个是购物频道…我想可能日本的免费电视就这么点，大多数都是收费频道。这九个电视台白天有新闻，有韩剧，有街头采访；晚上有芭蕾舞片段、有综艺节目、还有打着圣光的肉番！说到综艺节目，里面有一个片段就是把秃头用毛巾擦的锃亮，然后用遥控板去对着秃头摁键，结果信号经过秃头的折射，竟然能顺利的操纵电视。再后来叫来两个秃头，尝试多次折射，依旧可以准确遥控电视…就这么一个环节把我之前从来不看日本综艺节目的同事笑翻了，回国后就开始恶补这种日本综艺。</p><h2><span id="游玩的tips">游玩的tips</span></h2><p>1.日本路边的垃圾箱很少，据说是因为他们没有边走路边吃喝东西的习惯，所以随处带一个塑料袋来装垃圾；<br>2.USJ的快速通行证只有日语区的页面才有，请准备好visa和master卡；<br>3.办理的地铁充值卡不要扔，下一次再来日本，直接储值依旧可以使用；<br>4.到了USJ别上来先买东西，要先排队玩，东西可以放到最后出院的时候再买；<br>5.不会日语在一般情况下没问题，但是如果看不懂车站的话，就难免要问路了，这样会比较头疼，准备一个google翻译。<br>6.champion在日本的地摊也有卖，人民币大约100多，所以淘宝上那些200左右的champion完全不需要考虑…</p><h2><span id="这次的遗憾">这次的遗憾</span></h2><p>这次玩的蛮爽的，但是大阪仅仅只有三天只能玩一个皮毛，比如本次出游的遗憾如下：</p><p>1.据说大阪有一个棒球场，20日元一个球，然后通过发球机器发射，游客可以轮棒尝试一下本垒打的快感，但是由于时间太紧没有打上棒球…<br>2.没有去游戏机厅，以前常在漫画里看到日本有那种弹子机，如果赢的多，可以用塑料筐装满小弹子去换钱，这种游戏机厅在大阪的商场很常见，而且门口都有大广告，上面写“新品到店，欢迎畅玩”；<br>3.在龟梨和也和山下智久主演的《我命中注定的人》里，龟梨和也手工雕刻了一个王将的木牌，这次到了大阪逛了很多店，都没有发现这款木雕，不仅没有这个木雕，连战国时期各大将的头盔纺织品也没有看到，这一点很遗憾；<br>4.USJ里的变形金刚和终结者2都暂时停业，不过我后来在B战上看了视频，还是过山车…</p><p>等下一次如果有机会能去东京的话，就尝试把上面几个弥补上，再顺便去一趟秋叶原。</p>]]></content>
+    
+    <summary type="html">
+    
+      这五天在日本走了两个完全不同的城市
+    
+    </summary>
+    
+      <category term="坠乱花天" scheme="http://yoursite.com/categories/%E5%9D%A0%E4%B9%B1%E8%8A%B1%E5%A4%A9/"/>
+    
+    
+      <category term="日本" scheme="http://yoursite.com/tags/%E6%97%A5%E6%9C%AC/"/>
+    
+      <category term="旅游" scheme="http://yoursite.com/tags/%E6%97%85%E6%B8%B8/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Gitlab+Jenkins搭建持续集成系统</title>
+    <link href="http://yoursite.com/2018/05/25/Gitlab-Jenkins%E6%90%AD%E5%BB%BA%E6%8C%81%E7%BB%AD%E9%9B%86%E6%88%90%E7%B3%BB%E7%BB%9F/"/>
+    <id>http://yoursite.com/2018/05/25/Gitlab-Jenkins搭建持续集成系统/</id>
+    <published>2018-05-25T07:33:46.000Z</published>
+    <updated>2018-05-26T02:07:19.218Z</updated>
+    
+    <content type="html"><![CDATA[<script src="\assets\js\APlayer.min.js"> </script><h2><span id="前言">前言</span></h2><p>gitlab是一个应用很广泛的版本控制工具，他也有自带的持续集成工具—<code>gitlab cli</code>，但是这个工具不如jenkins那么好用。本文的目的要把gitlab和jenkins进行结合，当我们更新了代码并且把代码push到gitlab的时候，gitlab会把代码的变化通知到jenkins，然后jenkins就会自动构建project。</p><p>说一下实验环境：<br>Jenkins所在服务器IP：121.41.37.251（10.168.173.181），版本是<code>2.124</code>(查看jenkins的版本语句<code>java -jar /usr/lib/jenkins/jenkins.war --version</code>);<br>Gitlab所在服务器IP：114.55.224.158（10.25.85.175），使用容器安装，版本是<code>10.7.3</code>;</p><h2><span id="jenkins添加gitlab插件">jenkins添加gitlab插件</span></h2><p>通过浏览器登陆jenkins界面，然后在<code>系统管理</code>里面选择<code>管理插件</code>，如图：<br><img src="/images/gitlabjenkins1.png" alt="akb48"></p><p>然后在<code>可选择插件</code>里搜索<code>gitlab hook</code>插件，但是没想到我这个版本提示，目前的1.4.2版本的<code>gitlab hook</code>目前存在安全隐患，如图：<br><img src="/images/gitlabjenkins2.png" alt="akb48"></p><p>具体的安全隐患细节是这样的：<br><img src="/images/gitlabjenkins3.png" alt="akb48"></p><p>这个风险请自己把握，然后我选择了继续安装，如图：<br><img src="/images/gitlabjenkins4.png" alt="akb48"></p><p>安装完了<code>gitlab hook</code>插件后，还要安装<code>GitLab Plugin</code>和<code>Gitlab Authentication plugin</code>这两个插件，方法跟上面的一样。</p><h2><span id="创建测试工程">创建测试工程</span></h2><p>在jenkins上建立一个新的任务，比如叫”jicheng-test”，这是一个<code>自由风格的软件项目</code>：<br><img src="/images/gitlabjenkins6.png" alt="akb48"></p><p>然后在源码管理里面选择git，然后输入gitlab里面仓库的地址，比如我在gitlab上新建了一个仓库叫jenkinstest，那么就复制这个仓库的地址填到jenkins的<code>Repositories</code>里，如图：<br><img src="/images/gitlabjenkins8.png" alt="akb48"></p><p>还要在<code>Credentials</code>这里面写上gitlab的用户和密码，然后保存即可：<br><img src="/images/gitlabjenkins9.png" alt="akb48"></p><h2><span id="配置-gitlab-用户">配置 GitLab 用户</span></h2><p>浏览器切换到gitlab界面，在用户头像点击，<code>User settings</code> —&gt; <code>Access Tokens</code>，这里的<code>Personal Access Tokens</code>写入一个账号，这个账号是用来让Jenkins和GitLab API交互。这个用户将需要是全局的管理员或添加进每个组／工程，并作为成员。需要开发者权限来报告构建状态。如图：<br><img src="/images/gitlabjenkins5.png" alt="akb48"></p><p>输入账号和账号有效时期之后，会生成一个Private token，如图：<br><img src="/images/gitlabjenkins7.png" alt="akb48"></p><p>拷贝它，稍后在配置Jenkins服务器时会用到。</p>]]></content>
+    
+    <summary type="html">
+    
+      尚未完成...
+    
+    </summary>
+    
+      <category term="工作与技术" scheme="http://yoursite.com/categories/%E5%B7%A5%E4%BD%9C%E4%B8%8E%E6%8A%80%E6%9C%AF/"/>
+    
+    
+      <category term="jenkins" scheme="http://yoursite.com/tags/jenkins/"/>
+    
+      <category term="git" scheme="http://yoursite.com/tags/git/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>使用yum安装软件爆No such file or directory</title>
+    <link href="http://yoursite.com/2018/05/17/%E4%BD%BF%E7%94%A8yum%E5%AE%89%E8%A3%85%E8%BD%AF%E4%BB%B6%E7%88%86No-such-file-or-directory/"/>
+    <id>http://yoursite.com/2018/05/17/使用yum安装软件爆No-such-file-or-directory/</id>
+    <published>2018-05-17T09:25:09.000Z</published>
+    <updated>2018-05-17T11:03:29.837Z</updated>
+    
+    <content type="html"><![CDATA[<script src="\assets\js\APlayer.min.js"> </script><p>今天开发反馈说<code>yum install redis</code>报错<code>-bash: /usr/bin/yum: /usr/bin/python: bad interpreter: No such file or directory</code>，于是我就登上服务器，使用python一看，反馈<code>-bash: python: command not found</code>，原来这个机器的python被人改动了，用<code>whereis python</code>查了一下，原来python的地址被人改成了<code>/usr/bin/python2.7</code>，于是就手动更改了一下<code>/usr/bin/yum</code>，把<code>#!/usr/bin/python</code>改成了<code>#!/usr/bin/python2.7</code>。但是使用<code>yum install -y redis</code>发现虽然可以连接到库但是会报<code>No such file or directory</code>，如图：<br><img src="/images/nofile.png" alt="paradin"></p><p>原来光改了<code>/usr/bin/yum</code>还没用，还要改<code>/usr/libexec/urlgrabber-ext-down</code>这个文件，同样也是把python改成<code>/usr/bin/python2.7</code>说明python的路径才可以。</p><p>改了上面两个文件之后，又加上了<code>yum clean all</code>和<code>yum makecache</code>，清除一下缓存，一切恢复了正常。</p><p><img src="/images/slamdunk.jpg" alt="paradin"></p>]]></content>
+    
+    <summary type="html">
+    
+      去日本旅游期间，我要电话不接、微信装死...
+    
+    </summary>
+    
+      <category term="工作与技术" scheme="http://yoursite.com/categories/%E5%B7%A5%E4%BD%9C%E4%B8%8E%E6%8A%80%E6%9C%AF/"/>
+    
+    
+      <category term="linux" scheme="http://yoursite.com/tags/linux/"/>
+    
+      <category term="yum" scheme="http://yoursite.com/tags/yum/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>使用zabbix去监控docker容器</title>
+    <link href="http://yoursite.com/2018/05/17/%E4%BD%BF%E7%94%A8zabbix%E5%8E%BB%E7%9B%91%E6%8E%A7docker%E5%AE%B9%E5%99%A8/"/>
+    <id>http://yoursite.com/2018/05/17/使用zabbix去监控docker容器/</id>
+    <published>2018-05-17T06:06:46.000Z</published>
+    <updated>2018-05-17T11:35:27.993Z</updated>
+    
+    <content type="html"><![CDATA[<script src="\assets\js\APlayer.min.js"> </script><h2><span id="前言">前言</span></h2><p>现在容器技术越来越普遍，那么搭建了容器肯定要监控起来，监控方法有两种，一种是做一个zabbix-agent容器去监控容器，还有一个是升级原有的zabbix-agent，这里说第一种。</p><p>这里先交代一下环境：zabbix-server的ip是10.244.48.42，要监控的机器ip是10.244.34.79，这个机器里面装了一个容器在运行gitlab，如图：<br><img src="/images/gitlab20.png" alt="paradin"></p><p>事前检查两台服务器是否互通，而且10050和10051端口是否standby。还要在zabbix-server端做好<code>auto-discovery</code>，等等等等准备工作。</p><h2><span id="使用zabbix-agent-docker进行监控">使用Zabbix Agent Docker进行监控</span></h2><p>在10.244.34.79这个机器上先安装zabbix-agent容器：<br>    <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">docker run \</span><br><span class="line">  --name=dockbix \#这个是容器的名称</span><br><span class="line">  --net=host \#容器可以直接访问主机上所有的网络信息</span><br><span class="line">  --privileged \#容器内的root拥有真正的root权限</span><br><span class="line">  -v /:/rootfs \#这个是对应宿主机的映射盘</span><br><span class="line">  -v /var/run:/var/run \</span><br><span class="line">  --restart unless-stopped \ #不管退出状态码是什么始终重启容器，不过当daemon启动时，如果容器之前已经为停止状态，不要尝试启动它。</span><br><span class="line">  -e &quot;ZA_Server=10.244.48.42&quot; \#这里就填写zabbix-server的ip地址</span><br><span class="line">  -e &quot;ZA_ServerActive=10.244.48.42&quot; \</span><br><span class="line">  -d hub.c.163.com/canghai809/dockbix-agent-xxl-limited:latest#这里使用了网易蜂巢镜像</span><br></pre></td></tr></table></figure></p><p>但是反馈给我<code>docker: invalid restart policy unless-stopped.</code>这样的错误信息，原来这个gitlab这台服务器的docker版本较老，而<code>unless-stopped</code>这个是在1.9.0版本才加入的，所以对于旧版的docker环境需要改成<code>always</code>。</p><p>更改docker run的命令之后重新执行效果如下：<br><img src="/images/gitlab21.png" alt="paradin"></p><p>可见容器启动成功，<code>docker logs -f 容器ID号</code>看一下日志是否正常。如果正常的话，应该在zabbix-server端是可以看到这个10.244.34.79已经被添加到控制台里了，如图：<br><img src="/images/gitlab22.png" alt="paradin"></p><h2><span id="导入监控docker的模版">导入监控docker的模版</span></h2><p>在zabbix server上导入监控docker的模版，一共2个模版,下载后解压。模版下载地址: <a href="https://dl.cactifans.com/zabbix/Zabbix-Template-App-Docker.tar.gz" target="_blank" rel="noopener">https://dl.cactifans.com/zabbix/Zabbix-Template-App-Docker.tar.gz</a> 。</p><p>我使用主动模式，因此导入<code>Zabbix-Template-App-Docker-active.xml</code>这个模版，如图：<br><img src="/images/gitlab23.png" alt="paradin"></p><p><img src="/images/gitlab24.png" alt="paradin" title="将这个模板应用到10.244.34.79上"></p><p>此时可以去zabbix-server这个机器上验证一下是否监控成功，在zabbix-server上执行<code>zabbix_get -s 10.244.34.79 -k docker.discovery</code>，效果如下：<br><img src="/images/gitlab25.png" alt="paradin"></p><p>可见已经成功获取到了那两个容器的名称，这就代表zabbix-server已经监控到位了。</p><h2><span id="验证数据">验证数据</span></h2><p>首先现在10.244.34.79里执行<code>docker stats 容器1的ID 容器2的ID...</code>，看一下当前运行的所有容器的状态，如下：<br><img src="/images/gitlab26.png" alt="paradin"></p><p>与zabbix-server的<code>latest data</code>做一下对比，由于被监控机的docker版本较老，<code>docker stats</code>结果不是那么的精准，不过用来监控参考还是OK的…如果docker是最新版的，那么监控值是很准的。<br><img src="/images/gitlab28.png" alt="paradin" title="docker 18.04.0版本的stats跟zabbix获取值一致"></p><p>剩下的就是慢慢添加triggers了…</p><p>补充一句，<code>zabbix-agent 3.2</code>的rpm安装方法：<br>    <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">rpm -ivh http://repo.zabbix.com/zabbix/3.2/rhel/7/x86_64/zabbix-release-3.2-1.el7.noarch.rpm </span><br><span class="line">yum -y install zabbix-agent zabbix-sender</span><br><span class="line">service zabbix-agent start</span><br><span class="line">chkconfig zabbix-agent on</span><br></pre></td></tr></table></figure></p><h2><span id="参考资料">参考资料</span></h2><p><a href="https://github.com/monitoringartist/zabbix-docker-monitoring" target="_blank" rel="noopener">https://github.com/monitoringartist/zabbix-docker-monitoring</a> （墙裂推荐！）<br><a href="https://blog.codeship.com/ensuring-containers-are-always-running-with-dockers-restart-policy/" target="_blank" rel="noopener">https://blog.codeship.com/ensuring-containers-are-always-running-with-dockers-restart-policy/</a></p>]]></content>
+    
+    <summary type="html">
+    
+      dockbix会直接监控所有的运行容器
+    
+    </summary>
+    
+      <category term="工作与技术" scheme="http://yoursite.com/categories/%E5%B7%A5%E4%BD%9C%E4%B8%8E%E6%8A%80%E6%9C%AF/"/>
+    
+    
+      <category term="zabbix" scheme="http://yoursite.com/tags/zabbix/"/>
+    
+      <category term="gitlab" scheme="http://yoursite.com/tags/gitlab/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Gitlab的配置备份</title>
+    <link href="http://yoursite.com/2018/05/16/Gitlab%E9%85%8D%E7%BD%AE%E5%A4%87%E4%BB%BD/"/>
+    <id>http://yoursite.com/2018/05/16/Gitlab配置备份/</id>
+    <published>2018-05-16T07:02:50.000Z</published>
+    <updated>2018-05-16T07:51:07.958Z</updated>
+    
+    <content type="html"><![CDATA[<script src="\assets\js\APlayer.min.js"> </script><p>我这个gitlab是容器安装的，直接使用最新的gitlab镜像，gitlab版本是<code>10.7.3</code>。</p><p>要备份数据的话，就要进入容器里，执行<code>gitlab-rake gitlab:backup:create</code>，效果如下：<br><img src="/images/gitlab19.png" alt="paradin"></p><p>执行完毕之后，在<code>/var/opt/gitlab/backups</code>文件夹里就会生成一个备份文件，我这里生成的文件叫：1526454102_2018_05_16_10.7.3_gitlab_backup.tar，这个就是备份的文件。</p><p>如果要还原的话，命令如下：<br>    <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"># 先关闭连接数据库的进程</span><br><span class="line">sudo gitlab-ctl stop</span><br><span class="line"></span><br><span class="line"># 通过指定时间戳来执行restore操作，这个操作会复写gitlab的数据库</span><br><span class="line">sudo gitlab-rake gitlab:backup:restore BACKUP=1526454102 #BACKUP后面的是备份文件开头的那串数字</span><br><span class="line"></span><br><span class="line"># 再次启动gitlab</span><br><span class="line">sudo gitlab-ctl start</span><br><span class="line"></span><br><span class="line"># 通过下面命令检查gitlab</span><br><span class="line">sudo gitlab-rake gitlab:check SANITIZE=true</span><br></pre></td></tr></table></figure></p><p>注意！利用backup机制进行备份的话，对gitlab的版本是要求严格一致的。例如用8.6版的gitlab生成的备份文件，拿到8.7版的gitlab上进行恢复，是会报错的。</p><p>如果要设置这个备份文件的生命周期和备份文件存储的位置，编辑<code>/etc/gitlab/gitlab.rb</code>，修改如下的地方：<br>    <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">gitlab_rails[&apos;backup_path&apos;] = &quot;/var/opt/gitlab/backups&quot;#这里改新路径</span><br><span class="line">gitlab_rails[&apos;backup_archive_permissions&apos;] = 0644#这里可以设定文件的权限</span><br><span class="line"># limit backup lifetime to 7 days - 604800 seconds</span><br><span class="line">gitlab_rails[&apos;backup_keep_time&apos;] = 604800#文件存储时间一周</span><br></pre></td></tr></table></figure></p><p>然后重启一下gitlab即可。</p>]]></content>
+    
+    <summary type="html">
+    
+      不备份，要是数据丢了就死翘翘了...
+    
+    </summary>
+    
+      <category term="工作与技术" scheme="http://yoursite.com/categories/%E5%B7%A5%E4%BD%9C%E4%B8%8E%E6%8A%80%E6%9C%AF/"/>
+    
+    
+      <category term="gitlab" scheme="http://yoursite.com/tags/gitlab/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Gitlab的简单应用</title>
+    <link href="http://yoursite.com/2018/05/16/Gitlab%E7%9A%84%E7%AE%80%E5%8D%95%E5%AE%9E%E7%94%A8/"/>
+    <id>http://yoursite.com/2018/05/16/Gitlab的简单实用/</id>
+    <published>2018-05-16T01:30:52.000Z</published>
+    <updated>2018-05-26T06:49:50.306Z</updated>
+    
+    <content type="html"><![CDATA[<script src="\assets\js\APlayer.min.js"> </script><p>gitlab跟svn的区别我就不多说了，这里直接说具体应用。</p><h2><span id="建立一个project">建立一个project</span></h2><p>先登陆到gitlab的网页，我这里使用了root用户，选择<code>create a project</code>，然后就是填写project的名称以及它所属的用户，这里由于只有root用户，所以这个叫<code>jjfjj</code>的project就是root自己的，如果建立了一个组的话，那么这里就填写那个组，如下：<br><img src="/images/gitlab14.png" alt="paradin"></p><p>下面这个<code>Visibility Level</code> ，就是权限等级，它分三种：</p><ol><li>Private：私有的，只有你自己或者组内的成员能访问</li><li>Internal：所有登录的用户</li><li>Public：公开的，所有人都可以访问</li></ol><p>这个东西和project的名称都是可以后期更改的。</p><p>然后就是<code>create project</code>，就创建了这个jjfjj。如图:<br><img src="/images/gitlab15.png" alt="paradin"></p><h2><span id="将本地代码上传">将本地代码上传</span></h2><p>建立好了gitlab，就要把开发的代码传进去，我在另外一个机器里，创建一个目录code，这个目录就是专门用来放置代码的，假设现在里面有一个文件叫<code>testcode.py</code>，如图：<br><img src="/images/gitlab16.png" alt="paradin"></p><p>具体操作如下：<br><img src="/images/gitlab17.png" alt="paradin"></p><p>如果在两个不同的文件夹里执行上面的过程，会传输到两个不同的project里。说明一下上面几个命令的意思：<br><code>git init</code>：初始化git仓库<br><code>git add .</code>：添加整个目录里的所有文件到仓库<br><code>git rm --cached 某个文件名</code>：将某个文件从gitlab上撤除，如果想当前文件夹恢复成一个普通的文件夹，那就把文件夹路径下的.git文件删除掉即可<br><code>git commit -m &#39;这里是要写的注释&#39;</code>：提交代码到仓库<br><code>git remote add origin +gitlab的地址(上上图里红色框的内容)</code>：链接到gitlab服务器<br><code>git push origin master</code>：push代码到服务器<br><code>git remote -v</code>：查看当前文件夹的目标project</p><p>此时刷新一下gitlab的project页面，就看到刚刚的那个<code>testcode.py</code>已经传上来了。如图：<br><img src="/images/gitlab18.png" alt="paradin"></p><p>如果代码有所更改或者出现<code>Everything up-to-date</code>，那么就按顺序执行<code>git add .</code>，<code>git commit -m &#39;这里是要写的注释&#39;</code>，<code>git push origin master</code>即可。</p><h2><span id="免密码push代码">免密码push代码</span></h2><p>在上面的<code>git push origin master</code>的时候需要输入gitlab的用户密码，如要需要免密码push，有两种方法。</p><p>第一种方法是ssh，请看 <a href="https://blog.whsir.com/post-1749.html/comment-page-1#comment-3425" target="_blank" rel="noopener">https://blog.whsir.com/post-1749.html/comment-page-1#comment-3425</a> 。</p><p>第二种方法还是用http的方式传送，但是将密码写进配置文件里：<br>执行<code>git config --global credential.helper store</code>，然后<code>cat ~/.gitconfig</code>，就会看到如下结果：<br>    <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[user]</span><br><span class="line">email = chen_shuo@dahuatech.com</span><br><span class="line">name = root</span><br><span class="line">[credential]</span><br><span class="line">helper = store</span><br></pre></td></tr></table></figure></p><p>重新去执行<code>git add .</code>，<code>git commit -m &#39;这里是要写的注释&#39;</code>，<code>git push origin master</code>，就不再需要输入密码了。</p><h2><span id="从gitlab上垃取代码">从gitlab上垃取代码</span></h2><p>在要部署的机器上找到要部署的文件夹，我这里用/gitlab为例，操作如下：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">[root@pass-mixnumbus-001 /GITLAB] # git init        #将这个文件夹进行初始化                                             </span><br><span class="line">Initialized empty Git repository in /GITLAB/.git/#提示现在已经安装了.git文件</span><br><span class="line">[root@pass-mixnumbus-001 /GITLAB(master)] # git remote add origin http://114.55.224.158/root/JJFJJ.git#确定库</span><br><span class="line">[root@pass-mixnumbus-001 /GITLAB(master)] # git pull origin master #制定要把master分支的代码全拉取到这个文件夹里</span><br><span class="line">Username for 'http://114.55.224.158': root#输入账号和密码</span><br><span class="line">Password <span class="keyword">for</span> <span class="string">'http://root@114.55.224.158'</span>: </span><br><span class="line">From http:<span class="comment">//114.55.224.158/root/JJFJJ</span></span><br><span class="line"> * branch            master     -&gt; FETCH_HEAD</span><br><span class="line">[root@pass-mixnumbus-001 /GITLAB(master)] # ls#看一下效果</span><br><span class="line">admin.py  looksql.py  models.py  syncECS.py  testsyncECS.py</span><br></pre></td></tr></table></figure></p><p>再与gitlab界面的代码比较一下，果然都过来了！如图：<br><img src="/images/gitlab30.png" alt="paradin"></p><h2><span id="在gitlab上建立分支">在gitlab上建立分支</span></h2><p>gitlab上有很多个分支，主要的分支是master，它也是默认的分支，但是实际工作中是需要其他的开发去新建一些测试的分支，到时候可以先把这些测试的分支拿来部署，如果有问题就回滚回master分支。</p><p>分支相关的语句如下：<br>    <figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">git branch#查看本地分支</span><br><span class="line">git branch -r#查看远程分支</span><br><span class="line">git branch -a #查看所有分支</span><br><span class="line">git branch develop#本地创建新的分支，此时刷新gitlab的页面的话就会有这个叫develop的分支建立了</span><br><span class="line">git checkout develop#切换到新的develop分支</span><br><span class="line">git checkout -b develop#上面两步可以合成一个命令，这个的意思就是：创建+切换分支</span><br></pre></td></tr></table></figure></p><p>这个时候在代码机上新增或者改变文件，然后执行<code>git add .</code>，<code>git commit -m &#39;这里是要写的注释&#39;</code>，<code>git push origin develop</code>，就把新增的变化上传到了develop分支，如图：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">[root@iZ23pg8sy5bZ ~<span class="regexp">/GITLAB(develop)] # git push origin develop</span></span><br><span class="line"><span class="regexp">Counting objects: 4, done.</span></span><br><span class="line"><span class="regexp">Compressing objects: 100% (2/</span><span class="number">2</span>), done.</span><br><span class="line">Writing objects: <span class="number">100</span>% (<span class="number">3</span>/<span class="number">3</span>), <span class="number">325</span> bytes | <span class="number">0</span> bytes/s, done.</span><br><span class="line">Total <span class="number">3</span> (delta <span class="number">1</span>), reused <span class="number">0</span> (delta <span class="number">0</span>)</span><br><span class="line">remote: </span><br><span class="line">remote: To create a merge request <span class="keyword">for</span> develop, <span class="attr">visit</span>:</span><br><span class="line">remote:   http:<span class="comment">//114.55.224.158/root/JJFJJ/merge_requests/new?merge_request%5Bsource_branch%5D=develop</span></span><br><span class="line">remote: </span><br><span class="line">To http:<span class="comment">//114.55.224.158/root/JJFJJ.git</span></span><br><span class="line">   fc8d456.<span class="number">.8</span>a97b58  develop -&gt; develop</span><br></pre></td></tr></table></figure></p><p>而在部署的机器上，直接执行<code>git pull origin develop</code>，输入账号密码之后，就会把develop分支的内容全部垃取下来了。</p><p>如果不想要这个develop分支了，就<code>git branch -d develop</code>，如果要删除远程的分支，就是<code>git push origin :develop</code>，注意这个冒号。</p><h2><span id="参考资料">参考资料</span></h2><p><a href="https://blog.cnbluebox.com/blog/2014/04/15/gitlabde-shi-yong/" target="_blank" rel="noopener">https://blog.cnbluebox.com/blog/2014/04/15/gitlabde-shi-yong/</a><br><a href="https://zhang759740844.github.io/2016/08/27/git%E6%8A%80%E5%B7%A7/" target="_blank" rel="noopener">https://zhang759740844.github.io/2016/08/27/git%E6%8A%80%E5%B7%A7/</a><br><a href="https://www.restran.net/2016/02/23/git-and-gitlab-guide/" target="_blank" rel="noopener">https://www.restran.net/2016/02/23/git-and-gitlab-guide/</a><br><a href="https://www.jianshu.com/p/f54053afecf2" target="_blank" rel="noopener">https://www.jianshu.com/p/f54053afecf2</a></p>]]></content>
+    
+    <summary type="html">
+    
+      docker + gitlab，这才是未来部署的方向
+    
+    </summary>
+    
+      <category term="工作与技术" scheme="http://yoursite.com/categories/%E5%B7%A5%E4%BD%9C%E4%B8%8E%E6%8A%80%E6%9C%AF/"/>
+    
+    
+      <category term="gitlab" scheme="http://yoursite.com/tags/gitlab/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Gitlab的汉化过程</title>
+    <link href="http://yoursite.com/2018/05/15/Gitlab%E7%9A%84%E6%B1%89%E5%8C%96%E8%BF%87%E7%A8%8B/"/>
+    <id>http://yoursite.com/2018/05/15/Gitlab的汉化过程/</id>
+    <published>2018-05-15T02:17:51.000Z</published>
+    <updated>2018-05-15T12:29:16.804Z</updated>
+    
+    <content type="html"><![CDATA[<script src="\assets\js\APlayer.min.js"> </script><h2><span id="gitlab的容器安装方法">gitlab的容器安装方法</span></h2><p>部署前的第一句话，gitlab是不支持32位系统的！</p><p>gitlab用容器部署的话非常的简单，首先<code>docker pull gitlab/gitlab-ce:latest</code>下载镜像，然后<code>docker run --detach --hostname 本机外网IP --publish 443:443 --publish 80:80 --publish 2222:22 --name gitlab --restart always gitlab/gitlab-ce:latest</code>建立一个容器，如图：<br><img src="/images/gitlab10.png" alt="paradin"></p><p>然后在浏览器的地址栏里输入服务器的外网IP地址，就到了一个更换密码的页面，这个密码就是root的密码，如图：<br><img src="/images/gitlab13.png" alt="paradin"></p><p>设定密码之后，就可以通过root账号登陆gitlab了，如图：<br><img src="/images/gitlab11.png" alt="paradin"></p><p>至于“使用ldsp方式登录”、“配置域名”和“关闭注册功能”请移步去看：<a href="https://rorschachchan.github.io/2018/05/10/在已经运行的docker容器里面使用中文/" target="_blank" rel="noopener">https://rorschachchan.github.io/2018/05/10/在已经运行的docker容器里面使用中文/</a> 。</p><h2><span id="gitlab的汉化方法">gitlab的汉化方法</span></h2><p>汉化之前，要确定gitlab的版本，先<code>docker exec -it 容器ID env LANG=C.UTF-8 /bin/bash</code>登陆到容器里，执行<code>cat /opt/gitlab/embedded/service/gitlab-rails/VERSION</code>，由于当时镜像是最新的，所以gitlab的版本是<code>10.7.3</code>。</p><p>还是在容器里，执行<code>git clone https://gitlab.com/xhang/gitlab.git</code>，克隆获取汉化版本库(这里要感谢辛苦的汉化工作者，向你们致敬！)，默认是获取最新的。如果需要下载老版本的汉化包，则要加上老版本的分支，如：<code>git clone https://gitlab.com/xhang/gitlab.git -b v10.2.5-zh</code>。</p><p>然后<code>gitlab-ctl stop</code>先停止gitlab服务，<code>cd gitlab/</code>进入到刚刚下载的那个git包里，执行如下代码：<br>    <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">root@10 gitlab]# git fetch</span><br><span class="line">root@10 gitlab]# git diff v10.7.3 v10.7.3-zh &gt; ../10.7.3-zh.diff</span><br><span class="line">root@10 gitlab]# cd ..</span><br><span class="line">root@10 ~]# patch -d /opt/gitlab/embedded/service/gitlab-rails -p1 &lt; 10.7.3-zh.diff</span><br><span class="line">root@10 ~]# #如果提示没有patch，请执行apt-get update &amp;&amp; apt-get install patch</span><br><span class="line">root@10 ~]# gitlab-ctl start</span><br></pre></td></tr></table></figure></p><p>重新返回到浏览器里，就能看到汉化后的gitlab了，大功告成！<br><img src="/images/gitlab12.png" alt="paradin"></p><h2><span id="参考资料">参考资料</span></h2><p><a href="https://xuanwo.org/2016/04/13/gitlab-install-intro/" target="_blank" rel="noopener">https://xuanwo.org/2016/04/13/gitlab-install-intro/</a><br><a href="https://www.jianshu.com/p/6606aed59a56" target="_blank" rel="noopener">https://www.jianshu.com/p/6606aed59a56</a><br><a href="http://adairjun.github.io/2016/12/20/gitlab/" target="_blank" rel="noopener">http://adairjun.github.io/2016/12/20/gitlab/</a><br><a href="https://github.com/marbleqi/gitlab-ce-zh/blob/v10.5.1-zh-patch/Nginx.md" target="_blank" rel="noopener">https://github.com/marbleqi/gitlab-ce-zh/blob/v10.5.1-zh-patch/Nginx.md</a><br><img src="/images/kdshotharden.gif" alt="paradin"></p>]]></content>
+    
+    <summary type="html">
+    
+      为了考虑众多用户尤其是各位领导的英文水平...
+    
+    </summary>
+    
+      <category term="工作与技术" scheme="http://yoursite.com/categories/%E5%B7%A5%E4%BD%9C%E4%B8%8E%E6%8A%80%E6%9C%AF/"/>
+    
+    
+      <category term="gitlab" scheme="http://yoursite.com/tags/gitlab/"/>
+    
+  </entry>
   
   <entry>
     <title>浅析django里models.py、views.py与网页之间的爱恨纠葛</title>
@@ -175,320 +471,6 @@
       <category term="nginx" scheme="http://yoursite.com/tags/nginx/"/>
     
       <category term="负载均衡" scheme="http://yoursite.com/tags/%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>记一次阿里云oss云存储删除失败的问题</title>
-    <link href="http://yoursite.com/2018/04/27/%E8%AE%B0%E4%B8%80%E6%AC%A1%E9%98%BF%E9%87%8C%E4%BA%91oss%E4%BA%91%E5%AD%98%E5%82%A8%E5%88%A0%E9%99%A4%E5%A4%B1%E8%B4%A5%E7%9A%84%E9%97%AE%E9%A2%98/"/>
-    <id>http://yoursite.com/2018/04/27/记一次阿里云oss云存储删除失败的问题/</id>
-    <published>2018-04-27T14:24:58.000Z</published>
-    <updated>2018-04-27T14:49:33.284Z</updated>
-    
-    <content type="html"><![CDATA[<script src="\assets\js\APlayer.min.js"> </script><p>公司每天云存储都要删除过期的内容，工作细节是这样的：每天零点，采集模块开始收集应该删除掉的内容，然后把这个消息传给阿里云MQ，阿里云MQ又把消息传给删除模块，删除模块拿到名单之后，开始调用阿里云OSS的删除API进行删除。架构如图：<br><img src="/images/oss6.png" alt="paradin"></p><p>但是今天登陆监控平台发现，昨天oss没有删除，上涨了80多个T，如图：<br><img src="/images/oss1.png" alt="paradin"></p><p>老板一看，卧槽这怎么可以，80多个T的云存储费用可是不容小视的，于是责令追查一下为啥会发生这样的情况。</p><p>昨天我的手机又没有收到任何阿里云消息队列告警的信息，可见MQ应该是没问题的，查看一下是否有MQ的产生和消费情况，如下图：<br><img src="/images/oss2.png" alt="paradin" title="这个是消息产生情况"></p><p><img src="/images/oss3.png" alt="paradin" title="这个是消息消费情况"></p><p>产生的消息基本都消费掉了，由此推断之前的过程都应该是OK的。再查看一下会不会是删除模块外网带宽到期的问题，此时发现两天的流量有显著的不同：<br><img src="/images/oss7.png" alt="paradin" title="这个是正常的流量情况"></p><p><img src="/images/oss8.png" alt="paradin" title="这个是异常的流量情况"></p><p>流量明显减少，可以说是删除模块执行任务少了。于是到执行OSS删除API的模块上去抓了几个包，里面情况如下：<br><img src="/images/oss4.png" alt="paradin"></p><p>但是跑到阿里云对应的bucket里看一下文件情况，比如<code>https://lechangecloud.oss-cn-hangzhou.aliyuncs.com/lechange/4B01F1FPAGE4E9D_img/Alarm/20180427000913997_0_fa62bec6dee24cc0bee42e1ee3e75743_thumb_qcif.dav</code>这个文件，这个文件明明还在里面躺着好好的。如图：<br><img src="/images/oss5.png" alt="paradin"></p><p>文件00：27的时候就在了，但是2：53分的时候调用阿里云OSS的API去删除，明明返回了200，但是文件却没有真正的从OSS删除掉。</p><p>我觉得这样就拿去跟阿里云撕逼还是有点不太妥当，又回到刚刚的那个包里，我发现里面还有一些返回的内容是这样的：<br><img src="/images/oss9.png" alt="paradin"></p><p>这个图跟之前的图明显路径上不同，而这些文件在OSS上确认是被成功删除掉的，可见的确是文件路径的问题：失败的文件路径是完全路径，而成功的都是相对路径。于是就告诉开发赶快整改代码，把路径统一…</p><p><img src="/images/朝韩会面.png" alt="paradin" title="历史性的会面"></p>]]></content>
-    
-    <summary type="html">
-    
-      这一周六天班通宵了三次...
-    
-    </summary>
-    
-      <category term="工作与技术" scheme="http://yoursite.com/categories/%E5%B7%A5%E4%BD%9C%E4%B8%8E%E6%8A%80%E6%9C%AF/"/>
-    
-    
-      <category term="阿里云" scheme="http://yoursite.com/tags/%E9%98%BF%E9%87%8C%E4%BA%91/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>在安装docker私有仓库的时候遇到的openssl问题</title>
-    <link href="http://yoursite.com/2018/04/21/%E5%9C%A8%E5%AE%89%E8%A3%85docker%E7%A7%81%E6%9C%89%E4%BB%93%E5%BA%93%E7%9A%84%E6%97%B6%E5%80%99%E9%81%87%E5%88%B0%E7%9A%84openssl%E9%97%AE%E9%A2%98/"/>
-    <id>http://yoursite.com/2018/04/21/在安装docker私有仓库的时候遇到的openssl问题/</id>
-    <published>2018-04-20T16:45:39.000Z</published>
-    <updated>2018-04-26T15:30:53.852Z</updated>
-    
-    <content type="html"><![CDATA[<script src="\assets\js\APlayer.min.js"> </script><p>按照<a href="http://wiki.jikexueyuan.com/project/docker-technology-and-combat/local_repo.html" target="_blank" rel="noopener">http://wiki.jikexueyuan.com/project/docker-technology-and-combat/local_repo.html</a> 的方法本地安装一个私有仓库，在执行<code>sudo pip install docker-registry</code>这一步的时候，出现了这样的一个错误：<br><img src="/images/openssl1.png" alt="paradin"></p><p>既然说我没有swig，于是我<code>yum install swig -y</code>，安装的是<code>2.0.10-5.el7</code>版本。然后再次<code>pip install docker-registry</code>，一顿噼里啪啦之后，这次成了这样：<br><img src="/images/openssl2.png" alt="paradin"></p><p>又说没有openssl的文件，那执行<code>yum install openssl-devel</code>，OK了之后再次<code>pip install docker-registry</code>，再一次噼里啪啦，如下：<br><img src="/images/openssl3.png" alt="paradin"></p><p>反馈我：<code>/usr/include/openssl/opensslconf.h:44: Error: CPP #error &quot;&quot;This openssl-devel package does not work your architecture?&quot;&quot;. Use the -cpperraswarn option to continue swig processing.</code>,这个提示大意是说openssl-devel版本不适合你的系统架构，也就是x86的去找x86的头文件，x86_64的去找x86_64文件，但现在是互相找不到对方。</p><p>既然说<code>/usr/include/openssl/opensslconf.h</code>这个第44行有错误，那我们就打开这个文件去看看第44行写的是啥：<br>    <figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">41 #elif defined(__x86_64__)</span><br><span class="line">42 #include "opensslconf-x86_64.h"</span><br><span class="line">43 #else</span><br><span class="line">44 #error "This openssl-devel package does not work your architecture?"</span><br><span class="line">45 #endif</span><br><span class="line"><span class="number">46</span> </span><br><span class="line">47 #undef openssl_opensslconf_multilib_redirection_h</span><br></pre></td></tr></table></figure></p><p>这里我把第44行改成了这样：<br>    <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">41 #elif defined(__x86_64__)</span><br><span class="line">42 #include &quot;opensslconf-x86_64.h&quot;</span><br><span class="line">43 #else</span><br><span class="line">44 #include &quot;opensslconf.h&quot;    #去掉了原来的error提示，改成了安装opensslconf.h文件。</span><br><span class="line">45 #endif</span><br><span class="line">46 </span><br><span class="line">47 #undef openssl_opensslconf_multilib_redirection_h</span><br></pre></td></tr></table></figure></p><p>这一次重新执行<code>sudo pip install docker-registry</code>，终于成功…<br><img src="/images/openssl4.png" alt="paradin"></p><p><img src="/images/agirl.gif" alt="akb48"></p>]]></content>
-    
-    <summary type="html">
-    
-      这破玩意查了半天...
-    
-    </summary>
-    
-      <category term="工作与技术" scheme="http://yoursite.com/categories/%E5%B7%A5%E4%BD%9C%E4%B8%8E%E6%8A%80%E6%9C%AF/"/>
-    
-    
-      <category term="docker" scheme="http://yoursite.com/tags/docker/"/>
-    
-      <category term="容器技术" scheme="http://yoursite.com/tags/%E5%AE%B9%E5%99%A8%E6%8A%80%E6%9C%AF/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>在国王杯前夕评巴萨</title>
-    <link href="http://yoursite.com/2018/04/21/%E5%9C%A8%E5%9B%BD%E7%8E%8B%E6%9D%AF%E5%89%8D%E5%A4%95%E8%AF%84%E5%B7%B4%E8%90%A8/"/>
-    <id>http://yoursite.com/2018/04/21/在国王杯前夕评巴萨/</id>
-    <published>2018-04-20T16:44:17.000Z</published>
-    <updated>2018-04-20T17:40:54.008Z</updated>
-    
-    <content type="html"><![CDATA[<script src="\assets\js\APlayer.min.js"> </script><p>今天凌晨的马竞在西甲意外输给了皇家社会，巴萨的积分优势扩大到了12分。这个周末巴萨要跟塞维利亚打国王杯决赛，4月30号对拉科鲁尼亚的西甲联赛巴萨只要获胜，就会拿到今年的西甲联赛冠军，从而以冠军姿态在诺坎普迎接本赛季第二场国家德比。</p><h2><span id="巴尔韦德的困境">巴尔韦德的困境</span></h2><p>巴萨今年可以说是低姿态开始：从内马尔突然的离开到西超杯被皇马灌了5个，不可为说不惨。但是巴尔韦德在联赛却目前保持不败，这个成绩单可以说是相当不错的，这中间还有在伯纳乌的三球胜利。</p><p>赛季中前段，巴萨三线顺风顺水，前有塞梅多惊艳开场，后有大祭司维尔马伦扎实顶上，主教练巴尔韦德也给了阿奈斯这样小将出场机会，哪怕登贝莱那时候养伤，报纸媒体一片其乐融融。如果保利尼奥再有进球，更是一片狂欢。</p><p>然后巴尔韦德的保守开始慢慢让人所诟病，他是一个重视防守的教练，这很好，但是他有了库迪尼奥也有了归来的登贝莱，结果反而不敢搞轮换，甚至坚持让布教授打封闭出场，虽然不少人抱怨，但是由于球队整体战绩还算平稳，所以没有大规模的重视。可是巴萨欧冠的结果跟恩里克的第二个赛季一样，倒在了与罗马的第二回合比赛里，连续三年没有闯入欧冠四强。</p><p>其实对战罗马的第一回合，巴萨的4：1已经是靠意志拼下来的比赛，球员难免在第二回合的心态上有所轻敌，这种心态上的轻敌难免会影响到身体，但是巴尔韦德的临场指挥也让人严重不满。落下这耻辱一战，媒体和球迷之前的“忍气吞声”一并爆发，狂轰滥炸，直到现在依旧有人说“哪怕真的赛季双冠，也会因为欧冠的失利而让那两冠索然无味”。<br><img src="/images/fcb4.png" alt="paradin"></p><p>所以，巴尔韦德要在这个周日的国王杯决赛和对阵拉科鲁尼亚的西甲联赛里稳扎稳打，把国王杯和西甲冠军彻底拿到手里，这样整个人也能轻松一些。可是说来说去罗马一役这一个跟头摔得太疼了，在那么重大的比赛里失败，肯定需要在一个同样重大的比赛里胜利以挽回颜面，第二回合的国家德比无疑就是一个好的机会，如果巴尔韦德成功捍卫了诺坎普，“联赛双杀皇马+国内双冠”也能成为一个功劳。但是如果那场比赛，一心要打破巴萨不败金身的皇马真的成功了，那巴尔韦德势必在巴萨主帅的位置上也是飘摇。</p><p>所以巴帅，请务必要拿下国王杯冠军+西甲冠军！在第二个国家德比里也请拼尽全力！这样才能多少挽回一点“罗马之耻”的颜面。<br><img src="/images/fcb1.png" alt="paradin"></p><h2><span id="夏季转会展望">夏季转会展望</span></h2><p>我个人认为，巴萨很有可能在今年夏天卖掉如下几个人：西莱森、戈麦斯、小苏亚雷斯、艾尔卡塞尔、比达尔，自由走人的可能会是小白。这些人能套现7000万应该就满足了。</p><p>巴萨后卫现在四个人皮克和维尔马伦属于潜藏的伤员病号，米纳技术还是太糙，稍微让人放心的就是乌姆蒂蒂，他的续约问题肯定是休赛期的一个大事。不过我觉得米纳其实可以再留一年看看，他身体素质很好，而且人还年轻没伤病，只要心态练得沉稳，当一个合格的中后卫不难。</p><p>至于中场，个人希望小白再踢一年，现在我也觉得一个满血的小白应付普通的联赛、欧冠小组赛和杯赛都不是什么难事。但是目前的媒体趋势是小白赛季结束会来中超重庆队，即使这样巴萨也需要一个山寨的坎特和一个山寨的埃里克森，而罗贝托集这两个属性于一身，所以他就是一个“奉献的砖”，但是这样如果比达尔真的不留下来的话，巴萨还需要补进一个右后卫跟塞梅多良性竞争，这个右后卫的人选就比较挠头了。贝莱林？或许是一个选择，但是这个选择跟当年小法一样—要是双输就不好了。</p><p>前场如果能拿下格里兹曼肯定是好的，艾尔卡塞尔这种“躲着后卫”的踢法，虽然进球效率可以，但是没有真正起到轮换苏亚雷斯的作用。这样巴萨还需要在板凳上补充一个中锋（不用多能进球，哪怕搅屎棍也可以），同时也做好登贝莱/苏亚雷斯/梅西/格里兹曼（假设他真的来）的轮换。</p><p>总而言之，现在巴萨还是回归433比较好，配合442和4312的变化。那么休赛期最重要的补强就是格里兹曼+能抗中卫的前锋+一个中场+一个优秀的边后卫。</p><p>我个人希望的引援名单如下：<br>中场是魏格尔和B队的阿莱尼亚，埃里克森、博格巴和维拉蒂这三个不算是好的选择，要么太贵，要么节奏太慢。至于伊斯科、大卫席尔瓦、皮亚尼奇，那想都别想了，母队不会放人的。至于格雷茨卡，拜仁不是善茬；<br>边后卫可以考虑贝莱林，这个要看一下阿森纳的新教练是谁，摩纳哥的法比尼奥也可以，我知道他现在改中场了，也不耽误来一下跟罗贝托交叉换位…<br>前锋的话，我个人推荐B队阿奈斯试试看，其他的人选估计就是在西甲联赛内部找了；<br>这几个位置，最重要就是中场！梅西当初在哈白布的配合下威力无穷，一旦巴萨的中场重新掌握了控制力，不用频繁回撤的梅西依旧会进球如麻，这一点毋庸置疑。<br><img src="/images/fcb3.png" alt="paradin"></p><h2><span id="温格会来">温格会来？</span></h2><p>我个人首先不希望巴尔韦德下课，毕竟现在巴萨联赛冠军十拿九稳，国王杯如果也揽入怀中，这样一个成绩单也是一个80分，如果这个分数都炒掉主教练，那么继任者的压力势必很大，所以我个人倾向巴尔韦德留任，好好想一下，等阿图尔以及可能会来的格里兹曼到位了，巴萨应该怎么打。</p><p>不过如果温格真的来了，我个人也是赞成的，因为阿森纳的球风本来跟巴萨相似，相信温格跟梅西等人也会无缝接入，到时候教授或许真的可以在巴萨圆了欧冠梦想，不过这个想法成真的可能性低于5%，想想就得了。</p><h2><span id="下赛季的任务">下赛季的任务</span></h2><p>1.进攻体系依旧围绕梅西建队，让梅西继续火力全开的同时保证休息，欧冠要他有大用；<br>2.新球员（包括库蒂尼奥和登贝莱）适应巴萨的风格和体系，让皮克和布教授也能轮换得到休息；<br>3.欧冠一定要进入四强；<br>4.欧冠四强的基础上，西甲联赛冠军和国王杯能拿还是要拿，同时最好也能阻击皇马；<br><img src="/images/fcb2.png" alt="paradin"></p>]]></content>
-    
-    <summary type="html">
-    
-      这几天的巴萨真是风雨飘摇，操碎我的心
-    
-    </summary>
-    
-      <category term="追乱花天" scheme="http://yoursite.com/categories/%E8%BF%BD%E4%B9%B1%E8%8A%B1%E5%A4%A9/"/>
-    
-    
-      <category term="国际足坛" scheme="http://yoursite.com/tags/%E5%9B%BD%E9%99%85%E8%B6%B3%E5%9D%9B/"/>
-    
-      <category term="巴塞罗那" scheme="http://yoursite.com/tags/%E5%B7%B4%E5%A1%9E%E7%BD%97%E9%82%A3/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>国内Docker的加速方法</title>
-    <link href="http://yoursite.com/2018/04/20/%E5%9B%BD%E5%86%85Docker%E7%9A%84%E5%8A%A0%E9%80%9F%E6%96%B9%E6%B3%95/"/>
-    <id>http://yoursite.com/2018/04/20/国内Docker的加速方法/</id>
-    <published>2018-04-19T16:00:04.000Z</published>
-    <updated>2018-04-19T16:17:09.102Z</updated>
-    
-    <content type="html"><![CDATA[<script src="\assets\js\APlayer.min.js"> </script><p>由于大陆政府的特殊政策，国内想访问一些国外的资源是非常的曲折和痛苦，比较有代表性的就是亚马逊的云存储以及docker，尤其在<code>docker pull</code>一些镜像的时候，更是心惊胆战，祈求不要出现timout，然而现实往往很骨感。如下图：<br><img src="/images/jiasu.png" alt="paradin"></p><p>那么应该如何达到加速的效果呢？</p><p>在<code>CentOS 7</code>里，对于使用<code>systemd</code>的系统，请在<code>/etc/docker/daemon.json</code>中写入如下内容：（如果文件不存在请新建该文件）<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="string">"registry-mirrors"</span>: [</span><br><span class="line">    <span class="string">"https://registry.docker-cn.com"</span></span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p><p>注意，一定要保证该文件符合 json 规范，否则 Docker 将不能启动。</p><p>之后重新启动服务。<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ sudo systemctl daemon-reload</span><br><span class="line">$ sudo systemctl restart docker</span><br></pre></td></tr></table></figure></p><p>注意：如果您之前查看旧教程，修改了<code>docker.service</code>文件内容，请去掉您添加的内容（–registry-mirror=<a href="https://registry.docker-cn.com）。" target="_blank" rel="noopener">https://registry.docker-cn.com）。</a></p><p>配置加速之后，如果拉取镜像仍然十分缓慢，请手动检查加速器配置是否生效，在命令行执行<code>docker info |grep &#39;Registry Mirrors&#39; -A</code>，如果从结果中看到了如下内容，说明配置成功。<br><img src="/images/jiasu2.png" alt="paradin"></p><p>现在再重新尝试一下<code>docker pull training/webapp</code>，看看效果：<br><img src="/images/jiasu3.png" alt="paradin"></p><p>仅用17秒就pull了几乎400MB的镜像，高下立判！</p>]]></content>
-    
-    <summary type="html">
-    
-      墙内想干点事的确挺费劲
-    
-    </summary>
-    
-      <category term="工作与技术" scheme="http://yoursite.com/categories/%E5%B7%A5%E4%BD%9C%E4%B8%8E%E6%8A%80%E6%9C%AF/"/>
-    
-    
-      <category term="docker" scheme="http://yoursite.com/tags/docker/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>在Grafana里添加worldping插件</title>
-    <link href="http://yoursite.com/2018/04/19/%E5%9C%A8Grafana%E9%87%8C%E6%B7%BB%E5%8A%A0worldping%E6%8F%92%E4%BB%B6/"/>
-    <id>http://yoursite.com/2018/04/19/在Grafana里添加worldping插件/</id>
-    <published>2018-04-19T02:41:18.000Z</published>
-    <updated>2018-04-19T03:53:34.284Z</updated>
-    
-    <content type="html"><![CDATA[<script src="\assets\js\APlayer.min.js"> </script><h2><span id="安装插件">安装插件</span></h2><p>worldping是一个监控网站的dns、ping、http响应、https响应的插件，要安装它很简单，在granafa服务器里执行如下命令：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">grafana-cli plugins install raintank-worldping-app</span><br><span class="line">systemctl restart grafana-server.service</span><br></pre></td></tr></table></figure></p><p>执行完毕之后在grafana的界面里选择<code>Plugins</code>，然后在<code>APP</code>里找到<code>worldping</code>，启动它，但是此时发现需要一个api，如图：<br><img src="/images/worldping.png" alt="paradin"></p><p>此时你需要登录grafana的官网，然后点击<code>api keys</code>和<code>ADD API KEY</code>，就可以生成一个<code>API KEY</code>，名字可以随便起，如下：<br><img src="/images/worldping2.png" alt="paradin"></p><p>将生成的api key保存好，并且填回到grafana的api key里，这样worldping插件就可以使用了，如图：<br><img src="/images/worldping3.png" alt="paradin"></p><h2><span id="监控网站节点">监控网站节点</span></h2><p>此时点击黄色旋涡，发现多了worldping的选项，点击<code>worldping Home</code>，如图：<br><img src="/images/worldping4.png" alt="paradin"></p><p>然后点击<code>+ New Endpoint</code>，这里我输入我公司的官网域名，然后<code>begin auto-discovery</code>，如图：<br><img src="/images/worldping5.png" alt="paradin"></p><p>生成了结果之后，点击add，此时开始检查几个大城市，如芝加哥、东京、纽约、巴黎等大城市连接到刚刚输入的域名的情况，如图：<br><img src="/images/worldping6.png" alt="paradin"></p><p>大约需要1~2分钟后，数据检查完成，可以点击<code>GO to Summary Dashboard</code>，就会看到图像了：<br><img src="/images/worldping7.png" alt="paradin"></p><p>为什么我这个图里没有http?因为在nginx里我们做了http强制rewrite跳转到https，所以是读不到值的。</p><h2><span id="删除网站节点">删除网站节点</span></h2><p>如果要删除网站节点，还是在worldping里点击要删除网站后面的齿轮图标，如图：<br><img src="/images/worldping8.png" alt="paradin"></p><p>然后选择<code>configuration</code>，这里可以修改网站域名，要删除的话，选择最下面的<code>destory</code>，输入DELETE确认，然后就可以点击<code>DELETE</code>删除了，如图：<br><img src="/images/worldping9.png" alt="paradin"></p>]]></content>
-    
-    <summary type="html">
-    
-      这个搭配zabbix的网站监控，双重check!
-    
-    </summary>
-    
-      <category term="工作与技术" scheme="http://yoursite.com/categories/%E5%B7%A5%E4%BD%9C%E4%B8%8E%E6%8A%80%E6%9C%AF/"/>
-    
-    
-      <category term="grafana" scheme="http://yoursite.com/tags/grafana/"/>
-    
-      <category term="图像监控" scheme="http://yoursite.com/tags/%E5%9B%BE%E5%83%8F%E7%9B%91%E6%8E%A7/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>用非root用户启动tomcat进程</title>
-    <link href="http://yoursite.com/2018/04/18/%E4%BD%BF%E7%94%A8%E6%99%AE%E9%80%9A%E7%94%A8%E6%88%B7%E5%90%AF%E5%8A%A8tomcat/"/>
-    <id>http://yoursite.com/2018/04/18/使用普通用户启动tomcat/</id>
-    <published>2018-04-18T14:19:34.000Z</published>
-    <updated>2018-04-19T14:05:04.577Z</updated>
-    
-    <content type="html"><![CDATA[<script src="\assets\js\APlayer.min.js"> </script><p>使用非root用户启动进程是运维安全的一个主要环节，拿tomcat进程来说，如果是使用root用户去启动了tomcat，那么有一个严重的问题，那就是tomcat具有root权限。这意味着你的任何一个jsp脚本都具有root权限，所以那些不怀好意的人可以轻易地用jsp脚本去搞破坏，甚至删除你整个硬盘里的东西！所以为了活着，我们要极力避免这种现象。很多的软件都自带的用户/用户组，比如nginx、zabbix、elasticsearch，但是也有很多的软件没有这么贴心的服务，这就需要我们手动的更改了。</p><h2><span id="使用非root用户启动tomcat">使用非root用户启动tomcat</span></h2><p>以tomcat为例，打算用chris账号(属于chen这个group)启动。那么首先先创建账号和组，如下：<br>    <figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[root@chen-docker ~]groupadd chen    #创建chen这个组</span><br><span class="line">[root@chen-docker ~]useradd -s /bin/bash -g chen chris    #在这个组里面添加chris这个用户</span><br><span class="line">[root@chen-docker ~]passwd chris    #给这个用户设定密码</span><br><span class="line">[root@chen-docker ~]# id chris</span><br><span class="line">uid=1000(chris) gid=1002(chen) groups=1002(chen)    #可见添加成功</span><br></pre></td></tr></table></figure></p><p><code>su chris</code>切换到chris用户，在<code>/home/chris</code>里使用<code>wget http://apache.fayea.com/tomcat/tomcat-9/v9.0.7/bin/apache-tomcat-9.0.7.tar.gz</code>下载tomcat。然后解压缩在/home/chris里，因为chris用户在这里是有权限的。然后进行如下的操作：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">cd  ~<span class="regexp">/ 代表用户所在目录</span></span><br><span class="line"><span class="regexp">mkdir -p ~/</span>shell-script</span><br><span class="line">cd ~<span class="regexp">/shell-script/</span></span><br><span class="line">touch start.sh</span><br><span class="line">toush stop.sh</span><br></pre></td></tr></table></figure></p><p>这个<code>start.sh</code>的内容很简单，如下：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">#/bin/bash</span><br><span class="line">if [ "root" == "$USER" ]    #不让root启动</span><br><span class="line">then</span><br><span class="line">    echo <span class="string">"can't start with user 'root',retry after change user!"</span></span><br><span class="line">    exit <span class="number">1</span></span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">    cd /home/chris/apache-tomcat<span class="number">-9.0</span><span class="number">.7</span>/bin/    &amp;&amp; ./start.sh</span><br><span class="line">fi</span><br></pre></td></tr></table></figure></p><p><code>shutdown.sh</code>的内容同理：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">#/bin/bash</span><br><span class="line">if [ "root" == "$USER" ]    #不让root启动</span><br><span class="line">then</span><br><span class="line">    echo <span class="string">"can't start with user 'root',retry after change user!"</span></span><br><span class="line">    exit <span class="number">1</span></span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">    cd /home/chris/apache-tomcat<span class="number">-9.0</span><span class="number">.7</span>/bin/    &amp;&amp; ./shutdown.sh</span><br><span class="line">fi</span><br></pre></td></tr></table></figure></p><p><code>chmod +x *.sh</code>给上面两个脚本可执行权限，但是现在执行startup.sh或者shutdown.sh会出现一个问题：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Neither the JAVA_HOME nor the JRE_HOME environment variable is defined</span><br><span class="line">At least one <span class="keyword">of</span> these environment variable is needed to run <span class="keyword">this</span> program</span><br></pre></td></tr></table></figure></p><p>这是因为chris用户没有权限去启动java这个可执行程序，如果使用<code>java -version</code>回答是<code>bash: java: command not found</code>，这个时候怎么办？</p><p>编辑<code>~/.bash_profile</code>，在末尾处加上如下的内容：<br><img src="/images/noroot2.png" alt="paradin"></p><p>然后<code>source .bash_profile</code>，再使用<code>java -version</code>确认一下应该是OK了。这个时候也是可以使用chris用户去启动刚刚的那个start.sh和shutdown.sh的。<br><img src="/images/noroot3.png" alt="paradin"></p><p>由于我们的tomcat是源码解压缩，所以要使用root用户去创建一下<code>/etc/init.d/tomcat</code>。里面内容如下：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"><span class="keyword">case</span> $<span class="number">1</span> <span class="keyword">in</span></span><br><span class="line">start)</span><br><span class="line">su - chris -lc "sh /home/chris/shell-script/start.sh";;     #如果要root启动，那就是su - root -lc "sh /home/utomcat/shell-script/start.sh";;</span><br><span class="line">stop)</span><br><span class="line">su - chris -lc <span class="string">"sh /home/chris/shell-script/shutdown.sh"</span>;;</span><br><span class="line">*)</span><br><span class="line">echo <span class="string">"parameter error, usage:(start|stop)"</span>;;</span><br><span class="line">esac</span><br></pre></td></tr></table></figure></p><p>保存之后，执行一下<code>service tomcat start</code>看看效果。<br><img src="/images/noroot4.png" alt="paradin"></p><p>如果要设置开机自启动，别忘了<code>chkconfig --add tomcat</code>和<code>chkconfig tomcat on</code>，在浏览器打开<code>ip:8080</code>看见汤姆猫~<br><img src="/images/noroot5.png" alt="paradin"></p><h2><span id="当普通用户要使用1024以下的端口">当普通用户要使用1024以下的端口</span></h2><p>众所周知，linux默认是不准许普通用户调用1024以下的端口的，那么遇到这样的需求怎么办呢？最好的方法是使用iptables。</p><p>首先让程序运行在非root帐户下，并绑定高于1024的端口，在确保能正常工作的时候，将低端口通过端口转发，将低端口转到高端口，从而实现非root运行的程序绑定低端口。要使用此方法可以使用下面的方式：<br>    <figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">sysctl -w net.ipv4.ip_forward=1        #要长久保存，需要在/etc/sysctl.conf文件内修改，然后sysctl -p /etc/sysctl.conf</span><br><span class="line">iptables -F -t nat</span><br><span class="line">iptables -t nat -A PREROUTING -p tcp --dport 80 -j DNAT --to:8088    #将80端口转发到8088</span><br><span class="line">iptables -t nat -A PREROUTING -p tcp --dport 80 -j REDIRECT --to-port 8080    #这句话也可以</span><br></pre></td></tr></table></figure></p><p>这么操作在速度上没有任何影响。</p>]]></content>
-    
-    <summary type="html">
-    
-      chmod u+s 就是给某个程序的所有者以suid权限，可以像root用户一样操作
-    
-    </summary>
-    
-      <category term="工作与技术" scheme="http://yoursite.com/categories/%E5%B7%A5%E4%BD%9C%E4%B8%8E%E6%8A%80%E6%9C%AF/"/>
-    
-    
-      <category term="centos" scheme="http://yoursite.com/tags/centos/"/>
-    
-      <category term="运维安全" scheme="http://yoursite.com/tags/%E8%BF%90%E7%BB%B4%E5%AE%89%E5%85%A8/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>使用docker做一个主从同步的redis集群</title>
-    <link href="http://yoursite.com/2018/04/18/%E4%BD%BF%E7%94%A8docker%E5%81%9A%E4%B8%80%E4%B8%AA%E4%B8%BB%E4%BB%8E%E5%90%8C%E6%AD%A5%E7%9A%84redis%E9%9B%86%E7%BE%A4/"/>
-    <id>http://yoursite.com/2018/04/18/使用docker做一个主从同步的redis集群/</id>
-    <published>2018-04-17T16:14:44.000Z</published>
-    <updated>2018-04-19T03:51:26.430Z</updated>
-    
-    <content type="html"><![CDATA[<script src="\assets\js\APlayer.min.js"> </script><h2><span id="查看容器内部信息">查看容器内部信息</span></h2><p>之前用<code>docker run -it --name redis-master redis /bin/bash</code>创建了一个redis的docker，现在登陆发现状态已经是exit，于是就使用<code>docker container start 容器ID号or容器名称</code>来重新启动。如图：<br><img src="/images/docker4.png" alt="paradin"></p><p>然后书里说到要用<code>docker inspect</code>来查看所挂载volume的情况，使用命令:<br>    <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@chen-docker ~]# docker inspect --format &quot;&#123;&#123; .Volumes &#125;&#125;&quot; f391531120b0</span><br></pre></td></tr></table></figure></p><p>但是很不幸，系统反馈给我一个错误：<br>    <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Template parsing error: template: :1:3: executing &quot;&quot; at &lt;.Volumes&gt;: map has no entry for key &quot;Volumes&quot;</span><br></pre></td></tr></table></figure></p><p>没有这个<code>Volumes</code>，那就干脆查看一下这个容器的所有信息：<code>docker inspect f391531120b0</code>，这个命令里面有<code>Config、Mounts</code>、<code>HostConfig</code>、<code>NetworkSettings</code>等等整个容器的所有信息，比如看一下NetworkSettings相关的内容，如图：<br><img src="/images/docker6.png" alt="paradin"></p><p>此时使用如下命令：<br>    <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[root@chen-docker ~]# docker inspect --format &quot;&#123;&#123; .NetworkSettings.IPAddress &#125;&#125;&quot; f391531120b0    #注意前面的.</span><br><span class="line">192.168.0.2</span><br><span class="line">[root@chen-docker ~]# docker inspect --format &quot;&#123;&#123; .NetworkSettings.MacAddress &#125;&#125;&quot; f391531120b0</span><br><span class="line">02:42:c0:a8:00:02</span><br></pre></td></tr></table></figure></p><p>这样就可以获取到内网IP和mac地址，同理换成<code>docker inspect f391531120b0 | grep Mounts -A 10</code>，看一下挂载信息，如图：<br><img src="/images/docker5.png" alt="paradin"></p><p>原来容器里的/data其实就是宿主机的<code>/var/lib/docker/volumes/94b3c20a6d269c7498ab59ee45c560e84fed64a636767a4baa54fa7befbcd4ff/_data</code>这个文件夹。为了验证这一点，我先到宿主机去创建一个叫aaa文件，如下：<br>    <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">root@f391531120b0:/data# cat aaa </span><br><span class="line">123123</span><br></pre></td></tr></table></figure></p><p>再返回到宿主机上看：<br>    <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[root@chen-docker ~]# cd /var/lib/docker/volumes/94b3c20a6d269c7498ab59ee45c560e84fed64a636767a4baa54fa7befbcd4ff/_data</span><br><span class="line">[root@chen-docker _data]# ls</span><br><span class="line">aaa</span><br><span class="line">[root@chen-docker _data]# cat aaa </span><br><span class="line">123123</span><br></pre></td></tr></table></figure></p><p>这就搞定了！</p><h2><span id="主从同步排错">主从同步排错</span></h2><p>就是按书里写的开始配置和启动<code>redis-slave</code>，但是却发现同步没有成功，在<code>redis-slave</code>日志里发现这样的话：<br>    <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">32677:S 08 Feb 16:14:40.952 * Connecting to MASTER 172.168.10.70:6379</span><br><span class="line">32677:S 08 Feb 16:14:40.952 * MASTER &lt;-&gt; SLAVE sync started</span><br><span class="line">32677:S 08 Feb 16:14:40.953 # Error condition on socket for SYNC: Connection refused</span><br></pre></td></tr></table></figure></p><p>这个的原因就是redis主服务器绑定了127.0.0.1，那么跨服务器IP的访问就会失败，从服务器用IP和端口访问主的时候，主服务器发现本机6379端口绑在了127.0.0.1上，也就是只能本机才能访问，外部请求会被过滤。所以需要修改<code>redis-master</code>的<code>redis.conf</code>，注释掉<code>bind 127.0.0.1</code>，如果是线上生产环境建议绑定IP地址。</p><p>重新启动redis之后，发现同步依然失败，日志变成了这样：<br>    <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">90:S 17 Apr 09:27:35.906 * Non blocking connect for SYNC fired the event.</span><br><span class="line">90:S 17 Apr 09:27:35.907 # Error reply to PING from master: &apos;-DENIED Redis is running in protected mode because protected mode is enabled, no bind address was specified, no authentication password is requested to clients. In this mode connections are only accepted from the loopback interface. If you want to connect&apos;</span><br><span class="line">90:S 17 Apr 09:27:36.908 * Connecting to MASTER 192.168.0.2:6379</span><br><span class="line">90:S 17 Apr 09:27:36.909 * MASTER &lt;-&gt; SLAVE sync started</span><br><span class="line">90:S 17 Apr 09:27:36.909 * Non blocking connect for SYNC fired the event.</span><br><span class="line">90:S 17 Apr 09:27:36.909 # Error condition on socket for SYNC: Connection reset by peer</span><br></pre></td></tr></table></figure></p><p>这个日志的意思是说redis在没有开启bind和密码的情况下，保护模式被开启。然后Redis的只接受来自环回IPv4和IPv6地址的连接。于是还是要修改redis-master的<code>redis.conf</code>关闭保护模式：<code>portected-mode no</code>，然后重启redis-master即可。</p><h2><span id="容器内安装ping">容器内安装ping</span></h2><p>先检查你的容器是使用什么系统的景象，如果是ubantu那就是<code>apt-get</code>，安装ping的命令如下：<br>    <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">apt-get update</span><br><span class="line">apt-get install inetutils-ping</span><br></pre></td></tr></table></figure></p><h2><span id="如何让容器一直启动">如何让容器一直启动</span></h2><p>如果用了一段时间的docker就会发现，我们的容器经常用了一段时间就自动退出了，<code>docker ps</code>已经找不到了，在<code>docker ps -a</code>里面了，如图：<br><img src="/images/docker7.png" alt="paradin"></p><p>然后我们<code>docker start containerId</code>想重新开启这个容器，可能这次来的更快，没几分钟容器又自己关了，由这个问题又可能引发其它很多的问题。</p><p><code>docker run</code>指定的命令如果不是那些一直挂起的命令（比如运行top，不断echo），就是会自动退出的。<code>-d</code>命令是设置detach为<code>true</code>，根据官方的文档，意思是让这个命令在后台运行，但并不是一直运行，Docker容器后台运行,就必须有一个前台进程。主线程结束，容器会退出。</p><p>我们启动容器的时候不要<code>-d</code>命令启动，用<code>-dit</code>就好了，例如：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">docker run -d hello-world(不要这么做)</span><br><span class="line">docker run -dit hello-world(推荐)</span><br></pre></td></tr></table></figure></p>]]></content>
-    
-    <summary type="html">
-    
-      从《容器与容器云》 的第19页开始...
-    
-    </summary>
-    
-      <category term="工作与技术" scheme="http://yoursite.com/categories/%E5%B7%A5%E4%BD%9C%E4%B8%8E%E6%8A%80%E6%9C%AF/"/>
-    
-    
-      <category term="docker" scheme="http://yoursite.com/tags/docker/"/>
-    
-      <category term="redis" scheme="http://yoursite.com/tags/redis/"/>
-    
-      <category term="主从同步" scheme="http://yoursite.com/tags/%E4%B8%BB%E4%BB%8E%E5%90%8C%E6%AD%A5/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>使用zabbix监控memcache</title>
-    <link href="http://yoursite.com/2018/04/03/%E4%BD%BF%E7%94%A8zabbix%E7%9B%91%E6%8E%A7memcache/"/>
-    <id>http://yoursite.com/2018/04/03/使用zabbix监控memcache/</id>
-    <published>2018-04-03T11:00:58.000Z</published>
-    <updated>2018-04-03T11:05:46.074Z</updated>
-    
-    <content type="html"><![CDATA[<script src="\assets\js\APlayer.min.js"> </script><p>监控memcache的原理跟监控redis差不多，都是通过一个类似info的东西可以查询到memcache的状态值，然后通过脚本去获取这些值给zabbix，当发现某值不正常就发出告警。</p><p>查询当年memcache状态的命令是<code>echo stats |nc 127.0.0.1  11211</code>，如果没有<code>nc</code>命令，那就<code>yum install -y nc</code>。</p><p>获得到的结果是这个样子的：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><span class="line">[root@lconline-ec2 ~]# echo stats |nc 127.0.0.1  11211</span><br><span class="line">STAT pid <span class="number">1859</span>        memcache服务进程ID</span><br><span class="line">STAT uptime <span class="number">491093</span>    服务器已运行秒数</span><br><span class="line">STAT time <span class="number">1522740969</span>    服务器当前Unix时间戳</span><br><span class="line">STAT version <span class="number">1.4</span><span class="number">.25</span>        memcache版本</span><br><span class="line">STAT libevent <span class="number">1.4</span><span class="number">.13</span>-stable</span><br><span class="line">STAT pointer_size <span class="number">64</span>        操作系统指针大小</span><br><span class="line">STAT rusage_user <span class="number">14.321822</span>        进程累计用户时间</span><br><span class="line">STAT rusage_system <span class="number">14.095857</span>        进程累计系统时间</span><br><span class="line">STAT curr_connections <span class="number">5</span>        当前连接数量</span><br><span class="line">STAT total_connections <span class="number">51010</span>    Memcached运行以来连接总数</span><br><span class="line">STAT connection_structures <span class="number">8</span>    Memcached分配的连接结构数量</span><br><span class="line">STAT reserved_fds <span class="number">20</span></span><br><span class="line">STAT cmd_get <span class="number">0</span>        get命令请求次数</span><br><span class="line">STAT cmd_set <span class="number">0</span>        set命令请求次数</span><br><span class="line">STAT cmd_flush <span class="number">0</span>    flush命令请求次数</span><br><span class="line">STAT cmd_touch <span class="number">0</span>    touch命令请求次数</span><br><span class="line">STAT get_hits <span class="number">0</span>        get命令命中次数</span><br><span class="line">STAT get_misses <span class="number">0</span>    get命令未命中次数</span><br><span class="line">STAT delete_misses <span class="number">0</span>    <span class="keyword">delete</span>命令未命中次数</span><br><span class="line">STAT delete_hits <span class="number">0</span>        <span class="keyword">delete</span>命令命中次数</span><br><span class="line">STAT incr_misses <span class="number">0</span>        incr命令未命中次数</span><br><span class="line">STAT incr_hits <span class="number">0</span>        incr命令命中次数</span><br><span class="line">STAT decr_misses <span class="number">0</span>        decr命令未命中次数</span><br><span class="line">STAT decr_hits <span class="number">0</span>        decr命令命中次数</span><br><span class="line">STAT cas_misses <span class="number">0</span>        cas命令未命中次数</span><br><span class="line">STAT cas_hits <span class="number">0</span>            cas命令命中次数</span><br><span class="line">STAT cas_badval <span class="number">0</span>        使用擦拭次数</span><br><span class="line">STAT touch_hits <span class="number">0</span></span><br><span class="line">STAT touch_misses <span class="number">0</span></span><br><span class="line">STAT auth_cmds <span class="number">0</span>        认证命令处理的次数    </span><br><span class="line">STAT auth_errors <span class="number">0</span>        认证失败数目</span><br><span class="line">STAT bytes_read <span class="number">357040</span>        读取总字节数    </span><br><span class="line">STAT bytes_written <span class="number">60197691</span>        发送总字节数</span><br><span class="line">STAT limit_maxbytes <span class="number">1073741824</span>        分配的内存总大小（字节）</span><br><span class="line">STAT accepting_conns <span class="number">1</span>        服务器是否达到过最大连接（<span class="number">0</span>/<span class="number">1</span>）</span><br><span class="line">STAT listen_disabled_num <span class="number">0</span>        失效的监听数</span><br><span class="line">STAT time_in_listen_disabled_us <span class="number">0</span></span><br><span class="line">STAT threads <span class="number">4</span>        当前线程数</span><br><span class="line">STAT conn_yields <span class="number">0</span>        连接操作主动放弃数目</span><br><span class="line">STAT hash_power_level <span class="number">16</span></span><br><span class="line">STAT hash_bytes <span class="number">524288</span>        当前存储占用的字节数</span><br><span class="line">STAT hash_is_expanding <span class="number">0</span></span><br><span class="line">STAT malloc_fails <span class="number">0</span>    </span><br><span class="line">STAT bytes <span class="number">0</span>        当前存储占用的字节数</span><br><span class="line">STAT curr_items <span class="number">0</span>        当前存储的数据总数</span><br><span class="line">STAT total_items <span class="number">0</span>        启动以来存储的数据总数</span><br><span class="line">STAT expired_unfetched <span class="number">0</span>    </span><br><span class="line">STAT evicted_unfetched <span class="number">0</span></span><br><span class="line">STAT evictions <span class="number">0</span>        LRU释放的对象数目</span><br><span class="line">STAT reclaimed <span class="number">0</span>        已过期的数据条目来存储新数据的数目</span><br><span class="line">STAT crawler_reclaimed <span class="number">0</span></span><br><span class="line">STAT crawler_items_checked <span class="number">0</span></span><br><span class="line">STAT lrutail_reflocked <span class="number">0</span>    </span><br><span class="line">END</span><br></pre></td></tr></table></figure></p><p>修改<code>zabbix_agentd.conf</code>，添加一个新的自定义项：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">UserParameter=memcached.stat[*],(echo stats; sleep <span class="number">1</span>) | telnet <span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span> <span class="number">11211</span> <span class="number">2</span>&gt;&amp;<span class="number">1</span> | awk <span class="string">'/STAT $1 / &#123;print $NF&#125;'</span></span><br></pre></td></tr></table></figure></p><p>然后重启<code>zabbix-agent</code>，模板就用github里的就好，看到的效果如下：<br><img src="/images/check-memcached.png" alt="paradin"></p>]]></content>
-    
-    <summary type="html">
-    
-      上帝抛弃了吃不饱饭的人民
-    
-    </summary>
-    
-      <category term="工作与技术" scheme="http://yoursite.com/categories/%E5%B7%A5%E4%BD%9C%E4%B8%8E%E6%8A%80%E6%9C%AF/"/>
-    
-    
-      <category term="zabbix" scheme="http://yoursite.com/tags/zabbix/"/>
-    
-      <category term="memcached" scheme="http://yoursite.com/tags/memcached/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>使用zabbix去监控网站和tcp连接</title>
-    <link href="http://yoursite.com/2018/04/02/%E4%BD%BF%E7%94%A8zabbix%E5%8E%BB%E7%9B%91%E6%8E%A7%E7%BD%91%E7%AB%99/"/>
-    <id>http://yoursite.com/2018/04/02/使用zabbix去监控网站/</id>
-    <published>2018-04-02T01:42:45.000Z</published>
-    <updated>2018-04-03T11:58:22.848Z</updated>
-    
-    <content type="html"><![CDATA[<script src="\assets\js\APlayer.min.js"> </script><h2><span id="网页状态码监控">网页状态码监控</span></h2><p>在zabbix的web界面，<code>配置</code>–<code>主机</code>–选择一个有外网权限的服务器，比如选择zabbix server–<code>Web检测</code>，如图：<br><img src="/images/checkweb1.png" alt="paradin"></p><p>然后点击右上角的<code>创建Web场景</code>，然后依次填入<code>名称</code>，<code>间隔</code>，<code>客户端</code>等等，如图：<br><img src="/images/checkweb2.png" alt="paradin"></p><p>然后编辑<code>步骤</code>，先<code>添加</code>，填入对应的url，然后写上200状态码，意思就是返回200是OK的。<br><img src="/images/checkweb4.png" alt="paradin"><br>保存即可，如果还有http认证，那么就继续填写认证。</p><p>至此，一个简单的监控官网状态码的配置过程就结束了，剩下就是增添一下触发器，如下：<br><img src="/images/checkweb3.png" alt="paradin"></p><h2><span id="tcp连接监控">tcp连接监控</span></h2><p>首先在<code>zabbix-agentd.conf</code>里添加一个新的自定义监控项：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">UserParameter=tcp.status[*],netstat -a | awk <span class="string">'/^tcp/ &#123;++y[$NF]&#125; END &#123;for(i in y) print i,y[i]&#125;'</span> |  grep $<span class="number">1</span> | awk <span class="string">'&#123;print $NF&#125;'</span></span><br></pre></td></tr></table></figure></p><p>然后<code>service zabbix-agent restart</code>重启客户端，模板就是<a href="https://gitee.com/careyjike_173/zabbix/tree/master/template" target="_blank" rel="noopener">https://gitee.com/careyjike_173/zabbix/tree/master/template</a> 里的<code>zbx_tcp_status_templates.xml</code>，直接导入即可。如图：<br><img src="/images/checkweb5.png" alt="paradin"></p><p>然后自己配置一下<code>time_wait</code>/<code>close_wait</code>的告警阈值。</p><p><img src="/images/裤子卡世界波.gif" alt="akb48" title="裤子卡中圈世界波"></p>]]></content>
-    
-    <summary type="html">
-    
-      我可算是那个zabbix监控模板扒个精光...
-    
-    </summary>
-    
-      <category term="工作与技术" scheme="http://yoursite.com/categories/%E5%B7%A5%E4%BD%9C%E4%B8%8E%E6%8A%80%E6%9C%AF/"/>
-    
-    
-      <category term="zabbix" scheme="http://yoursite.com/tags/zabbix/"/>
-    
-      <category term="web监控" scheme="http://yoursite.com/tags/web%E7%9B%91%E6%8E%A7/"/>
-    
-      <category term="tcp连接" scheme="http://yoursite.com/tags/tcp%E8%BF%9E%E6%8E%A5/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>使用zabbix去监控php-fpm</title>
-    <link href="http://yoursite.com/2018/04/02/%E4%BD%BF%E7%94%A8zabbix%E5%8E%BB%E7%9B%91%E6%8E%A7php-fpm/"/>
-    <id>http://yoursite.com/2018/04/02/使用zabbix去监控php-fpm/</id>
-    <published>2018-04-02T01:42:36.000Z</published>
-    <updated>2018-04-03T11:58:46.168Z</updated>
-    
-    <content type="html"><![CDATA[<script src="\assets\js\APlayer.min.js"> </script><h2><span id="开启状态统计">开启状态统计</span></h2><p>nginx有一个status来获取nginx处理信息的总览情况，php-fpm也有一个状态统计。要打开这个状态统计，需要先打开php-fpm.conf，将<code>pm.status_path = /status</code>前面的注释去掉。</p><p>然后跑到nginx里，在<code>nginx.conf</code>里添加一个location：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">   location ~ ^<span class="regexp">/(status|ping) &#123;</span></span><br><span class="line"><span class="regexp">       fastcgi_pass 127.0.0.1:9000;</span></span><br><span class="line"><span class="regexp">       include fastcgi.conf;</span></span><br><span class="line"><span class="regexp">       access_log off;</span></span><br><span class="line"><span class="regexp">       allow 127.0.0.1;</span></span><br><span class="line"><span class="regexp">       deny all;</span></span><br><span class="line"><span class="regexp">&#125;</span></span><br></pre></td></tr></table></figure></p><p>然后重启一下php-fpm和nginx，在命令行里输入<code>curl -s http://127.0.0.1:80/status</code>，就会看到php的状态统计，如下图：<br><img src="/images/checkphp.png" alt="paradin"></p><h2><span id="php-fpm-status详解">php-fpm status详解</span></h2><p><code>pool</code> - fpm池子名称，大多数为www<br><code>process manager</code> – 进程管理方式,值：static, dynamic<br><code>start time</code>– 启动日期,如果reload了php-fpm，时间会更新<br><code>start since</code> – 运行时长<br><code>accepted conn</code> – 当前池子接受的请求数<br><code>listen queue</code> – 请求等待队列，如果这个值不为0，那么要增加FPM的进程数量<br><code>max listen queue</code> – 请求等待队列最高的数量<br><code>listen queue len</code> – socket等待队列长度<br><code>idle processes</code> – 空闲进程数量<br><code>active processes</code> – 活跃进程数量<br><code>total processes</code> – 总进程数量<br><code>max active processes</code> – 最大的活跃进程数量（FPM启动开始算）<br><code>max children reached</code> - 大道进程最大数量限制的次数，如果这个数量不为0，那说明你的最大进程数量太小了，请改大一点。<br><code>slow requests</code> – 启用了php-fpm slow-log，缓慢请求的数量 </p><h2><span id="配置监控">配置监控</span></h2><p>跑到<code>zabbix-agentd.conf</code>里添加一个自定义监控项，如下：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">UserParameter=php-fpm.status[*],/usr/bin/curl -s <span class="string">"http://127.0.0.1/php-fpm_status?xml"</span> | grep <span class="string">"&lt;$1&gt;"</span> | awk -F<span class="string">'&gt;|&lt;'</span> <span class="string">'&#123; print $$3&#125;'</span></span><br></pre></td></tr></table></figure></p><p>然后重启一下<code>zabbix-agent</code>，模板就是<a href="https://gitee.com/careyjike_173/zabbix/tree/master/template" target="_blank" rel="noopener">https://gitee.com/careyjike_173/zabbix/tree/master/template</a> 里的<code>zbx_php-fpm_templates.xml</code>，直接导入即可！</p><p>效果如下图：<br><img src="/images/checkphp2.png" alt="paradin"></p><p><img src="/images/百年美洲杯对委内瑞拉助攻伊瓜因.gif" alt="paradin" title="梅西百年美洲杯对委内瑞拉助攻伊瓜因"></p>]]></content>
-    
-    <summary type="html">
-    
-      php-fpm得多一点了解，不然即使有报警了也不知道怎么办
-    
-    </summary>
-    
-      <category term="工作与技术" scheme="http://yoursite.com/categories/%E5%B7%A5%E4%BD%9C%E4%B8%8E%E6%8A%80%E6%9C%AF/"/>
-    
-    
-      <category term="zabbix" scheme="http://yoursite.com/tags/zabbix/"/>
-    
-      <category term="php-fpm" scheme="http://yoursite.com/tags/php-fpm/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>使用zabbix去监控nginx</title>
-    <link href="http://yoursite.com/2018/04/02/%E4%BD%BF%E7%94%A8zabbix%E5%8E%BB%E7%9B%91%E6%8E%A7nginx/"/>
-    <id>http://yoursite.com/2018/04/02/使用zabbix去监控nginx/</id>
-    <published>2018-04-02T01:42:24.000Z</published>
-    <updated>2018-04-03T11:58:00.111Z</updated>
-    
-    <content type="html"><![CDATA[<script src="\assets\js\APlayer.min.js"> </script><h2><span id="准备工作">准备工作</span></h2><p>zabbix监控nginx，首先要确认nginx里是否有<code>http_stub_status_module</code>这个模块，一般来说，这个模块是自动安装的，<code>nginx -V</code>如下图：<br><img src="/images/checknginx1.png" alt="paradin"></p><p>如果你的nginx没有这个模块，请去看<a href="https://rorschachchan.github.io/2018/01/03/Nginx动态编译新的模块/" target="_blank" rel="noopener">https://rorschachchan.github.io/2018/01/03/Nginx动态编译新的模块/</a> 。</p><p>然后在<code>nginx.conf</code>里添加一段话：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"> location = <span class="regexp">/nginx-status  &#123;</span></span><br><span class="line"><span class="regexp">    stub_status   on;</span></span><br><span class="line"><span class="regexp">    access_log   off;</span></span><br><span class="line"><span class="regexp">&#125;</span></span><br></pre></td></tr></table></figure></p><p><code>nginx -s reload</code>一下，然后在命令行输入<code>curl http://127.0.0.1/nginx-status</code>，就会看到如下的界面：<br><img src="/images/checknginx2.png" alt="paradin"></p><p>这样就可以通过<code>http_stub_status_module</code>检查nginx情况了！</p><h2><span id="nginx-status详解">nginx status详解</span></h2><p>以上图的<code>nginx status</code>来做例子说明一下各个数字的意思：<br><code>active connections</code> – 活跃的连接数量<br><code>accepts</code> — 总共处理了3832000个连接<br><code>handled</code> — 成功创建3832000次握手<br><code>requests</code> —  总共处理了3295877个请求<br><code>reading</code> — 读取客户端的连接数<br><code>writing</code> — 响应数据到客户端的数量<br><code>waiting</code> — 开启<code>keep-alive</code>的情况下,这个值等于<code>active – (reading+writing)</code>, 意思就是 Nginx 已经处理完正在等候下一次请求指令的驻留连接</p><h2><span id="配置监控">配置监控</span></h2><p>有了模块，还需要添加一个脚本，然后就可以获取上面的数值了，脚本如下：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"># Method of use</span><br><span class="line"></span><br><span class="line">HOST=<span class="string">"127.0.0.1"</span></span><br><span class="line">PORT="80"#这个根据实际情况填写</span><br><span class="line">URL=<span class="string">"http://$&#123;HOST&#125;:$&#123;PORT&#125;/nginx-status"</span></span><br><span class="line"></span><br><span class="line">active() &#123;</span><br><span class="line">       curl <span class="string">"$&#123;URL&#125;"</span> <span class="number">2</span>&gt;<span class="regexp">/dev/</span><span class="literal">null</span> | grep  <span class="string">"Active"</span> | awk <span class="string">'&#123;print $NF&#125;'</span></span><br><span class="line">&#125;</span><br><span class="line">reading() &#123;</span><br><span class="line">       curl <span class="string">"$&#123;URL&#125;"</span> <span class="number">2</span>&gt;<span class="regexp">/dev/</span><span class="literal">null</span> | grep <span class="string">"Reading"</span> | awk <span class="string">'&#123;print $2&#125;'</span></span><br><span class="line">&#125;</span><br><span class="line">writing() &#123;</span><br><span class="line">       curl <span class="string">"$&#123;URL&#125;"</span> <span class="number">2</span>&gt;<span class="regexp">/dev/</span><span class="literal">null</span> | grep <span class="string">"Writing"</span> | awk <span class="string">'&#123;print $4&#125;'</span></span><br><span class="line">&#125;</span><br><span class="line">waiting() &#123;</span><br><span class="line">       curl <span class="string">"$&#123;URL&#125;"</span> <span class="number">2</span>&gt;<span class="regexp">/dev/</span><span class="literal">null</span> | grep <span class="string">"Waiting"</span> | awk <span class="string">'&#123;print $NF&#125;'</span></span><br><span class="line">&#125;</span><br><span class="line">accepts() &#123;</span><br><span class="line">       curl <span class="string">"$&#123;URL&#125;"</span> <span class="number">2</span>&gt;<span class="regexp">/dev/</span><span class="literal">null</span> | awk NR==<span class="number">3</span> | awk <span class="string">'&#123;print $1&#125;'</span></span><br><span class="line">&#125;</span><br><span class="line">handled() &#123;</span><br><span class="line">       curl <span class="string">"$&#123;URL&#125;"</span> <span class="number">2</span>&gt;<span class="regexp">/dev/</span><span class="literal">null</span> | awk NR==<span class="number">3</span> | awk <span class="string">'&#123;print $2&#125;'</span></span><br><span class="line">&#125;</span><br><span class="line">requests() &#123;</span><br><span class="line">       curl <span class="string">"$&#123;URL&#125;"</span> <span class="number">2</span>&gt;<span class="regexp">/dev/</span><span class="literal">null</span> | awk NR==<span class="number">3</span> | awk <span class="string">'&#123;print $NF&#125;'</span></span><br><span class="line">&#125;</span><br><span class="line">ping() &#123;</span><br><span class="line">       ps -ef | grep nginx | grep -v grep -c</span><br><span class="line">&#125;</span><br><span class="line">$<span class="number">1</span></span><br></pre></td></tr></table></figure></p><p>然后再去<code>zabbix_agentd.conf</code>里添加一句话:<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">UserParameter=nginx.status[*],/usr/local/zabbix/script/nginx_status.sh $<span class="number">1</span></span><br></pre></td></tr></table></figure></p><p>然后<code>service zabbix-agent restart</code>，自定义项就搞定了。</p><p>如果要导入模板，<a href="https://gitee.com/careyjike_173/zabbix" target="_blank" rel="noopener">https://gitee.com/careyjike_173/zabbix</a> 这个朋友的模板已经非常全面了，根据实际情况修改之后再导入他的xml就好，感谢前人付出！</p><p><img src="/images/埃里克森落叶球.gif" alt="paradin" title="埃尔克森远射破蓝军"></p>]]></content>
-    
-    <summary type="html">
-    
-      这一周又要把zabbix重新搭建并且搞起来了！
-    
-    </summary>
-    
-      <category term="工作与技术" scheme="http://yoursite.com/categories/%E5%B7%A5%E4%BD%9C%E4%B8%8E%E6%8A%80%E6%9C%AF/"/>
-    
-    
-      <category term="nginx" scheme="http://yoursite.com/tags/nginx/"/>
-    
-      <category term="zabbix" scheme="http://yoursite.com/tags/zabbix/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>金山云api调用的两个例子</title>
-    <link href="http://yoursite.com/2018/03/29/%E9%87%91%E5%B1%B1%E4%BA%91api%E8%B0%83%E7%94%A8%E7%9A%84%E4%B8%A4%E4%B8%AA%E4%BE%8B%E5%AD%90/"/>
-    <id>http://yoursite.com/2018/03/29/金山云api调用的两个例子/</id>
-    <published>2018-03-29T14:55:09.000Z</published>
-    <updated>2018-03-29T15:26:45.306Z</updated>
-    
-    <content type="html"><![CDATA[<script src="\assets\js\APlayer.min.js"> </script><p>今天另外一个运维要看一下金山云API返回的格式，于是就临时写了两个demo，也顺便记录下来，说不定以后开发脚本的时候可能用的着。</p><h2><span id="查询数据库的脚本">查询数据库的脚本</span></h2><p>需要先获取<code>https://github.com/kscdb/krds_openapi_sdk.git</code>，然后执行<code>python setup.py install</code>安装所用的金山库。</p><p>这个脚本是查询某个数据库的具体情况：<br><img src="/images/ksapi4.png" alt="paradin"></p><p>脚本如下：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/usr/bin/env python</span></span><br><span class="line"># -*- encoding:utf-8 -*-</span><br><span class="line"><span class="keyword">from</span> kscore.session <span class="keyword">import</span> get_session</span><br><span class="line"><span class="keyword">from</span> krds_client <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line">#密钥</span><br><span class="line">ACCESS_KEY_ID = <span class="string">"这里填写ak"</span></span><br><span class="line">SECRET_ACCESS_KEY = <span class="string">"这里填写sk"</span></span><br><span class="line"></span><br><span class="line">#连接</span><br><span class="line">s = get_session()</span><br><span class="line">krds_client = KRDSClient(ACCESS_KEY_ID, SECRET_ACCESS_KEY, <span class="string">'地域名'</span>)</span><br><span class="line">r = krds_client.DescribeDBInstances(DBInstanceIdentifier='5c664b16-fbfe-4373-8a00-67c9476e7386',DBInstanceType='HA')#DBInstanceIdentifier后面是实例ID</span><br><span class="line">print r</span><br></pre></td></tr></table></figure></p><p>执行脚本之后，可以看到返回的结果包括数据库里很多的资料，如图：<br><img src="/images/ksapi1.png" alt="paradin" title="执行效果"></p><p>如果不加参数的话，就是返回账号内所有的数据库情况。</p><h2><span id="查询服务器的脚本">查询服务器的脚本</span></h2><p>需要先获取<code>https://github.com/KscSDK/ksc-sdk-python.git</code>，然后执行<code>python setup.py install</code>安装所用的金山库。</p><p>这个脚本是查询下面这个服务器的情况：<br><img src="/images/ksapi3.png" alt="paradin"></p><p>脚本如下：<br>    <figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/usr/bin/env python</span></span><br><span class="line"># -*- encoding:utf-8 -*-</span><br><span class="line"><span class="keyword">from</span> kscore.session <span class="keyword">import</span> get_session</span><br><span class="line"></span><br><span class="line">#密钥</span><br><span class="line">ACCESS_KEY_ID = <span class="string">"这里填写ak"</span></span><br><span class="line">SECRET_ACCESS_KEY = <span class="string">"这里填写sk"</span></span><br><span class="line"></span><br><span class="line">#连接</span><br><span class="line">s = get_session()</span><br><span class="line">client = s.create_client(<span class="string">"kec"</span>, <span class="string">"地域名"</span>, use_ssl=True,ks_access_key_id=ACCESS_KEY_ID, ks_secret_access_key=SECRET_ACCESS_KEY)</span><br><span class="line">print client.describe_instances(Search=['js-online-hlsproxy-20'])#Search后面接实例名</span><br></pre></td></tr></table></figure></p><p>执行脚本之后，可以看到返回的结果包括数据库里很多的资料，如图：<br><img src="/images/ksapi2.png" alt="paradin" title="执行效果"></p><p>如果不加参数的话，就是返回账号内所有的服务器情况。</p><h2><span id="参考资料">参考资料</span></h2><p><a href="https://github.com/KscSDK/ksc-sdk-python" target="_blank" rel="noopener">https://github.com/KscSDK/ksc-sdk-python</a><br><a href="https://github.com/kscdb/krds_openapi_sdk" target="_blank" rel="noopener">https://github.com/kscdb/krds_openapi_sdk</a></p>]]></content>
-    
-    <summary type="html">
-    
-      留下两个例子，日后说不定用得着
-    
-    </summary>
-    
-      <category term="工作与技术" scheme="http://yoursite.com/categories/%E5%B7%A5%E4%BD%9C%E4%B8%8E%E6%8A%80%E6%9C%AF/"/>
-    
-    
-      <category term="python" scheme="http://yoursite.com/tags/python/"/>
-    
-      <category term="金山云" scheme="http://yoursite.com/tags/%E9%87%91%E5%B1%B1%E4%BA%91/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>使用pandas来做html表格</title>
-    <link href="http://yoursite.com/2018/03/27/%E4%BD%BF%E7%94%A8pandas%E6%9D%A5%E5%81%9Ahtml%E8%A1%A8%E6%A0%BC/"/>
-    <id>http://yoursite.com/2018/03/27/使用pandas来做html表格/</id>
-    <published>2018-03-27T15:31:28.000Z</published>
-    <updated>2018-03-27T15:56:17.698Z</updated>
-    
-    <content type="html"><![CDATA[<script src="\assets\js\APlayer.min.js"> </script><h2><span id="前言">前言</span></h2><p>最近电子商城慢sql问题引了小BOSS的重视，于是就打算给开发们搞一个表格，在表格里可以看到前一天阿里云数据库的慢sql。这一次我不打算用html邮件了，因为慢sql数量不固定，今天可能三个，明天可能五个，后天抽风可能就一百个。而html邮件的格式是要事先写死的，于是我就用pandas来做这个表格，直接生成一个html文件，通过访问浏览器去让开发看慢sql。</p><h2><span id="慢日志脚本">慢日志脚本</span></h2><p>我要承认，阿里云自带的api在线调试工具真是一个好东西，有了它，脚本demo可以直接生成，地址是：<a href="https://api.aliyun.com/?spm=a2c4g.750001.952925.6.1QrDYe" target="_blank" rel="noopener">https://api.aliyun.com/?spm=a2c4g.750001.952925.6.1QrDYe</a> ，于是乎，阿里云获取慢日志脚本<code>test.py</code>如下：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/usr/bin/env python</span></span><br><span class="line">#coding=utf-8</span><br><span class="line"><span class="keyword">import</span> json</span><br><span class="line"><span class="keyword">from</span> aliyunsdkcore <span class="keyword">import</span> client</span><br><span class="line"><span class="keyword">from</span> aliyunsdkrds.request.v20140815 <span class="keyword">import</span> DescribeSlowLogRecordsRequest</span><br><span class="line"></span><br><span class="line">clt = client.AcsClient(<span class="string">'这里是ak'</span>,<span class="string">'这里是sk'</span>,<span class="string">'这里是地域'</span>)</span><br><span class="line"></span><br><span class="line"># 设置参数</span><br><span class="line">request = DescribeSlowLogRecordsRequest.DescribeSlowLogRecordsRequest()</span><br><span class="line">request.set_accept_format(<span class="string">'json'</span>)</span><br><span class="line"></span><br><span class="line">request.add_query_param(<span class="string">'DBInstanceId'</span>, <span class="string">'RDS的ID号'</span>)</span><br><span class="line">request.add_query_param('StartTime', '2018-03-26T08:00Z')#3月26日早上8点开始</span><br><span class="line">request.add_query_param('EndTime', '2018-03-27T08:00Z')#3月27日早上8点结束</span><br><span class="line">request.add_query_param(<span class="string">'DBName'</span>, <span class="string">'对应的数据库名'</span>)</span><br><span class="line">request.add_query_param('PageSize', 100)#这个值只能是30/50/100</span><br><span class="line"></span><br><span class="line"># 发起请求</span><br><span class="line">response = clt.do_action_with_exception(request)</span><br><span class="line">print response</span><br><span class="line"></span><br><span class="line">#把json格式的返回值改成dict格式</span><br><span class="line">slow_log=json.loads(response)</span><br><span class="line">num = slow_log[<span class="string">'TotalRecordCount'</span>]</span><br><span class="line">Hostaddress = []</span><br><span class="line">LockTimes = []</span><br><span class="line">ParseRowCounts = []</span><br><span class="line">QueryTimes = []</span><br><span class="line">SQLText = []</span><br><span class="line"></span><br><span class="line">#将有用的值做成list</span><br><span class="line"><span class="keyword">if</span> num &lt; <span class="number">100</span>:</span><br><span class="line">       <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">0</span>,num):</span><br><span class="line">               Hostaddress.append(slow_log[<span class="string">'Items'</span>][<span class="string">'SQLSlowRecord'</span>][i][<span class="string">'HostAddress'</span>])</span><br><span class="line">               LockTimes.append(slow_log[<span class="string">'Items'</span>][<span class="string">'SQLSlowRecord'</span>][i][<span class="string">'LockTimes'</span>])</span><br><span class="line">               ParseRowCounts.append(slow_log[<span class="string">'Items'</span>][<span class="string">'SQLSlowRecord'</span>][i][<span class="string">'ParseRowCounts'</span>])</span><br><span class="line">               QueryTimes.append(slow_log[<span class="string">'Items'</span>][<span class="string">'SQLSlowRecord'</span>][i][<span class="string">'QueryTimes'</span>])</span><br><span class="line">               SQLText.append(slow_log[<span class="string">'Items'</span>][<span class="string">'SQLSlowRecord'</span>][i][<span class="string">'SQLText'</span>])</span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">       <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">0</span>,<span class="number">100</span>):</span><br><span class="line">               Hostaddress.append(slow_log[<span class="string">'Items'</span>][<span class="string">'SQLSlowRecord'</span>][i][<span class="string">'HostAddress'</span>])</span><br><span class="line">               LockTimes.append(slow_log[<span class="string">'Items'</span>][<span class="string">'SQLSlowRecord'</span>][i][<span class="string">'LockTimes'</span>])</span><br><span class="line">               ParseRowCounts.append(slow_log[<span class="string">'Items'</span>][<span class="string">'SQLSlowRecord'</span>][i][<span class="string">'ParseRowCounts'</span>])</span><br><span class="line">               QueryTimes.append(slow_log[<span class="string">'Items'</span>][<span class="string">'SQLSlowRecord'</span>][i][<span class="string">'QueryTimes'</span>])</span><br><span class="line">               SQLText.append(slow_log[<span class="string">'Items'</span>][<span class="string">'SQLSlowRecord'</span>][i][<span class="string">'SQLText'</span>])</span><br></pre></td></tr></table></figure></p><p>这个<code>response</code>的格式是一个<code>json</code>，在<code>www.json.cn</code>里查看是这个样子：<br><img src="/images/pandas1.png" alt="paradin"></p><p>可以看到返回值里面<code>TotalRecordCount</code>就是总返回值，如果这个值大于<code>PageSize</code>，那么就会有第二篇，需要手动翻篇。所以我这里直接最大值就是100，一篇100已经够开发看了…</p><h2><span id="脚本如下">脚本如下</span></h2><p>在上面的脚本里可以获取到所有慢sql的<code>json</code>格式，那么就可以再写一个脚本把<code>json</code>转化成<code>html</code>格式并且生成一个<code>html</code>文件，然后在nginx里直接把这个文件展示出来。既然用到了<code>pandas</code>库，那么就要先安装<code>pandas</code>,方法如下：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">pip install --upgrade pip</span><br><span class="line">pip install pandas</span><br><span class="line">如果有“Please upgrade numpy to &gt;= <span class="number">1.9</span><span class="number">.0</span> to use <span class="keyword">this</span> pandas version”的反应，那么执行下一句</span><br><span class="line">pip install -U numpy</span><br></pre></td></tr></table></figure></p><p>生成html的整个脚本如下：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/usr/bin/env python</span></span><br><span class="line">#coding=utf-8</span><br><span class="line">from test import Hostaddress,LockTimes,ParseRowCounts,QueryTimes,SQLText#从刚写的test.py里得到那些list变量</span><br><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"></span><br><span class="line">def convertToHtml(result,title):</span><br><span class="line">    #将数据转换为html的table</span><br><span class="line">    #result是list[list1,list2]这样的结构</span><br><span class="line">    #title是list结构；和result一一对应。titleList[0]对应resultList[0]这样的一条数据对应html表格中的一列</span><br><span class="line">    d = &#123;&#125;</span><br><span class="line">    index = <span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> t <span class="keyword">in</span> title:</span><br><span class="line">        d[t]=result[index]</span><br><span class="line">        index = index+<span class="number">1</span></span><br><span class="line">    pd.set_option('max_colwidth',200)#默认的行长度是50，这里我调成了200</span><br><span class="line">    df = pd.DataFrame(d)</span><br><span class="line">    df = df[title]</span><br><span class="line">    h = df.to_html(index=False)</span><br><span class="line">    <span class="keyword">return</span> h</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    result = [Hostaddress,LockTimes,ParseRowCounts,QueryTimes,SQLText]</span><br><span class="line">    title = [u<span class="string">'HostAddress'</span>,u<span class="string">'LockTimes'</span>,u<span class="string">'ParseRowCounts'</span>,u<span class="string">'QueryTimes'</span>,u<span class="string">'SQLText'</span>]</span><br><span class="line">    #生成一个叫biaoge.html</span><br><span class="line">    <span class="keyword">with</span> open(<span class="string">'/nginxhtml路径/biaoge.html'</span>, <span class="string">'w'</span>) <span class="keyword">as</span> f:</span><br><span class="line">        f.write(convertToHtml(result,title))</span><br><span class="line">        print <span class="string">"html文件已经生成！"</span></span><br></pre></td></tr></table></figure></p><h2><span id="执行效果">执行效果</span></h2><p>将这个<code>biaoge.html</code>直接生成到nginx的html文件夹里，在浏览器里打开这个html就看到效果了，如图：<br><img src="/images/pandas2.png" alt="paradin"></p>]]></content>
-    
-    <summary type="html">
-    
-      最近各种画图，都快吐了...
-    
-    </summary>
-    
-      <category term="工作与技术" scheme="http://yoursite.com/categories/%E5%B7%A5%E4%BD%9C%E4%B8%8E%E6%8A%80%E6%9C%AF/"/>
-    
-    
-      <category term="python" scheme="http://yoursite.com/tags/python/"/>
-    
-      <category term="pandas" scheme="http://yoursite.com/tags/pandas/"/>
-    
-      <category term="大数据分析" scheme="http://yoursite.com/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90/"/>
     
   </entry>
   

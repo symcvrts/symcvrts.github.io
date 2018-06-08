@@ -1,6 +1,154 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[Grafana配置smtp邮件]]></title>
+    <url>%2F2018%2F06%2F06%2FGrafana%E9%85%8D%E7%BD%AEsmtp%E9%82%AE%E4%BB%B6%2F</url>
+    <content type="text"><![CDATA[配置smtp如果要通过grafana接收告警邮件，都需要配置邮箱。而相关配置文件就是grafana.ini，分别要修改如下几个地方： 1234567891011121314151617181920#################################### SMTP / Emailing ##########################[smtp]enabled = truehost = smtp.163.com:465user = 邮箱前缀@163.com# If the password contains # or ; you have to wrap it with trippel quotes. Ex """#password;"""password = 客户端授权密码;cert_file =;key_file =skip_verify = truefrom_address = 邮箱前缀@163.comfrom_name = Grafana # EHLO identity in SMTP dialog (defaults to instance_name);ehlo_identity = dashboard.example.com#################################### Alerting ############################[alerting]# Disable alerting engine &amp; UI features;enabled = true# Makes it possible to turn off alert rule execution but alerting UI is visibleexecute_alerts = true 我采用了网易邮箱，把文件保存退出之后，重启一下grafana-server。然后在页面的alatm页面里配置Notification channels，如图： 如果发送不成功，去查看一下日志，日志地址是/var/log/grafana/grafana.log。如果发送成功了，那么邮箱会收到这样的一个邮件： 邮箱密码问题问题这里要注意几个问题！ 阿里云的服务器出于安全考虑默认是不会开放25端口的，如果你非要用阿里云的服务器去打开25端口，请移步https://www.alibabacloud.com/help/zh/doc-detail/56130.htm ； 如果不想麻烦阿里云那么就要使用其他端口，比如我配置文件里面写的加密的465端口，这个端口不能使用登陆邮箱的普通密码，而是需要填写“授权码”； 以网易邮箱为例，首先先要打开POP3/SMTP服务，如图： 其次然后在客户端授权密码里设置一个新的密码，如图： 然后把这个授权码填写到grafana.ini里，填邮箱的登录密码是错误的。 参考资料http://www.kubiops.com/blog/2017/02/27/Grafana%E5%91%8A%E8%AD%A6%E9%85%8D%E7%BD%AE.html]]></content>
+      <categories>
+        <category>工作与技术</category>
+      </categories>
+      <tags>
+        <tag>grafana</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[Gitlab给分支设定权限]]></title>
+    <url>%2F2018%2F06%2F06%2FGitlab%E7%BB%99%E5%88%86%E6%94%AF%E8%AE%BE%E5%AE%9A%E6%9D%83%E9%99%90%2F</url>
+    <content type="text"><![CDATA[给gitlab的各位开发设置权限是很重要的，不然他们就可能会偷偷的把执行分支合并甚至git pull来破坏线上环境。 首先先确定在project下各位人员的身份，在设置（setting）–成员(members)里面，可以看到projects现有的用户和用户组，如图： 由于我这个gitlab已经是汉化版的了，这里做一个简单的中英对比：Master是“主程序员”、Developer是“开发人员”、Reporter是“报告者”，这个身份只有读权限可以创建代码片段，一般来说都给测试人员，而Guest就是“访客”了，它只能提交问题和评论。 然后再到版本库（Repository）里选择保护分支（Protected Branches），如图： Allowed to merge就是分支合并权限，Allowed to push就是推送权限，这两个可以根据不同人的身份进行控制。如果受保护，除了master权限的人员，其余人都不可以push、delete等操作。默认情况下master分支是处于被保护状态下的，developer角色的人是无法提交到master分支的。 如果是docker的话，那么gitlab权限问题修复会用到如下命令： 12docker exec -it gitlab update-permissionsdocker restart gitlab容器的ID]]></content>
+      <categories>
+        <category>工作与技术</category>
+      </categories>
+      <tags>
+        <tag>git</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[解决Waiting(TTFB)过长的问题]]></title>
+    <url>%2F2018%2F06%2F04%2F%E8%A7%A3%E5%86%B3Waiting-TTFB-%E8%BF%87%E9%95%BF%E7%9A%84%E9%97%AE%E9%A2%98%2F</url>
+    <content type="text"><![CDATA[正文电商平台整套系统是从上海商派公司（ecshop）那里购买的整套代码，结合我们公司自己的二开功能的3.0版本在上周几经波折终於部署上去了，经过了一个周末之后，今天市场运营的人在微信群里叫：“官方网站打开速度好慢。”果然整个官网首页要5~6秒钟才打得开，这个显然是不能忍受的，使用F12查看细节，发现Waiting(TTFB)的时间非常长，如图： 正常来说TFFB时间通常建议在200ms以下，如果超过推荐值，会引起队列中其他资源下载都跟着变慢。TFFB高主要有两个原因：一是客户端和服务器之前网络情况比较差；二是服务器应用响应比较慢；第三：重定向太多，重定向跟TFFB时间成正比。 于是乎检查网络情况以及各应用负载情况，都是OK的，重定向也很少。那么就减少DNS查询，把所有能用IP的地方都替换了域名，比如nginx的localhost里使用对应服务器的域名而不是127.0.0.1，比如在配置文件里的阿里云的数据库和redis都用IP地址替代。然而收效甚微，该慢依旧是慢。 这个时候就返回到后台去查看，左翻翻右翻翻，最后找到了这个地方，如图： 启动全页缓存，一切就都好了… 参考资料https://www.oschina.net/question/244077_221319]]></content>
+      <categories>
+        <category>工作与技术</category>
+      </categories>
+      <tags>
+        <tag>运维技术</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[Centos7安装zabbix3.4全过程]]></title>
+    <url>%2F2018%2F06%2F04%2FCentos7%E5%AE%89%E8%A3%85zabbix3-4%E5%85%A8%E8%BF%87%E7%A8%8B%2F</url>
+    <content type="text"><![CDATA[安装zabbix-server 3.4本文以centos 7为例。 123456789101112131415161718systemctl stop firewalld.service #关闭防火墙systemctl disable firewalld.service #开机不启动防火墙setenforce 0 #清空selinux的配置 yum install mariadb-server mariadb –ysystemctl enable mariadb #设置开机启动systemctl start mariadb #启动MariaDBrpm -Uvh http://repo.zabbix.com/zabbix/3.4/rhel/7/x86_64/zabbix-agent-3.4.5-1.el7.x86_64.rpmyum install zabbix-server-mysql zabbix-web-mysql -yzcat /usr/share/doc/zabbix-server-mysql-3.4.9/create.sql.gz |mysql -uzabbix -pzabbix zabbix #这里是设定zabbix数据库账号密码和database的地方，create.sql.gz这个文件位置要根据实际情况来vim /etc/httpd/conf.d/zabbix.conf #这里要修改文件里的时区，改成Asia/Shanghaisystemctl start zabbix-serversystemctl enable zabbix-server setsebool -P httpd_can_connect_zabbix onsetsebool -P httpd_can_cetwork_connect_db onsystemctl start httpd systemctl enable httpdchkconfig zabbix_agent onsystemctl start zabbix-agent 然后就是在浏览器输入外网IP/zabbix/进行页面安装了，剩下的就不多写了。 安装zabbix-agent 3.4如果是centos 6: 123rpm -Uvh http://repo.zabbix.com/zabbix/3.4/rhel/6/x86_64/zabbix-release-3.4-1.el6.noarch.rpmyum install -y zabbix-agentchkconfig zabbix_agent on;service zabbix_agent start #如果不对就使使zabbix-agent 如果是centos 7: 12rpm -Uvh http://repo.zabbix.com/zabbix/3.4/rhel/7/x86_64/zabbix-agent-3.4.5-1.el7.x86_64.rpmchkconfig zabbix_agent on;service zabbix_agent start #如果不对就使使zabbix-agent 其他资料https://www.kaijia.me/2014/11/zabbix-report-lack-of-free-swap-space-issue-on-server-without-swap-solved/]]></content>
+      <categories>
+        <category>工作与技术</category>
+      </categories>
+      <tags>
+        <tag>zabbix</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[记录一次阿里云负载均衡端口监听不正确的过程]]></title>
+    <url>%2F2018%2F05%2F31%2F%E8%AE%B0%E5%BD%95%E4%B8%80%E6%AC%A1%E9%98%BF%E9%87%8C%E4%BA%91%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%E7%AB%AF%E5%8F%A3%E7%9B%91%E5%90%AC%E4%B8%8D%E6%AD%A3%E7%A1%AE%E7%9A%84%E8%BF%87%E7%A8%8B%2F</url>
+    <content type="text"><![CDATA[在阿里云上新配置了一个负载均衡，后面挂载的服务器上安装了一个nginx，分别开启了80端口和8080端口，其中80端口是给http访问的，8080端口是给https访问的，同时在8080端口上做了http跳转https的配置。 但是在负载均衡配置完毕之后，发现tcp的80转8080是OK的，但是https的443转80却始终不OK，网页也自然打不开，但是在nginx上看80端口的确是在stand by： 而且安全组都做了配置，telnet端口也是完全没有问题的，如图： 执行了一下time curl -I -X HEAD SLB的域名 -x http://本机IP地址:80看一下效果，如图： 可见命令执行OK，但是耗时需要7秒，而默认的阿里云SLB在https监听的超时时间设定是5秒，怀疑是后端ECS上对head头响应慢导致的健康检查失败。然后在网页上使用“检查”功能，发现有几个js、css文件耗时很长，于是就叫前端的码农们配合查一下，在几位前端吭哧吭哧解决了这个问题之后，https访问恢复正常。]]></content>
+      <categories>
+        <category>工作与技术</category>
+      </categories>
+      <tags>
+        <tag>nginx</tag>
+        <tag>阿里云</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[苹果手机无信用卡注册区美国apple store的办法]]></title>
+    <url>%2F2018%2F05%2F30%2F%E8%8B%B9%E6%9E%9C%E6%89%8B%E6%9C%BA%E6%97%A0%E4%BF%A1%E7%94%A8%E5%8D%A1%E6%B3%A8%E5%86%8C%E5%8C%BA%E7%BE%8E%E5%9B%BDapple-store%E7%9A%84%E5%8A%9E%E6%B3%95%2F</url>
+    <content type="text"><![CDATA[这次去霓虹国在心斋桥Apple体验店买了一个256G的iphone X，由于政府政策的原因，中国区的apple store有很多应用是没有的，于是乎我就打算注册一个美国版的账号，从而登录美国版的apple store去下载那些“你懂得”的app。 首先先登录https://www.apple.com/ ，在网页最下面先确定国家是United States，然后点击Manage Your Apple ID，如图： 在https://appleid.apple.com/#!&amp;page=signin页面里，点击Create your Apple ID建立一个新的apple账号，名称正常写，国家还是United States不要动，生日如实填写，但是如果是未成年人的话，有些成人的app是不可以被下载的。然后就是写好自己的登陆问题，这个问题已经要记住，每次登陆都要输入，忘记的话就麻烦了。注册账号这里其他部分我就不多说了。 账号注册完毕之后，就直接在苹果网站上登录，登录之后，就会看到账号的详细信息，在Payment &amp; Shipping的地方点击Add Payment Method…，如图： 这里有一个PAYMENT METHOD的地方，要填写none，如果你用apple手机上登录这个账号的话，这里是不能选none的，无论是Dr.还是Mr.都没有none这个选项，所以说一定要在网页登录账号。然后就是需要你填写一些用户地址、邮编等信息，由于是账号注册时候选择的是美国，那么也需要填写美国的地址，可以在http://www.haoweichi.com/Index/random里生成一个身份信息填写。如图： 下面那个SHIPPING ADDRESS就是账单邮寄的地址，想填就填，不想填就放那。填写好了之后点击save，但是目前这个账号还是不能通过的，如果你在apple手机登录了这个账号然后登录apple store的话，会有一个提示：该账号没有被使用过，请填写细节。 这里如果你还手机上操作填写细节，发现你刚刚在电脑上填写的地址和邮编已经同步到手机的账号了，但是支付卡那一栏还是没有none，也就是说依旧要一个信用卡。此时请在电脑上下载itunes，然后在电脑的itunes里登录这个美国区账号，由于电脑itunes里的支付渠道依旧可以选择none，所以我们可以在这里绕一个弯，使用itunes这个渠道来完成这个美国区账号的彻底注册。 在itunes把整个账号完整过程都注册完毕之后，再登录到手机端，就可以在美国的apple store里尽情的下载app了！]]></content>
+      <categories>
+        <category>坠乱花天</category>
+      </categories>
+      <tags>
+        <tag>apple</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[超赞的京都大阪五日游]]></title>
+    <url>%2F2018%2F05%2F25%2F%E8%B6%85%E8%B5%9E%E7%9A%84%E4%BA%AC%E9%83%BD%E5%A4%A7%E9%98%AA%E4%BA%94%E6%97%A5%E6%B8%B8%2F</url>
+    <content type="text"><![CDATA[说来惭愧，活了30年了这是我第一次出国旅行，借着公司有一次旅游的机会就跟女朋友一起到京都和大阪玩5天。 搞定了签证，在网上买好了USJ的快速通行票，又预定了随身WIFI，简单在穷游、知乎和马蜂窝上做了做自由行的攻略，18号晚上6点半从杭州萧山机场出发，两个小时后到达关西机场。之前在《miss pilot》里看到过ANA的航空，这一次亲自乘坐感觉还是不错，飞机场有吃有玩还有葡萄酒喝。 到关西机场之后，又按指纹又照相的通过了一连串的海关检查，就跟公司其他小伙伴兵分两路，他们去奈良看鹿，我跟女票直接去京都。凭借女票的三脚猫日语功力和她已经来过大阪的经验，我俩先办理了地铁卡，购买了一日游行卡，然后坐上了从大阪出发到京都。 从大阪到京都大约花了一个半小时左右，抵达京都已经是晚上11点了。路上下着细细小雨，再加上两人拖着箱子有点肚饿，就在路边的seven-eleven里简单买了一点水和东西，买东西之余发现在超市里有成人书籍出售。从便利店出来顺着google地图找之前在爱彼迎上预订的民宿，那是一个公寓型民宿，凭借店主之前在邮件里写的密码，我们从信箱里拿到房间钥匙。 日本的庙京都是一个充满寺庙和神社的地方，京都的旅行就是“从这个庙出来，到下一个庙去”，而清水寺正是京都众多庙里人气很旺的景点之一，日本的庙和神社有一个习惯，入寺前先用竹勺洗手，如果要入室参拜的话还要脱鞋。在京都穿和服是一个很常见的事情，而且我觉得一群人穿和服是一个蛮cool的风景，不过女票没有租，但是在寺里买了很多的御守。 昨晚到京都太晚，无法注意天空，到了白天才发现京都的天真的很蓝，看见远方的山轻而易举。从清水寺出来下一站是八坂神社，巧的是遇到了一对新婚夫妇在这里结婚拍照，不得不说日本新郎传统的黑和服加扇子的形象还是很帅的。 日本的玩水族馆一直都是我非常喜欢的地方，而大阪海游馆也是这一次游玩里安排的一个重要环节，但是比较让我失望的是它的海底隧道很短，大约也就杭州水族馆的一半长度。我俩没有看到喂食节目，而且海游馆也没有海豹顶球，海豚跳舞这样的节目。不过海游馆的鱼种类还是很多的，有些品种还可以亲手去摸一摸它们。出了海游馆就是一个蛮大的摩天轮，用一日通票的话可以免费上去坐一圈。 大阪的USJ是我们这次日本之行的最后一站也是最高潮的部分，去年圣诞节我跟女票在上海的迪士尼度过的。从迪士尼回来就一直碎碎念大阪的环球影城，我俩还特意挑选了一个工作日去玩就是为了尽可能的少排队，但是那天依旧很多很多人，真的超火爆。 环球影城的运营模式跟迪士尼差不多，通过IP分主题区，可以购物也有花车游行。但是整个乐园的玩法相对单一—-都是过山车：哈利波特是过山车、蜘蛛侠是过山车、小黄人是原地晃晃过山车、侏罗纪公园是水上过山车，至于翼龙飞行和好莱坞美梦更是超刺激的过山车… 这一次环球影城的特殊项目有四个：怪物猎人、美少女战士（看动画片）、柯南（密室逃脱）和最终幻想。我跟女票还有公司同事都选择了柯南，虽然通篇日语对白，不过还是能猜出来一个大概剧情，所以一个半小时玩下来感觉就像看了一遍柯南的剧场版，里面的解密就不剧透了，机关真的很难，想要在一个小时内完全逃脱几乎是一个不可能的任务。 上面把正经的娱乐说完了，下面来说一点不正经的娱乐。我和女票在大阪住在日本桥地铁站附近，那里距离道顿堀走路也就10分钟的路程，而道顿堀附近有一个街叫宗右卫门町，那里就是大阪有名的牛郎街，一路走过去各种牛郎宣传大海报和在路边搭讪的小哥，甚至那附近的小吃店里还有牛郎哥的宣传单。除了铺天盖地的牛郎哥哥外还有站街的妹妹，大多数都是黄发浓妆，但是仔细看脸都不算太好看的。这些人会跟过往的单身男女搭讪，邀请他们去店里坐坐喝点酒说说话，至于有没有更进一步的皮肉关系，那就不好说了。而且据说他们是不做不懂日语人的生意的，所以如果他们真的纠缠你了，就直接说我是外国人就好。 日本的购物到了日本，买东西是必然的。不过当地的大商场关门很早，基本晚上八点半左右就开始关门。在伏见稻荷大社甚至有的商铺五点半就打烊了，我很好奇，商场这么早关门，那日本人晚上的娱乐是什么呢？他们除了去居酒屋喝酒和广场溜达再加上回家看电视难道就没有其他的娱乐了吗？ 不过，各大药妆店的营业时间很晚，甚至唐吉坷德是24小时营业。这种地方里充满了大陆人、香港人、台湾人、韩国人还有泰国人，在人群和背包中穿梭，拎着篮子买买买，买到5000就可以退税。我女票这次买了很多的卸妆水乳液面膜眼霜口红还有零食，作为一个在旁边无事可做的男人，深深地觉得陪女人逛街是一个很遭罪的事情。 日本的吃我是看过《深夜食堂》和《孤独的美食家》的，所以对日本的食物有一点好感，而且在杭州吃到日本料理也不是一个难事。不过这次到了日本，连续吃了五天当地的饭，发现日本的菜其实很单一。 日本普通的餐就是“米饭+猪肉\牛肉\鸡肉+沙拉+味增汤”，日本的米饭是很好吃的，但是他们的肉做法基本就是炸，炒是很少的。如果不是米饭的话就是炒面、拉面、寿司或者是煎饺。期间我跟女票吃了一次烤肉，里面有“最强牛里脊和牛肠”给我留下了很深的印象。此外在海游馆还吃到了我梦寐已久的大阪烧，插播一句话，吃大阪烧的时候还看到足球运动员郑大世，我女票一眼就认出他来了… 日本的消费能力不低，五天下来，基本上每一顿饭都大约花费了3000多日元，在吉野家吃算比较便宜的，2000不到就能搞定。在烤肉店要了套餐，每人是5000日元。这次在日本，觉得最好吃的是牛里脊，然后就是烤蟹壳。 说完了吃再说说喝，大阪和京都随处可见自动售卖机，售卖机里面基本就是五样饮品—水、绿茶、优酸乳、可乐和咖啡，价钱还都差不多。日本的水果很贵，一个不到6斤重的西瓜就要2200日元左右，橘子大约五块钱一个，但是他们的酒却相比较便宜。在日本我可没少喝梅子酒、气泡果酒和啤酒。 日本的电视我俩住的民宿有一个小电视，里面有12个频道，其中三个是购物频道…我想可能日本的免费电视就这么点，大多数都是收费频道。这九个电视台白天有新闻，有韩剧，有街头采访；晚上有芭蕾舞片段、有综艺节目、还有打着圣光的肉番！说到综艺节目，里面有一个片段就是把秃头用毛巾擦的锃亮，然后用遥控板去对着秃头摁键，结果信号经过秃头的折射，竟然能顺利的操纵电视。再后来叫来两个秃头，尝试多次折射，依旧可以准确遥控电视…就这么一个环节把我之前从来不看日本综艺节目的同事笑翻了，回国后就开始恶补这种日本综艺。 游玩的tips1.日本路边的垃圾箱很少，据说是因为他们没有边走路边吃喝东西的习惯，所以随处带一个塑料袋来装垃圾；2.USJ的快速通行证只有日语区的页面才有，请准备好visa和master卡；3.办理的地铁充值卡不要扔，下一次再来日本，直接储值依旧可以使用；4.到了USJ别上来先买东西，要先排队玩，东西可以放到最后出院的时候再买；5.不会日语在一般情况下没问题，但是如果看不懂车站的话，就难免要问路了，这样会比较头疼，准备一个google翻译。6.champion在日本的地摊也有卖，人民币大约100多，所以淘宝上那些200左右的champion完全不需要考虑… 这次的遗憾这次玩的蛮爽的，但是大阪仅仅只有三天只能玩一个皮毛，比如本次出游的遗憾如下： 1.据说大阪有一个棒球场，20日元一个球，然后通过发球机器发射，游客可以轮棒尝试一下本垒打的快感，但是由于时间太紧没有打上棒球…2.没有去游戏机厅，以前常在漫画里看到日本有那种弹子机，如果赢的多，可以用塑料筐装满小弹子去换钱，这种游戏机厅在大阪的商场很常见，而且门口都有大广告，上面写“新品到店，欢迎畅玩”；3.在龟梨和也和山下智久主演的《我命中注定的人》里，龟梨和也手工雕刻了一个王将的木牌，这次到了大阪逛了很多店，都没有发现这款木雕，不仅没有这个木雕，连战国时期各大将的头盔纺织品也没有看到，这一点很遗憾；4.USJ里的变形金刚和终结者2都暂时停业，不过我后来在B战上看了视频，还是过山车… 等下一次如果有机会能去东京的话，就尝试把上面几个弥补上，再顺便去一趟秋叶原。]]></content>
+      <categories>
+        <category>坠乱花天</category>
+      </categories>
+      <tags>
+        <tag>日本</tag>
+        <tag>旅游</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[Gitlab+Jenkins搭建持续集成系统]]></title>
+    <url>%2F2018%2F05%2F25%2FGitlab-Jenkins%E6%90%AD%E5%BB%BA%E6%8C%81%E7%BB%AD%E9%9B%86%E6%88%90%E7%B3%BB%E7%BB%9F%2F</url>
+    <content type="text"><![CDATA[前言gitlab是一个应用很广泛的版本控制工具，他也有自带的持续集成工具—gitlab cli，但是这个工具不如jenkins那么好用。本文的目的要把gitlab和jenkins进行结合，当我们更新了代码并且把代码push到gitlab的时候，gitlab会把代码的变化通知到jenkins，然后jenkins就会自动构建project。 说一下实验环境：Jenkins所在服务器IP：121.41.37.251（10.168.173.181），版本是2.124(查看jenkins的版本语句java -jar /usr/lib/jenkins/jenkins.war --version);Gitlab所在服务器IP：114.55.224.158（10.25.85.175），使用容器安装，版本是10.7.3; jenkins添加gitlab插件通过浏览器登陆jenkins界面，然后在系统管理里面选择管理插件，如图： 然后在可选择插件里搜索gitlab hook插件，但是没想到我这个版本提示，目前的1.4.2版本的gitlab hook目前存在安全隐患，如图： 具体的安全隐患细节是这样的： 这个风险请自己把握，然后我选择了继续安装，如图： 安装完了gitlab hook插件后，还要安装GitLab Plugin和Gitlab Authentication plugin这两个插件，方法跟上面的一样。 创建测试工程在jenkins上建立一个新的任务，比如叫”jicheng-test”，这是一个自由风格的软件项目： 然后在源码管理里面选择git，然后输入gitlab里面仓库的地址，比如我在gitlab上新建了一个仓库叫jenkinstest，那么就复制这个仓库的地址填到jenkins的Repositories里，如图： 还要在Credentials这里面写上gitlab的用户和密码，然后保存即可： 配置 GitLab 用户浏览器切换到gitlab界面，在用户头像点击，User settings —&gt; Access Tokens，这里的Personal Access Tokens写入一个账号，这个账号是用来让Jenkins和GitLab API交互。这个用户将需要是全局的管理员或添加进每个组／工程，并作为成员。需要开发者权限来报告构建状态。如图： 输入账号和账号有效时期之后，会生成一个Private token，如图： 拷贝它，稍后在配置Jenkins服务器时会用到。]]></content>
+      <categories>
+        <category>工作与技术</category>
+      </categories>
+      <tags>
+        <tag>jenkins</tag>
+        <tag>git</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[使用yum安装软件爆No such file or directory]]></title>
+    <url>%2F2018%2F05%2F17%2F%E4%BD%BF%E7%94%A8yum%E5%AE%89%E8%A3%85%E8%BD%AF%E4%BB%B6%E7%88%86No-such-file-or-directory%2F</url>
+    <content type="text"><![CDATA[今天开发反馈说yum install redis报错-bash: /usr/bin/yum: /usr/bin/python: bad interpreter: No such file or directory，于是我就登上服务器，使用python一看，反馈-bash: python: command not found，原来这个机器的python被人改动了，用whereis python查了一下，原来python的地址被人改成了/usr/bin/python2.7，于是就手动更改了一下/usr/bin/yum，把#!/usr/bin/python改成了#!/usr/bin/python2.7。但是使用yum install -y redis发现虽然可以连接到库但是会报No such file or directory，如图： 原来光改了/usr/bin/yum还没用，还要改/usr/libexec/urlgrabber-ext-down这个文件，同样也是把python改成/usr/bin/python2.7说明python的路径才可以。 改了上面两个文件之后，又加上了yum clean all和yum makecache，清除一下缓存，一切恢复了正常。]]></content>
+      <categories>
+        <category>工作与技术</category>
+      </categories>
+      <tags>
+        <tag>linux</tag>
+        <tag>yum</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[使用zabbix去监控docker容器]]></title>
+    <url>%2F2018%2F05%2F17%2F%E4%BD%BF%E7%94%A8zabbix%E5%8E%BB%E7%9B%91%E6%8E%A7docker%E5%AE%B9%E5%99%A8%2F</url>
+    <content type="text"><![CDATA[前言现在容器技术越来越普遍，那么搭建了容器肯定要监控起来，监控方法有两种，一种是做一个zabbix-agent容器去监控容器，还有一个是升级原有的zabbix-agent，这里说第一种。 这里先交代一下环境：zabbix-server的ip是10.244.48.42，要监控的机器ip是10.244.34.79，这个机器里面装了一个容器在运行gitlab，如图： 事前检查两台服务器是否互通，而且10050和10051端口是否standby。还要在zabbix-server端做好auto-discovery，等等等等准备工作。 使用Zabbix Agent Docker进行监控在10.244.34.79这个机器上先安装zabbix-agent容器： 12345678910docker run \ --name=dockbix \ #这个是容器的名称 --net=host \ #容器可以直接访问主机上所有的网络信息 --privileged \ #容器内的root拥有真正的root权限 -v /:/rootfs \ #这个是对应宿主机的映射盘 -v /var/run:/var/run \ --restart unless-stopped \ #不管退出状态码是什么始终重启容器，不过当daemon启动时，如果容器之前已经为停止状态，不要尝试启动它。 -e &quot;ZA_Server=10.244.48.42&quot; \ #这里就填写zabbix-server的ip地址 -e &quot;ZA_ServerActive=10.244.48.42&quot; \ -d hub.c.163.com/canghai809/dockbix-agent-xxl-limited:latest #这里使用了网易蜂巢镜像 但是反馈给我docker: invalid restart policy unless-stopped.这样的错误信息，原来这个gitlab这台服务器的docker版本较老，而unless-stopped这个是在1.9.0版本才加入的，所以对于旧版的docker环境需要改成always。 更改docker run的命令之后重新执行效果如下： 可见容器启动成功，docker logs -f 容器ID号看一下日志是否正常。如果正常的话，应该在zabbix-server端是可以看到这个10.244.34.79已经被添加到控制台里了，如图： 导入监控docker的模版在zabbix server上导入监控docker的模版，一共2个模版,下载后解压。模版下载地址: https://dl.cactifans.com/zabbix/Zabbix-Template-App-Docker.tar.gz 。 我使用主动模式，因此导入Zabbix-Template-App-Docker-active.xml这个模版，如图： 此时可以去zabbix-server这个机器上验证一下是否监控成功，在zabbix-server上执行zabbix_get -s 10.244.34.79 -k docker.discovery，效果如下： 可见已经成功获取到了那两个容器的名称，这就代表zabbix-server已经监控到位了。 验证数据首先现在10.244.34.79里执行docker stats 容器1的ID 容器2的ID...，看一下当前运行的所有容器的状态，如下： 与zabbix-server的latest data做一下对比，由于被监控机的docker版本较老，docker stats结果不是那么的精准，不过用来监控参考还是OK的…如果docker是最新版的，那么监控值是很准的。 剩下的就是慢慢添加triggers了… 补充一句，zabbix-agent 3.2的rpm安装方法： 1234rpm -ivh http://repo.zabbix.com/zabbix/3.2/rhel/7/x86_64/zabbix-release-3.2-1.el7.noarch.rpm yum -y install zabbix-agent zabbix-senderservice zabbix-agent startchkconfig zabbix-agent on 参考资料https://github.com/monitoringartist/zabbix-docker-monitoring （墙裂推荐！）https://blog.codeship.com/ensuring-containers-are-always-running-with-dockers-restart-policy/]]></content>
+      <categories>
+        <category>工作与技术</category>
+      </categories>
+      <tags>
+        <tag>zabbix</tag>
+        <tag>gitlab</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[Gitlab的配置备份]]></title>
+    <url>%2F2018%2F05%2F16%2FGitlab%E9%85%8D%E7%BD%AE%E5%A4%87%E4%BB%BD%2F</url>
+    <content type="text"><![CDATA[我这个gitlab是容器安装的，直接使用最新的gitlab镜像，gitlab版本是10.7.3。 要备份数据的话，就要进入容器里，执行gitlab-rake gitlab:backup:create，效果如下： 执行完毕之后，在/var/opt/gitlab/backups文件夹里就会生成一个备份文件，我这里生成的文件叫：1526454102_2018_05_16_10.7.3_gitlab_backup.tar，这个就是备份的文件。 如果要还原的话，命令如下： 1234567891011# 先关闭连接数据库的进程sudo gitlab-ctl stop# 通过指定时间戳来执行restore操作，这个操作会复写gitlab的数据库sudo gitlab-rake gitlab:backup:restore BACKUP=1526454102 #BACKUP后面的是备份文件开头的那串数字# 再次启动gitlabsudo gitlab-ctl start# 通过下面命令检查gitlabsudo gitlab-rake gitlab:check SANITIZE=true 注意！利用backup机制进行备份的话，对gitlab的版本是要求严格一致的。例如用8.6版的gitlab生成的备份文件，拿到8.7版的gitlab上进行恢复，是会报错的。 如果要设置这个备份文件的生命周期和备份文件存储的位置，编辑/etc/gitlab/gitlab.rb，修改如下的地方： 1234gitlab_rails[&apos;backup_path&apos;] = &quot;/var/opt/gitlab/backups&quot; #这里改新路径gitlab_rails[&apos;backup_archive_permissions&apos;] = 0644 #这里可以设定文件的权限# limit backup lifetime to 7 days - 604800 secondsgitlab_rails[&apos;backup_keep_time&apos;] = 604800 #文件存储时间一周 然后重启一下gitlab即可。]]></content>
+      <categories>
+        <category>工作与技术</category>
+      </categories>
+      <tags>
+        <tag>gitlab</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[Gitlab的简单应用]]></title>
+    <url>%2F2018%2F05%2F16%2FGitlab%E7%9A%84%E7%AE%80%E5%8D%95%E5%AE%9E%E7%94%A8%2F</url>
+    <content type="text"><![CDATA[gitlab跟svn的区别我就不多说了，这里直接说具体应用。 建立一个project先登陆到gitlab的网页，我这里使用了root用户，选择create a project，然后就是填写project的名称以及它所属的用户，这里由于只有root用户，所以这个叫jjfjj的project就是root自己的，如果建立了一个组的话，那么这里就填写那个组，如下： 下面这个Visibility Level ，就是权限等级，它分三种： Private：私有的，只有你自己或者组内的成员能访问 Internal：所有登录的用户 Public：公开的，所有人都可以访问 这个东西和project的名称都是可以后期更改的。 然后就是create project，就创建了这个jjfjj。如图: 将本地代码上传建立好了gitlab，就要把开发的代码传进去，我在另外一个机器里，创建一个目录code，这个目录就是专门用来放置代码的，假设现在里面有一个文件叫testcode.py，如图： 具体操作如下： 如果在两个不同的文件夹里执行上面的过程，会传输到两个不同的project里。说明一下上面几个命令的意思：git init：初始化git仓库git add .：添加整个目录里的所有文件到仓库git rm --cached 某个文件名：将某个文件从gitlab上撤除，如果想当前文件夹恢复成一个普通的文件夹，那就把文件夹路径下的.git文件删除掉即可git commit -m &#39;这里是要写的注释&#39;：提交代码到仓库git remote add origin +gitlab的地址(上上图里红色框的内容)：链接到gitlab服务器git push origin master：push代码到服务器git remote -v：查看当前文件夹的目标project 此时刷新一下gitlab的project页面，就看到刚刚的那个testcode.py已经传上来了。如图： 如果代码有所更改或者出现Everything up-to-date，那么就按顺序执行git add .，git commit -m &#39;这里是要写的注释&#39;，git push origin master即可。 免密码push代码在上面的git push origin master的时候需要输入gitlab的用户密码，如要需要免密码push，有两种方法。 第一种方法是ssh，请看 https://blog.whsir.com/post-1749.html/comment-page-1#comment-3425 。 第二种方法还是用http的方式传送，但是将密码写进配置文件里：执行git config --global credential.helper store，然后cat ~/.gitconfig，就会看到如下结果： 12345[user] email = chen_shuo@dahuatech.com name = root[credential] helper = store 重新去执行git add .，git commit -m &#39;这里是要写的注释&#39;，git push origin master，就不再需要输入密码了。 从gitlab上垃取代码在要部署的机器上找到要部署的文件夹，我这里用/gitlab为例，操作如下： 12345678910[root@pass-mixnumbus-001 /GITLAB] # git init #将这个文件夹进行初始化 Initialized empty Git repository in /GITLAB/.git/ #提示现在已经安装了.git文件[root@pass-mixnumbus-001 /GITLAB(master)] # git remote add origin http://114.55.224.158/root/JJFJJ.git #确定库[root@pass-mixnumbus-001 /GITLAB(master)] # git pull origin master #制定要把master分支的代码全拉取到这个文件夹里Username for 'http://114.55.224.158': root #输入账号和密码Password for 'http://root@114.55.224.158': From http://114.55.224.158/root/JJFJJ * branch master -&gt; FETCH_HEAD[root@pass-mixnumbus-001 /GITLAB(master)] # ls #看一下效果admin.py looksql.py models.py syncECS.py testsyncECS.py 再与gitlab界面的代码比较一下，果然都过来了！如图： 在gitlab上建立分支gitlab上有很多个分支，主要的分支是master，它也是默认的分支，但是实际工作中是需要其他的开发去新建一些测试的分支，到时候可以先把这些测试的分支拿来部署，如果有问题就回滚回master分支。 分支相关的语句如下： 123456git branch #查看本地分支git branch -r #查看远程分支git branch -a #查看所有分支git branch develop #本地创建新的分支，此时刷新gitlab的页面的话就会有这个叫develop的分支建立了git checkout develop #切换到新的develop分支git checkout -b develop #上面两步可以合成一个命令，这个的意思就是：创建+切换分支 这个时候在代码机上新增或者改变文件，然后执行git add .，git commit -m &#39;这里是要写的注释&#39;，git push origin develop，就把新增的变化上传到了develop分支，如图： 1234567891011[root@iZ23pg8sy5bZ ~/GITLAB(develop)] # git push origin developCounting objects: 4, done.Compressing objects: 100% (2/2), done.Writing objects: 100% (3/3), 325 bytes | 0 bytes/s, done.Total 3 (delta 1), reused 0 (delta 0)remote: remote: To create a merge request for develop, visit:remote: http://114.55.224.158/root/JJFJJ/merge_requests/new?merge_request%5Bsource_branch%5D=developremote: To http://114.55.224.158/root/JJFJJ.git fc8d456..8a97b58 develop -&gt; develop 而在部署的机器上，直接执行git pull origin develop，输入账号密码之后，就会把develop分支的内容全部垃取下来了。 如果不想要这个develop分支了，就git branch -d develop，如果要删除远程的分支，就是git push origin :develop，注意这个冒号。 参考资料https://blog.cnbluebox.com/blog/2014/04/15/gitlabde-shi-yong/https://zhang759740844.github.io/2016/08/27/git%E6%8A%80%E5%B7%A7/https://www.restran.net/2016/02/23/git-and-gitlab-guide/https://www.jianshu.com/p/f54053afecf2]]></content>
+      <categories>
+        <category>工作与技术</category>
+      </categories>
+      <tags>
+        <tag>gitlab</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[Gitlab的汉化过程]]></title>
+    <url>%2F2018%2F05%2F15%2FGitlab%E7%9A%84%E6%B1%89%E5%8C%96%E8%BF%87%E7%A8%8B%2F</url>
+    <content type="text"><![CDATA[gitlab的容器安装方法部署前的第一句话，gitlab是不支持32位系统的！ gitlab用容器部署的话非常的简单，首先docker pull gitlab/gitlab-ce:latest下载镜像，然后docker run --detach --hostname 本机外网IP --publish 443:443 --publish 80:80 --publish 2222:22 --name gitlab --restart always gitlab/gitlab-ce:latest建立一个容器，如图： 然后在浏览器的地址栏里输入服务器的外网IP地址，就到了一个更换密码的页面，这个密码就是root的密码，如图： 设定密码之后，就可以通过root账号登陆gitlab了，如图： 至于“使用ldsp方式登录”、“配置域名”和“关闭注册功能”请移步去看：https://rorschachchan.github.io/2018/05/10/在已经运行的docker容器里面使用中文/ 。 gitlab的汉化方法汉化之前，要确定gitlab的版本，先docker exec -it 容器ID env LANG=C.UTF-8 /bin/bash登陆到容器里，执行cat /opt/gitlab/embedded/service/gitlab-rails/VERSION，由于当时镜像是最新的，所以gitlab的版本是10.7.3。 还是在容器里，执行git clone https://gitlab.com/xhang/gitlab.git，克隆获取汉化版本库(这里要感谢辛苦的汉化工作者，向你们致敬！)，默认是获取最新的。如果需要下载老版本的汉化包，则要加上老版本的分支，如：git clone https://gitlab.com/xhang/gitlab.git -b v10.2.5-zh。 然后gitlab-ctl stop先停止gitlab服务，cd gitlab/进入到刚刚下载的那个git包里，执行如下代码： 123456root@10 gitlab]# git fetchroot@10 gitlab]# git diff v10.7.3 v10.7.3-zh &gt; ../10.7.3-zh.diffroot@10 gitlab]# cd ..root@10 ~]# patch -d /opt/gitlab/embedded/service/gitlab-rails -p1 &lt; 10.7.3-zh.diffroot@10 ~]# #如果提示没有patch，请执行apt-get update &amp;&amp; apt-get install patchroot@10 ~]# gitlab-ctl start 重新返回到浏览器里，就能看到汉化后的gitlab了，大功告成！ 参考资料https://xuanwo.org/2016/04/13/gitlab-install-intro/https://www.jianshu.com/p/6606aed59a56http://adairjun.github.io/2016/12/20/gitlab/https://github.com/marbleqi/gitlab-ce-zh/blob/v10.5.1-zh-patch/Nginx.md]]></content>
+      <categories>
+        <category>工作与技术</category>
+      </categories>
+      <tags>
+        <tag>gitlab</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[浅析django里models.py、views.py与网页之间的爱恨纠葛]]></title>
     <url>%2F2018%2F05%2F14%2F%E6%B5%85%E6%9E%90django%E9%87%8Cmodels-py%E3%80%81views-py%E3%80%81page%E4%B9%8B%E9%97%B4%E7%9A%84%E7%BA%A0%E8%91%9B%2F</url>
     <content type="text"><![CDATA[环境：django 2.0 + python 3.6 + pycharm 2018 django建立一个app之后就会有models.py、views.py、admin.py这几个文件，他们三个分别的用途如下： models.py主要是用来设置数据在数据库的存储格式（比如默认值，字段类型和字段长度等等）; admin.py是用来设置在/admin/后台里面的显示样式; views.py是用来设置在前台网页里的显示样式； urls.py是用来编辑域名规则； admin.py是后台配置的文件，所以对前台网页来说，它不重要，而真正与前端网页相关的就是三个部分：models.py、views.py和对应的网页。 举个例子，假设有一个models.py，内容如下： 1234567from django.db import models from django.contrib.auth.models import User class BlogType(models.Model): type_name = models.CharField(max_length=15) #规定type_name是一个最大为15字节的charfield def __str__(self): return &apos;&lt;BlogType:%s&gt;&apos; % self.type_name 然后随便加入一些内容，如图： 而在views.py里，要求在前端网页里如此的显示： 1234567from django.shortcuts import render_to_response,get_object_or_404 from .models import Blog,BlogType #这里引用了models.py里的那两个class def blog_list(request): context = &#123;&#125; context[&apos;blog_types&apos;] = BlogType.objects.all() return render_to_response(&apos;pageblog/blog_list.html&apos;,context) 在views.py里规定，如果有访问域名是/blog_list/的网页，就返回pageblog/blog_list.html这个页面，而这个blog_list.html只是一个框架，里面的内容是context。context本身是一个字典，里面的里面的key对应的value是用ojbects这个函数获得的，objects.all()就是获取全部的意思。用来填充blog_list.html的context里面有blogs和blog_types两个key。 那么现在就可以在blog_list.html里使用blog_types这个key了，如下： 1234&lt;!-- 前面略 --&gt; &lt;h4&gt;博客分类&lt;/h4&gt; &lt;h3&gt; &#123;&#123; blog_types&#125;&#125; &lt;/h3&gt; &lt;!-- 后面略 --&gt; 这样的效果如下： 返回的是QuerySet类型，QuerySet是Django的查询集，可以通过QuerySet条件查询得到对应模型的对象集合。由此看出blog_types已经成功的引入到了blog_list.html里。 至于拆成每一个“博客类型”就很简单了，html部分如下： 12345678910&lt;h4&gt;博客分类&lt;/h4&gt; &lt;!-- ul是无项目的标签 --&gt; &lt;ul&gt; &#123;% for blog_type in blog_types%&#125; #开始一个for循环 &lt;li&gt;&lt;a href=&quot;&#123;% url &apos;blogs_with_type&apos; blog_type.pk %&#125;&quot;&gt;&#123;&#123; blog_type.type_name &#125;&#125; &lt;/a&gt;&lt;/li&gt; #对每一个类型加上一个a链接 &#123;% empty %&#125; #如果唯空就说“暂无分类” &lt;!-- li是具体的项目 --&gt; &lt;li&gt; 暂无分类 &lt;/li&gt; &#123;% endfor %&#125; &lt;/ul&gt;]]></content>
@@ -137,6 +285,18 @@
       <tags>
         <tag>grafana</tag>
         <tag>图像监控</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[用非root启动进程以及启动docker]]></title>
+    <url>%2F2018%2F04%2F18%2F%E7%94%A8%E9%9D%9Eroot%E5%90%AF%E5%8A%A8%E8%BF%9B%E7%A8%8B%E4%BB%A5%E5%8F%8A%E5%90%AF%E5%8A%A8docker%2F</url>
+    <content type="text"><![CDATA[使用非root用户启动普通进程使用非root用户启动进程是运维安全的一个主要环节，拿tomcat进程来说，如果是使用root用户去启动了tomcat，那么有一个严重的问题，那就是tomcat具有root权限。这意味着你的任何一个jsp脚本都具有root权限，所以那些不怀好意的人可以轻易地用jsp脚本去搞破坏，甚至删除你整个硬盘里的东西！所以为了活着，我们要极力避免这种现象。 很多的软件都自带的用户/用户组，比如nginx、zabbix、elasticsearch，但是也有更多的软件没有这么贴心的服务，这就需要我们手动的更改了。 docker不应该使用root启动1.8版本之前的docker是不支持user namespace的，所以那样的话，如果在docker容器内部使用root运行app，那么不可否认，这个root和宿主机的root是同一个UID。但是，需要特别注意的是，容器内的root与宿主机上的root权限并不一定是相等的。 但是为了绝对的安全，还是推荐把docker升级到1.8以上，然后彻底避免用root去启动容器，在http://www.projectatomic.io/docs/docker-image-author-guidance/里最下面一段也明文说了---生产环境里不要用root用户去启动docker!!! 使用非root用户启动docker的办法如下：创建docker组：sudo groupadd docker将当前用户加入docker组：sudo gpasswd -a ${USER} docker重新启动docker服务：sudo service docker restart或sudo systemctl restart docker当前用户退出系统再重新登陆。 参考资料https://www.zhihu.com/question/25580965]]></content>
+      <categories>
+        <category>工作与技术</category>
+      </categories>
+      <tags>
+        <tag>docker</tag>
+        <tag>安全</tag>
       </tags>
   </entry>
   <entry>
