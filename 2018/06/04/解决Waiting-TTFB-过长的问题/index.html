@@ -98,7 +98,10 @@
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://yoursite.com/images/TTFB1.png">
 <meta property="og:image" content="http://yoursite.com/images/TTFB.jpg">
-<meta property="og:updated_time" content="2018-06-04T10:22:57.314Z">
+<meta property="og:image" content="http://yoursite.com/images/CDN1.png">
+<meta property="og:image" content="http://yoursite.com/images/CDN2.png">
+<meta property="og:image" content="http://yoursite.com/images/CDN3.png">
+<meta property="og:updated_time" content="2019-03-13T09:37:26.481Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="解决Waiting(TTFB)过长的问题">
 <meta name="twitter:description" content="当你遇到一堆不听话的开发，就是这么辛苦">
@@ -428,7 +431,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  393
+                  597
                 </span>
               
 
@@ -444,7 +447,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  1
+                  2
                 </span>
               
             </div>
@@ -474,6 +477,11 @@
 <p>于是乎检查网络情况以及各应用负载情况，都是OK的，重定向也很少。那么就减少DNS查询，把所有能用IP的地方都替换了域名，比如nginx的<code>localhost</code>里使用对应服务器的域名而不是127.0.0.1，比如在配置文件里的阿里云的数据库和redis都用IP地址替代。然而收效甚微，该慢依旧是慢。</p>
 <p>这个时候就返回到后台去查看，左翻翻右翻翻，最后找到了这个地方，如图：<br><img src="/images/TTFB.jpg" alt="akb48"></p>
 <p>启动全页缓存，一切就都好了…</p>
+<h2><span id="补充故障">补充故障</span></h2><p>前端妹子跑来问一个问题，界面上一个1.1k的js文件，为什么加载用248ms？如图：<br><img src="/images/CDN1.png" alt="akb48"></p>
+<p>可见大量时间都用在了<code>Content Download</code>上，但是这个文件明明已经很小了。况且旁边还有150K左右的文件也用了不到80ms，可见应该不全是网络传输慢那么简单。</p>
+<p>看了一下这个js的细节，发现这个js需要去访问阿里云的OSS资源。如图：<br><img src="/images/CDN2.png" alt="akb48"></p>
+<p>是不是时间花费在访问资源上了呢，于是我单独访问一下这个png图片，发现单独访问的时间根本不长：<br><img src="/images/CDN3.png" alt="akb48"></p>
+<p>这个js已经没有压缩的余地了，那么究竟是什么这么消耗时间？这个我要慢慢查，先把问题记录一下…</p>
 <h2><span id="参考资料">参考资料</span></h2><p><a href="https://www.oschina.net/question/244077_221319" target="_blank" rel="noopener">https://www.oschina.net/question/244077_221319</a></p>
 
       
@@ -709,7 +717,7 @@ var jiathis_config={
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">138</span>
+                  <span class="site-state-item-count">225</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -720,7 +728,7 @@ var jiathis_config={
               
               <div class="site-state-item site-state-categories">
                 
-                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-count">9</span>
                   <span class="site-state-item-name">分类</span>
                 
               </div>
@@ -731,7 +739,7 @@ var jiathis_config={
               
               <div class="site-state-item site-state-tags">
                 
-                  <span class="site-state-item-count">115</span>
+                  <span class="site-state-item-count">186</span>
                   <span class="site-state-item-name">标签</span>
                 
               </div>
@@ -871,7 +879,7 @@ show_date_time();
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text"><span id="&#x6B63;&#x6587;">&#x6B63;&#x6587;</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">2.</span> <span class="nav-text"><span id="&#x53C2;&#x8003;&#x8D44;&#x6599;">&#x53C2;&#x8003;&#x8D44;&#x6599;</span></span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text"><span id="&#x6B63;&#x6587;">&#x6B63;&#x6587;</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">2.</span> <span class="nav-text"><span id="&#x8865;&#x5145;&#x6545;&#x969C;">&#x8865;&#x5145;&#x6545;&#x969C;</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">3.</span> <span class="nav-text"><span id="&#x53C2;&#x8003;&#x8D44;&#x6599;">&#x53C2;&#x8003;&#x8D44;&#x6599;</span></span></a></li></ol></div>
             
 
           </div>
@@ -893,7 +901,7 @@ show_date_time();
     <footer id="footer" class="footer">
       <div class="footer-inner">
         <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-<div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+<div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>
@@ -924,7 +932,7 @@ show_date_time();
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">博客全站共130.6k字</span>
+  <span class="post-count">博客全站共231.7k字</span>
 </div>
         
 

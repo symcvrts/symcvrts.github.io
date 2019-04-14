@@ -100,7 +100,7 @@
 <meta property="og:image" content="http://yoursite.com/images/google2.png">
 <meta property="og:image" content="http://yoursite.com/images/google3.png">
 <meta property="og:image" content="http://yoursite.com/images/google4.png">
-<meta property="og:updated_time" content="2018-01-22T02:32:42.229Z">
+<meta property="og:updated_time" content="2019-02-21T12:05:15.795Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="使用Google Authenticator给ssh进行登录验证">
 <meta name="twitter:description" content="给Linux服务器再加一把锁">
@@ -430,7 +430,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  1,645
+                  1,714
                 </span>
               
 
@@ -483,15 +483,11 @@
 <p>注意！修改了这步之后，服务器千万不能断开连接，否则再连是需要google验证码的，而我们现在还没有生成码，所以肯定是无法连接服务器，如果是云服务器，可以通过登陆控制台的方式把这个文件修改回来，如果是实体服务器，那就呵呵呵了。</p>
 <p>2）编辑<code>/etc/ssh/sshd_config</code>，就修改一个地方：<code>ChallengeResponseAuthentication yes</code><br>3）保存退出之后，重启一下ssh服务：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">RHEL6 /Centos6：Service sshd restart</span><br><span class="line">RHEL7 /Centos7：Systemctl resart sshd</span><br></pre></td></tr></table></figure></p>
 <h2><span id="生成登陆验证码">生成登陆验证码</span></h2><p>这次以root用户为例，那么切换成root用户执行下面的过程。<br>1）执行<code>google-authenticator</code>，由于我们之前已经安装了<code>qrencode</code>，那么这个时候会生成一个超级超级巨大的二维码，给各位感受一下：<br><img src="/images/google3.png" alt="办公室"></p>
-<p>红色内容是生成的密钥，很重要。绿色的内容是备用的紧急救助码，紧急救助码就是当你无法获取认证码时（比如手机丢了），可以当做认证码来用，每用一个少一个，但其实可以手动添加的，建议如果 root 账户使用 Google Authenticator 的话一定要把紧急救助码另外保存一份。</p>
-<pre><code>Do you want me to update your &quot;/home/test/.google_authenticator&quot; file? (y/n) y
-</code></pre><p>是否更新用户的 Google Authenticator 配置文件，选择 y 才能使上面操作对当前用户生效，其实就是在对应用户的 Home 目录下生成了一个 .google_authenticator 文件，如果你想停用这个用户的 Google Authenticator 验证，只需要删除这个用户 Home 目录下的 .google_authenticator 文件就可以了。</p>
-<pre><code>Do you want to disallow multiple uses of the same authentication token? This restricts you to one login about every 30s, but it increases your chances to notice or even prevent man-in-the-middle attacks (y/n) y
-</code></pre><p>每次生成的认证码是否同时只允许一个人使用？这里选择 y。</p>
-<pre><code>By default, tokens are good for 30 seconds. In order to compensate for possible time-skew between the client and the server, we allow an extra token before and after the current time. If you experience problems with poor time synchronization, you can increase the window from its default size of +-1min (window size of 3) to about +-4min (window size of 17 acceptable tokens). Do you want to do so? (y/n) n
-</code></pre><p>是否增加时间误差？这里随便选择， ny都可以。</p>
-<pre><code>If the computer that you are logging into isn&apos;t hardened against brute-force login attempts, you can enable rate-limiting for the authentication module. By default, this limits attackers to no more than 3 login attempts every 30s. Do you want to enable rate-limiting (y/n) y
-</code></pre><p>是否启用次数限制？这里选择 y，默认每 30 秒最多尝试登录 3 次。</p>
+<p>红色内容是生成的密钥，很重要。绿色的内容是备用的紧急救助码，紧急救助码就是当你无法获取认证码时（比如手机丢了），可以当做认证码来用，每用一个少一个，但其实可以手动添加的，建议如果 root 账户使用 Google Authenticator 的话一定要把紧急救助码另外保存一份。<br>    <figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Do you want me to update your "/home/test/.google_authenticator" file? (y/n) y</span><br></pre></td></tr></table></figure></p>
+<p>是否更新用户的 Google Authenticator 配置文件，选择 y 才能使上面操作对当前用户生效，其实就是在对应用户的 Home 目录下生成了一个 .google_authenticator 文件，如果你想停用这个用户的 Google Authenticator 验证，只需要删除这个用户 Home 目录下的 .google_authenticator 文件就可以了。<br>    <figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Do you want to disallow multiple uses of the same authentication token? This restricts you to one login about every 30s, but it increases your chances to notice or even prevent man-in-the-middle attacks (y/n) y</span><br></pre></td></tr></table></figure></p>
+<p>每次生成的认证码是否同时只允许一个人使用？这里选择 y。<br>    <figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">By default, tokens are good for 30 seconds. In order to compensate for possible time-skew between the client and the server, we allow an extra token before and after the current time. If you experience problems with poor time synchronization, you can increase the window from its default size of +-1min (window size of 3) to about +-4min (window size of 17 acceptable tokens). Do you want to do so? (y/n) n</span><br></pre></td></tr></table></figure></p>
+<p>是否增加时间误差？这里随便选择， ny都可以。<br>    <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">If the computer that you are logging into isn<span class="string">'t hardened against brute-force login attempts, you can enable rate-limiting for the authentication module. By default, this limits attackers to no more than 3 login attempts every 30s. Do you want to enable rate-limiting (y/n) y</span></span><br></pre></td></tr></table></figure></p>
+<p>是否启用次数限制？这里选择 y，默认每 30 秒最多尝试登录 3 次。</p>
 <p>如果想要写成脚本的话，那么上面交互式的设置也可用通过参数一次性设置：<code>google-authenticator -t -f -d -l test@chen.super -i MR.chen -r 3 -R 30 -W</code>。</p>
 <p>-I和-i是可以随便写的，但是-i后期可以改，-I不能改。</p>
 <h2><span id="搭配手机端">搭配手机端</span></h2><p>如果手机是ios，就去apple store里搜索“Google Authenticator”，如果是安卓，就去应用商店搜索“谷歌动态口令”。</p>
@@ -504,6 +500,7 @@
 <p>然后更改/etc/pam.d/sshd内的路径配置:<code>auth required pam_google_authenticator.so user=root secret=/PATH_FOLDER/${USER}</code>。</p>
 <p>上面那句话里“user=root” 用于强制PAM使用root用户权限来搜索文件。</p>
 <p>另外请注意，由于我们当时切换成了root用户，所以密钥文件的所有者是root，生成文件的用户只能读取文件(chmod: 400)：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">chown root.root /PATH_FILE/SECRET_KEY_FILES</span><br><span class="line">chmod <span class="number">400</span> /PATH_FILE/SECRET_KEY_FILES</span><br></pre></td></tr></table></figure></p>
+<h2><span id="使用chrome浏览器查看mfa">使用chrome浏览器查看mfa</span></h2><p>如果你没有带手机，如何查看mfa呢？请使用chrome的插件<a href="http://gauth.apps.gbraad.nl/" target="_blank" rel="noopener">http://gauth.apps.gbraad.nl/</a> 。 然后手动添加即可，但是要注意，这台电脑不能断网太久哦，不然就会自动删除。</p>
 
       
     </div>
@@ -740,7 +737,7 @@ var jiathis_config={
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">138</span>
+                  <span class="site-state-item-count">225</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -751,7 +748,7 @@ var jiathis_config={
               
               <div class="site-state-item site-state-categories">
                 
-                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-count">9</span>
                   <span class="site-state-item-name">分类</span>
                 
               </div>
@@ -762,7 +759,7 @@ var jiathis_config={
               
               <div class="site-state-item site-state-tags">
                 
-                  <span class="site-state-item-count">115</span>
+                  <span class="site-state-item-count">186</span>
                   <span class="site-state-item-name">标签</span>
                 
               </div>
@@ -902,7 +899,7 @@ show_date_time();
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text"><span id="&#x5B89;&#x88C5;&#x524D;&#x51C6;&#x5907;">&#x5B89;&#x88C5;&#x524D;&#x51C6;&#x5907;</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">2.</span> <span class="nav-text"><span id="&#x5B89;&#x88C5;&#x8C37;&#x6B4C;&#x8EAB;&#x4EFD;&#x9A8C;&#x8BC1;&#x5668;">&#x5B89;&#x88C5;&#x8C37;&#x6B4C;&#x8EAB;&#x4EFD;&#x9A8C;&#x8BC1;&#x5668;</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">3.</span> <span class="nav-text"><span id="&#x8C03;&#x6574;&#x767B;&#x9646;&#x65B9;&#x5F0F;">&#x8C03;&#x6574;&#x767B;&#x9646;&#x65B9;&#x5F0F;</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">4.</span> <span class="nav-text"><span id="&#x751F;&#x6210;&#x767B;&#x9646;&#x9A8C;&#x8BC1;&#x7801;">&#x751F;&#x6210;&#x767B;&#x9646;&#x9A8C;&#x8BC1;&#x7801;</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">5.</span> <span class="nav-text"><span id="&#x642D;&#x914D;&#x624B;&#x673A;&#x7AEF;">&#x642D;&#x914D;&#x624B;&#x673A;&#x7AEF;</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">6.</span> <span class="nav-text"><span id="&#x66F4;&#x6539;&#x5B58;&#x50A8;&#x4F4D;&#x7F6E;">&#x66F4;&#x6539;&#x5B58;&#x50A8;&#x4F4D;&#x7F6E;</span></span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text"><span id="&#x5B89;&#x88C5;&#x524D;&#x51C6;&#x5907;">&#x5B89;&#x88C5;&#x524D;&#x51C6;&#x5907;</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">2.</span> <span class="nav-text"><span id="&#x5B89;&#x88C5;&#x8C37;&#x6B4C;&#x8EAB;&#x4EFD;&#x9A8C;&#x8BC1;&#x5668;">&#x5B89;&#x88C5;&#x8C37;&#x6B4C;&#x8EAB;&#x4EFD;&#x9A8C;&#x8BC1;&#x5668;</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">3.</span> <span class="nav-text"><span id="&#x8C03;&#x6574;&#x767B;&#x9646;&#x65B9;&#x5F0F;">&#x8C03;&#x6574;&#x767B;&#x9646;&#x65B9;&#x5F0F;</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">4.</span> <span class="nav-text"><span id="&#x751F;&#x6210;&#x767B;&#x9646;&#x9A8C;&#x8BC1;&#x7801;">&#x751F;&#x6210;&#x767B;&#x9646;&#x9A8C;&#x8BC1;&#x7801;</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">5.</span> <span class="nav-text"><span id="&#x642D;&#x914D;&#x624B;&#x673A;&#x7AEF;">&#x642D;&#x914D;&#x624B;&#x673A;&#x7AEF;</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">6.</span> <span class="nav-text"><span id="&#x66F4;&#x6539;&#x5B58;&#x50A8;&#x4F4D;&#x7F6E;">&#x66F4;&#x6539;&#x5B58;&#x50A8;&#x4F4D;&#x7F6E;</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">7.</span> <span class="nav-text"><span id="&#x4F7F;&#x7528;chrome&#x6D4F;&#x89C8;&#x5668;&#x67E5;&#x770B;mfa">&#x4F7F;&#x7528;chrome&#x6D4F;&#x89C8;&#x5668;&#x67E5;&#x770B;mfa</span></span></a></li></ol></div>
             
 
           </div>
@@ -924,7 +921,7 @@ show_date_time();
     <footer id="footer" class="footer">
       <div class="footer-inner">
         <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-<div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+<div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>
@@ -955,7 +952,7 @@ show_date_time();
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">博客全站共130.6k字</span>
+  <span class="post-count">博客全站共231.7k字</span>
 </div>
         
 

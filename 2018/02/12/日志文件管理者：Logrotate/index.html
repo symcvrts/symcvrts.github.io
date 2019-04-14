@@ -101,7 +101,7 @@
 <meta property="og:image" content="http://yoursite.com/images/logrotate3.png">
 <meta property="og:image" content="http://yoursite.com/images/logrotate4.png">
 <meta property="og:image" content="http://yoursite.com/images/logrotate5.png">
-<meta property="og:updated_time" content="2018-02-12T12:07:05.274Z">
+<meta property="og:updated_time" content="2019-02-15T07:44:35.538Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="日志文件管理者：Logrotate">
 <meta name="twitter:description" content="rotate是“轮转、交替、转动、试转动”的意思">
@@ -431,7 +431,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  1,025
+                  1,044
                 </span>
               
 
@@ -489,7 +489,7 @@
 <p>而这个<code>restart.sh</code>的内容很简单:<br>    <figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line">cd /mnt &amp;&amp; ./stopAUC.sh    #停止auc进程</span><br><span class="line">cd /mnt &amp;&amp; ./startAUC.sh    #启动auc进程</span><br><span class="line">echo HAHAHAHA！！！    #表示已经OK了，让我们发出杠铃一般的笑声</span><br></pre></td></tr></table></figure></p>
 <p>现在我们重新跑一下logrotate，<code>logrotate -vf /etc/logrotate.conf</code>。看一下效果：<br><img src="/images/logrotate4.png" alt="paradin"></p>
 <p>可以看到先把日志改名压缩，完事后也执行了<code>restart.sh</code>这个脚本，再日志里一看，<code>auc.log</code>也顺利生成了！<br><img src="/images/logrotate5.png" alt="paradin"></p>
-<h2><span id="参考资料">参考资料</span></h2><p><a href="http://www.pythondev.org/post/8.html" target="_blank" rel="noopener">http://www.pythondev.org/post/8.html</a></p>
+<h2><span id="参考资料">参考资料</span></h2><p><a href="http://www.pythondev.org/post/8.html" target="_blank" rel="noopener">http://www.pythondev.org/post/8.html</a><br><a href="https://www.jianshu.com/p/87e2fd01393c?utm_campaign=maleskine&amp;utm_content=note&amp;utm_medium=seo_notes&amp;utm_source=recommendation" target="_blank" rel="noopener">https://www.jianshu.com/p/87e2fd01393c?utm_campaign=maleskine&amp;utm_content=note&amp;utm_medium=seo_notes&amp;utm_source=recommendation</a><br><a href="https://segmentfault.com/q/1010000000120419" target="_blank" rel="noopener">https://segmentfault.com/q/1010000000120419</a></p>
 
       
     </div>
@@ -726,7 +726,7 @@ var jiathis_config={
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">138</span>
+                  <span class="site-state-item-count">225</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -737,7 +737,7 @@ var jiathis_config={
               
               <div class="site-state-item site-state-categories">
                 
-                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-count">9</span>
                   <span class="site-state-item-name">分类</span>
                 
               </div>
@@ -748,7 +748,7 @@ var jiathis_config={
               
               <div class="site-state-item site-state-tags">
                 
-                  <span class="site-state-item-count">115</span>
+                  <span class="site-state-item-count">186</span>
                   <span class="site-state-item-name">标签</span>
                 
               </div>
@@ -910,7 +910,7 @@ show_date_time();
     <footer id="footer" class="footer">
       <div class="footer-inner">
         <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-<div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+<div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>
@@ -941,7 +941,7 @@ show_date_time();
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">博客全站共130.6k字</span>
+  <span class="post-count">博客全站共231.7k字</span>
 </div>
         
 
