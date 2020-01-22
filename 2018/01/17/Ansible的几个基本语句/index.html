@@ -96,7 +96,7 @@
 <meta property="og:site_name" content="Chris Chan&#39;s BLOG">
 <meta property="og:description" content="Ansible的基础用法">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-01-22T02:27:27.780Z">
+<meta property="og:updated_time" content="2019-08-26T04:17:46.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Ansible的几个基本语句">
 <meta name="twitter:description" content="Ansible的基础用法">
@@ -425,7 +425,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  1,135
+                  1,176
                 </span>
               
 
@@ -485,6 +485,7 @@
 <p>11)<code>ansible 10.168.194.89 -m synchronize -a &quot;mode=pull src=/chenshuo/nba.txt dest=/chenshuo/a.txt&quot;</code><br>将10.168.194.89这台服务器上的/chenshuo/nba.txt拉到控制服务器的/chenshuo文件夹下，顺便改名叫a.txt。</p>
 <p>12)<code>ansible all -m get_url -a &quot;url=https://pypi.python.org/packages/56/2b/9c9c113fb88082950067a42cc99e3c61f1df72035f89bb0bdf0a60308ca0/pexpect-4.1.0.tar.gz#md5=562a1a21f2a60b36dfd5d906dbf0943e dest=/chenshuo&quot;</code><br>把那一大串网址的下载连接下载到host文件里的所有ip的/chenshuo文件夹下。</p>
 <p>13)<code>ansible 10.117.14.37 -m script -a &quot;/chenshuo/free.sh&quot;</code><br>在10.117.14.37上执行操作端的free.sh，注意操作端必须要有free.sh这个脚本，而10.117.14.37这台机器上并不一定要有。</p>
+<h2><span id="补充">补充</span></h2><p>如果ansible启动的时候爆RequestsDependencyWarning: urllib3 (1.21.1) or chardet (2.2.1) doesn’t match a supported version!的错误，需要pip卸载urllib3和chardet，再pip安装requests即可。</p>
 <h2><span id="参考资料">参考资料</span></h2><p><a href="http://blog.csdn.net/iloveyin/article/details/46982023" target="_blank" rel="noopener">http://blog.csdn.net/iloveyin/article/details/46982023</a></p>
 
       
@@ -722,7 +723,7 @@ var jiathis_config={
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">225</span>
+                  <span class="site-state-item-count">284</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -744,7 +745,7 @@ var jiathis_config={
               
               <div class="site-state-item site-state-tags">
                 
-                  <span class="site-state-item-count">186</span>
+                  <span class="site-state-item-count">242</span>
                   <span class="site-state-item-name">标签</span>
                 
               </div>
@@ -884,7 +885,7 @@ show_date_time();
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text"><span id="&#x5F00;&#x7BC7;&#x7684;&#x5E9F;&#x8BDD;">&#x5F00;&#x7BC7;&#x7684;&#x5E9F;&#x8BDD;</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">2.</span> <span class="nav-text"><span id="&#x5177;&#x4F53;&#x8BED;&#x53E5;">&#x5177;&#x4F53;&#x8BED;&#x53E5;</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">3.</span> <span class="nav-text"><span id="&#x53C2;&#x8003;&#x8D44;&#x6599;">&#x53C2;&#x8003;&#x8D44;&#x6599;</span></span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text"><span id="&#x5F00;&#x7BC7;&#x7684;&#x5E9F;&#x8BDD;">&#x5F00;&#x7BC7;&#x7684;&#x5E9F;&#x8BDD;</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">2.</span> <span class="nav-text"><span id="&#x5177;&#x4F53;&#x8BED;&#x53E5;">&#x5177;&#x4F53;&#x8BED;&#x53E5;</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">3.</span> <span class="nav-text"><span id="&#x8865;&#x5145;">&#x8865;&#x5145;</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">4.</span> <span class="nav-text"><span id="&#x53C2;&#x8003;&#x8D44;&#x6599;">&#x53C2;&#x8003;&#x8D44;&#x6599;</span></span></a></li></ol></div>
             
 
           </div>
@@ -906,7 +907,7 @@ show_date_time();
     <footer id="footer" class="footer">
       <div class="footer-inner">
         <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-<div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+<div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>
@@ -937,7 +938,7 @@ show_date_time();
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">博客全站共231.7k字</span>
+  <span class="post-count">博客全站共314.1k字</span>
 </div>
         
 

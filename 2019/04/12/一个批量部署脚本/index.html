@@ -75,7 +75,7 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="python,多线程," />
 
 
 
@@ -88,14 +88,21 @@
 
 
 
+<meta name="description" content="缓存设计两条规则：1.越靠近用户的请求越好，比如能用本地缓存的就不要发送HTTP请求，能用CDN缓存的就不要打到Web服务器，能用Nginx缓存的就不要用数据库的缓存；2.尽量使用本进程和本机的缓存解决，因为跨了进程和机器甚至机房，缓存的网络开销就会非常大，在高并发的时候会非常明显。">
+<meta name="keywords" content="python,多线程">
 <meta property="og:type" content="article">
-<meta property="og:title" content="一个批量部署脚本">
+<meta property="og:title" content="一个批量部署脚本（未完成）">
 <meta property="og:url" content="http://yoursite.com/2019/04/12/一个批量部署脚本/index.html">
 <meta property="og:site_name" content="Chris Chan&#39;s BLOG">
+<meta property="og:description" content="缓存设计两条规则：1.越靠近用户的请求越好，比如能用本地缓存的就不要发送HTTP请求，能用CDN缓存的就不要打到Web服务器，能用Nginx缓存的就不要用数据库的缓存；2.尽量使用本进程和本机的缓存解决，因为跨了进程和机器甚至机房，缓存的网络开销就会非常大，在高并发的时候会非常明显。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-04-12T08:40:16.664Z">
+<meta property="og:image" content="http://yoursite.com/images/multiprocessing1.png">
+<meta property="og:image" content="http://yoursite.com/images/手刀秒饿狼.gif">
+<meta property="og:updated_time" content="2019-04-29T12:04:38.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="一个批量部署脚本">
+<meta name="twitter:title" content="一个批量部署脚本（未完成）">
+<meta name="twitter:description" content="缓存设计两条规则：1.越靠近用户的请求越好，比如能用本地缓存的就不要发送HTTP请求，能用CDN缓存的就不要打到Web服务器，能用Nginx缓存的就不要用数据库的缓存；2.尽量使用本进程和本机的缓存解决，因为跨了进程和机器甚至机房，缓存的网络开销就会非常大，在高并发的时候会非常明显。">
+<meta name="twitter:image" content="http://yoursite.com/images/multiprocessing1.png">
 
 
 
@@ -131,7 +138,7 @@
 
 
 
-  <title>一个批量部署脚本 | Chris Chan's BLOG</title>
+  <title>一个批量部署脚本（未完成） | Chris Chan's BLOG</title>
   
 
 
@@ -331,7 +338,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">一个批量部署脚本</h1>
+          <h1 class="post-title" itemprop="name headline">一个批量部署脚本（未完成）</h1>
         
 
         <div class="post-meta">
@@ -354,6 +361,28 @@
           </span>
 
           
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/工作与技术/" itemprop="url" rel="index">
+                    <span itemprop="name">工作与技术</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
 
           
             
@@ -373,7 +402,7 @@
 
           
           
-             <span id="/2019/04/12/一个批量部署脚本/" class="leancloud_visitors" data-flag-title="一个批量部署脚本">
+             <span id="/2019/04/12/一个批量部署脚本/" class="leancloud_visitors" data-flag-title="一个批量部署脚本（未完成）">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -399,7 +428,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  0
+                  779
                 </span>
               
 
@@ -415,12 +444,16 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  1
+                  3
                 </span>
               
             </div>
           
 
+          
+              <div class="post-description">
+                  缓存设计两条规则：1.越靠近用户的请求越好，比如能用本地缓存的就不要发送HTTP请求，能用CDN缓存的就不要打到Web服务器，能用Nginx缓存的就不要用数据库的缓存；2.尽量使用本进程和本机的缓存解决，因为跨了进程和机器甚至机房，缓存的网络开销就会非常大，在高并发的时候会非常明显。
+              </div>
           
 
         </div>
@@ -436,7 +469,18 @@
       
 
       
-        <script src="\assets\js\APlayer.min.js"> </script>
+        <script src="\assets\js\APlayer.min.js"> </script><h2><span id="脚本设计">脚本设计</span></h2><p>首先安装ansible，并且用group1,group2…对相同模块的服务器进行分组，注意！group1只能是一台服务器，剩下的服务器均摊。</p>
+<p>按模块依赖顺序输入，模块名称用逗号分隔。进行for循环，先使用ansible对group1进行部署工作，部署模块并且启动之后，暂停600秒，让开发利用这10分钟检查日志和配置项是否有问题，如果有问题就ctrl+c，在暂停600秒的同时，脚本新开一个进程A，paramiko到第一台服务器里，检查日志是否出现ERROR等关键字样，如果有就输出，600秒结束之后，关闭线程A，继续部署group2，直至名单里所有的模块都部署完毕。</p>
+<p>作画的意思如下：<br><img src="/images/multiprocessing1.png" alt="akb48"></p>
+<h2><span id="用python去实现tailf功能">用python去实现tailf功能</span></h2><p>在shell下执行<code>tail -f</code>就是一句话的事，但是用python实现则需要一个脚本了，内容如下：<br>    <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/env python</span></span><br><span class="line"><span class="comment">#coding=utf-8</span></span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">watch</span><span class="params">(fn, words)</span>:</span></span><br><span class="line">    fp = open(fn, <span class="string">'r'</span>)</span><br><span class="line">    <span class="keyword">while</span> <span class="keyword">True</span>:</span><br><span class="line">        new = fp.readline()</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> new:</span><br><span class="line">            <span class="keyword">for</span> word <span class="keyword">in</span> words:</span><br><span class="line">                <span class="keyword">if</span> word <span class="keyword">in</span> new:</span><br><span class="line">                    <span class="keyword">yield</span> (word, new)</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            time.sleep(<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">fn = <span class="string">'文件路径'</span></span><br><span class="line">words = [<span class="string">'关键词'</span>]</span><br><span class="line"><span class="keyword">for</span> hit_word, hit_sentence <span class="keyword">in</span> watch(fn, words):</span><br><span class="line">    <span class="keyword">print</span> <span class="string">"发现关键词 %r 在日志里: %r"</span> % (hit_word, hit_sentence)</span><br></pre></td></tr></table></figure></p>
+<h2><span id="python实现线程通信">python实现线程通信</span></h2><p>假设我们有一个函数叫AAA，希望脚本能开两个线程，线程A是等待5秒，线程B是不断的执行AAA（），直到5秒结束，线程B也停止线程AAA（）。那么脚本如下：</p>
+<h2><span id="按行读取文件取各种集合">按行读取文件取各种集合</span></h2><p>python对于两个字典求交集（&amp;），差集（-），全集（|）比较简单，而对于两个文件按行取集合的方法如下：<br>    <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># -*- coding: utf-8 -*-</span></span><br><span class="line">s1 = set(open(<span class="string">r'C:\Users\33664\Desktop\aaa.txt'</span>,<span class="string">'r'</span>).readlines())</span><br><span class="line">s2 = set(open(<span class="string">r'C:\Users\33664\Desktop\bbb.txt'</span>,<span class="string">'r'</span>).readlines())</span><br><span class="line"></span><br><span class="line"><span class="keyword">print</span> (<span class="string">'交集是: %s'</span> % (s1.intersection(s2)))</span><br><span class="line"><span class="keyword">print</span> (<span class="string">'并集是: %s'</span> % (s1.union(s2)))</span><br><span class="line"><span class="keyword">print</span> (<span class="string">'差集是: %s'</span>%(s1.difference(s2)))</span><br><span class="line"><span class="keyword">print</span> (<span class="string">'dif: %s'</span>%(s1.difference(s2).union(s2.difference(s1))))</span><br></pre></td></tr></table></figure></p>
+<h2><span id="_的问题">_的问题</span></h2><p>有些python脚本在for循环里会有这样的代码：<br>    <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> _ <span class="keyword">in</span> range(<span class="number">5</span>)</span><br><span class="line">	<span class="keyword">print</span> (<span class="string">"我想放假，我想放假"</span>)</span><br></pre></td></tr></table></figure></p>
+<p>这里面的独立_其实没有特殊的意义，仅仅是是用作一个名字，来表示某个变量是临时的或无关紧要的。</p>
+<p>不过_还有其他的用途，它可以展示最近的一次表达式的结果，比如：<br>    <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="number">20</span> + <span class="number">3</span></span><br><span class="line"><span class="number">23</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>_</span><br><span class="line"><span class="number">23</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>print(_)</span><br><span class="line"><span class="number">23</span></span><br></pre></td></tr></table></figure></p>
+<h2><span id="额外补充">额外补充</span></h2><p>1.tailf命令主动停止命令：<code>tail -f 目标日志|sed &#39;/启动成功/Q&#39;</code>，此语句会在”启动成功”打印时退出，但log只能打印到”启动成功”的上一行；<br>2.<code>subprocess.call(&quot;命令1&quot;)</code>，命令1是按顺序执行的，效果等同于<code>subprocess.Popen(&quot;命令1&quot;).wait()</code>；<code>subprocess.Popen(&quot;命令2&quot;)</code>，命令2是与前一个命令并发进行的；  </p>
+<h2><span id="参考资料">参考资料</span></h2><p><a href="https://stackoverflow.com/questions/1703640/how-to-implement-a-pythonic-equivalent-of-tail-f" target="_blank" rel="noopener">https://stackoverflow.com/questions/1703640/how-to-implement-a-pythonic-equivalent-of-tail-f</a><br><a href="https://python3-cookbook.readthedocs.io/zh_CN/latest/c12/p03_communicating_between_threads.html" target="_blank" rel="noopener">https://python3-cookbook.readthedocs.io/zh_CN/latest/c12/p03_communicating_between_threads.html</a><br><a href="https://stackoverflow.com/questions/22698754/subprocess-calls-are-they-done-in-parallel/22698825#22698825" target="_blank" rel="noopener">https://stackoverflow.com/questions/22698754/subprocess-calls-are-they-done-in-parallel/22698825#22698825</a><br><img src="/images/手刀秒饿狼.gif" alt="akb48" title="琦玉与饿狼的第一次会面"></p>
+
       
     </div>
     
@@ -500,7 +544,7 @@
 
 				<li class="post-copyright-link">
 					<strong>本文标题：</strong>
-					<a href="http://yoursite.com/2019/04/12/一个批量部署脚本/" title="一个批量部署脚本">一个批量部署脚本</a>
+					<a href="http://yoursite.com/2019/04/12/一个批量部署脚本/" title="一个批量部署脚本（未完成）">一个批量部署脚本（未完成）</a>
 				</li>
 
 				<li class="post-copyright-date">
@@ -515,6 +559,14 @@
 			
 		</div>
 	
+      
+        <div class="post-tags">
+          
+            <a href="/tags/python/" rel="tag"><i class="fa fa-tag"></i> python</a>
+          
+            <a href="/tags/多线程/" rel="tag"><i class="fa fa-tag"></i> 多线程</a>
+          
+        </div>
       
 
       
@@ -547,6 +599,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/04/15/在Django里插入paramiko，实现批量操作/" rel="prev" title="在Django里插入paramiko实现批量操作">
+                在Django里插入paramiko实现批量操作 <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -629,8 +685,17 @@ var jiathis_config={
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -651,7 +716,7 @@ var jiathis_config={
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">225</span>
+                  <span class="site-state-item-count">284</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -673,7 +738,7 @@ var jiathis_config={
               
               <div class="site-state-item site-state-tags">
                 
-                  <span class="site-state-item-count">186</span>
+                  <span class="site-state-item-count">242</span>
                   <span class="site-state-item-name">标签</span>
                 
               </div>
@@ -804,6 +869,22 @@ show_date_time();
       </section>
 
       
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text"><span id="&#x811A;&#x672C;&#x8BBE;&#x8BA1;">&#x811A;&#x672C;&#x8BBE;&#x8BA1;</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">2.</span> <span class="nav-text"><span id="&#x7528;python&#x53BB;&#x5B9E;&#x73B0;tailf&#x529F;&#x80FD;">&#x7528;python&#x53BB;&#x5B9E;&#x73B0;tailf&#x529F;&#x80FD;</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">3.</span> <span class="nav-text"><span id="python&#x5B9E;&#x73B0;&#x7EBF;&#x7A0B;&#x901A;&#x4FE1;">python&#x5B9E;&#x73B0;&#x7EBF;&#x7A0B;&#x901A;&#x4FE1;</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">4.</span> <span class="nav-text"><span id="&#x6309;&#x884C;&#x8BFB;&#x53D6;&#x6587;&#x4EF6;&#x53D6;&#x5404;&#x79CD;&#x96C6;&#x5408;">&#x6309;&#x884C;&#x8BFB;&#x53D6;&#x6587;&#x4EF6;&#x53D6;&#x5404;&#x79CD;&#x96C6;&#x5408;</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">5.</span> <span class="nav-text"><span id="_&#x7684;&#x95EE;&#x9898;">_&#x7684;&#x95EE;&#x9898;</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">6.</span> <span class="nav-text"><span id="&#x989D;&#x5916;&#x8865;&#x5145;">&#x989D;&#x5916;&#x8865;&#x5145;</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">7.</span> <span class="nav-text"><span id="&#x53C2;&#x8003;&#x8D44;&#x6599;">&#x53C2;&#x8003;&#x8D44;&#x6599;</span></span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
 
       
 
@@ -819,7 +900,7 @@ show_date_time();
     <footer id="footer" class="footer">
       <div class="footer-inner">
         <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-<div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+<div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>
@@ -850,7 +931,7 @@ show_date_time();
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">博客全站共231.7k字</span>
+  <span class="post-count">博客全站共314.1k字</span>
 </div>
         
 

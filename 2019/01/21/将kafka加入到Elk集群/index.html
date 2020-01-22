@@ -97,8 +97,9 @@
 <meta property="og:description" content="elk6跟elk5有了很大的变化，很多文本格式都已经不识别了。">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://yoursite.com/images/elk19.png">
+<meta property="og:image" content="http://yoursite.com/images/elk23.png">
 <meta property="og:image" content="http://yoursite.com/images/elk20.png">
-<meta property="og:updated_time" content="2019-04-11T06:38:52.261Z">
+<meta property="og:updated_time" content="2019-06-10T02:58:46.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="将kafka加入到Elk集群">
 <meta name="twitter:description" content="elk6跟elk5有了很大的变化，很多文本格式都已经不识别了。">
@@ -428,7 +429,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  1,544
+                  1,667
                 </span>
               
 
@@ -444,7 +445,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  7
+                  8
                 </span>
               
             </div>
@@ -486,15 +487,17 @@
 <p>这里的配置，官网标准的建议是把50％的可用内存作为<code>Elasticsearch</code>的堆内存，保留剩下的50％。当然它也不会被浪费，<code>Lucene</code>会很乐意利用起余下的内存。查看node下是否开启了<code>Mem_lock</code>的语句是：<code>curl &#39;localhost:9200/_nodes?filter_path=**.mlockall&#39;</code>。</p>
 <p>保存完毕，还没完,<code>vim /etc/security/limits.conf</code>，最后两行改成如下:<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">* soft nofile <span class="number">65536</span></span><br><span class="line">* hard nofile <span class="number">65536</span></span><br><span class="line"># allow user 'elk' mlockall</span><br><span class="line">elk soft memlock unlimited</span><br><span class="line">elk hard memlock unlimited</span><br></pre></td></tr></table></figure></p>
 <p>然后切换成elk用户，执行<code>./elasticsearch -d</code>就是后台启动了。</p>
-<p>简单的几句es命令：<br>    <figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">curl -XGET http:<span class="comment">//127.0.0.1:9200/_cat/allocation?v	#查看本机node磁盘容量</span></span><br><span class="line">curl -XGET http:<span class="comment">//127.0.0.1:9200/_cat/nodes?v	#能查看node的CPU和负载情况</span></span><br><span class="line">curl -XGET http:<span class="comment">//127.0.0.1:9200/_aliases	#查看所有的索引</span></span><br><span class="line">curl 'http://localhost:9200/_search?pretty' 	#查看索引一些细节</span><br></pre></td></tr></table></figure></p>
+<p>简单的几句es命令：<br>    <figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">curl -XGET http:<span class="comment">//127.0.0.1:9200/_cat/allocation?v	#查看本机node磁盘容量</span></span><br><span class="line">curl -XGET http:<span class="comment">//127.0.0.1:9200/_cat/nodes?v	#能查看node的CPU和负载情况</span></span><br><span class="line">curl -XGET http:<span class="comment">//127.0.0.1:9200/_aliases	#查看所有的索引</span></span><br><span class="line">curl 'http://localhost:9200/_search?pretty' 	#查看索引一些细节</span><br><span class="line">curl -XDELETE 'localhost:9200/shoporder-log-2019-02?pretty&amp;pretty' 	#删除shoporder-log-2019-02这个索引，同时磁盘释放空间</span><br></pre></td></tr></table></figure></p>
 <h2><span id="kibana和es-head的部署-配置和启动">kibana和es-head的部署、配置和启动</span></h2><p><code>es-head</code>是用docker部署的，语句如下：<br>    <figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">#假设docker已经安装好了</span><br><span class="line">docker run --name es-head -p 9100:9100 tobias74/elasticsearch-head:6	#这里必须安装6版本，不然的话，数据不会显示</span><br></pre></td></tr></table></figure></p>
 <p>运行完之后，要进入到容器里修改一下对应的配置文件<code>Gruntfile.js</code>，修改一下<code>connect</code>段落：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">connect: &#123;</span><br><span class="line">		server: &#123;</span><br><span class="line">			options: &#123;</span><br><span class="line">				port: <span class="number">9100</span>,</span><br><span class="line">				base: <span class="string">'.'</span>,</span><br><span class="line">				keepalive: <span class="literal">true</span>,</span><br><span class="line">				hostname: '*'		#新增加这样一句话</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure></p>
 <p>保存文件，<code>docker restart es-head</code>即可。在浏览器里访问<code>外网ip地址:9100</code>，如图：<br><img src="/images/elk19.png" alt="akb48"></p>
 <p><code>Kibana</code>也是用docker部署的，语句如下：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">#假设docker已经安装好了</span><br><span class="line">docker run --name kibana -p <span class="number">5601</span>:<span class="number">5601</span> docker.elastic.co/kibana/kibana:<span class="number">6.5</span><span class="number">.4</span></span><br></pre></td></tr></table></figure></p>
 <p>运行完之后，要进入到容器里修改一下对应的配置文件<code>kibana.yml</code>：<br>    <figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">---</span><br><span class="line"># Default Kibana configuration from kibana-docker.</span><br><span class="line"></span><br><span class="line">server.name: kibana</span><br><span class="line">server.host: "0.0.0.0"	#准许所有人访问</span><br><span class="line">elasticsearch.url: http:<span class="comment">//es外网IP:9200</span></span><br><span class="line">xpack.monitoring.ui.container.elasticsearch.enabled: <span class="literal">false</span></span><br><span class="line"></span><br><span class="line"># SSL for outgoing requests from the Kibana Server (PEM formatted)</span><br><span class="line">server.ssl.enabled: <span class="literal">true</span></span><br><span class="line">server.ssl.key: /usr/share/kibana/config/mykey.key	#这里是https证书</span><br><span class="line">server.ssl.certificate: /usr/share/kibana/config/mycert.crt		#这里是https证书</span><br></pre></td></tr></table></figure></p>
-<p>修改完事之后，<code>docker restart kibana</code>，然后在浏览器里访问<code>外网ip地址:9100</code>就可以查看kibana了，然后先去<code>menagement</code> —&gt;<code>index pattern</code>填入刚刚生成的index，然后在<code>discover</code>页面里选择刚刚生成的index就能看到日志内容了：<br><img src="/images/elk20.png" alt="akb48"></p>
+<p>修改完事之后，<code>docker restart kibana</code>，此时进入到kibana容器发现5601的端口并没有与任何的程序相关联，如图：<br><img src="/images/elk23.png" alt="akb48"></p>
+<p>其实这是没关系的，可以无视掉。然后在浏览器里访问<code>外网ip地址:5601</code>就可以查看kibana了，先去<code>menagement</code> —&gt;<code>index pattern</code>填入刚刚生成的index，然后在<code>discover</code>页面里选择刚刚生成的index就能看到日志内容了：<br><img src="/images/elk20.png" alt="akb48"></p>
+<p>如果kibana在某一天突然出现了”重定向过多”,重启kibana进程可破，但是index都会消失…但愿你永远不会遇到这样的bug情况…</p>
 <p><code>X-pack</code>目前还不支持6.2以上的版本，故此先略。因为没有<code>X-pack</code>，所以再<code>kibana.yml</code>里的<code>elasticsearch.url</code>我们还是写http，有了<code>X-pack</code>就要改成<code>elasticsearch.url: &quot;https://&lt;your_elasticsearch_host&gt;.com:9200&quot;</code>的样子，让es与kibana之间的传输是加密的。</p>
-<h2><span id="参考资料">参考资料</span></h2><p><a href="https://dzone.com/articles/just-say-no-swapping" target="_blank" rel="noopener">https://dzone.com/articles/just-say-no-swapping</a><br><a href="https://www.elastic.co/guide/cn/elasticsearch/guide/cn/heap-sizing.html" target="_blank" rel="noopener">https://www.elastic.co/guide/cn/elasticsearch/guide/cn/heap-sizing.html</a></p>
+<h2><span id="参考资料">参考资料</span></h2><p><a href="https://dzone.com/articles/just-say-no-swapping" target="_blank" rel="noopener">https://dzone.com/articles/just-say-no-swapping</a><br><a href="https://www.elastic.co/guide/cn/elasticsearch/guide/cn/heap-sizing.html" target="_blank" rel="noopener">https://www.elastic.co/guide/cn/elasticsearch/guide/cn/heap-sizing.html</a><br><a href="https://www.elastic.co/guide/cn/kibana/current/settings.html" target="_blank" rel="noopener">https://www.elastic.co/guide/cn/kibana/current/settings.html</a></p>
 
       
     </div>
@@ -731,7 +734,7 @@ var jiathis_config={
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">225</span>
+                  <span class="site-state-item-count">284</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -753,7 +756,7 @@ var jiathis_config={
               
               <div class="site-state-item site-state-tags">
                 
-                  <span class="site-state-item-count">186</span>
+                  <span class="site-state-item-count">242</span>
                   <span class="site-state-item-name">标签</span>
                 
               </div>
@@ -915,7 +918,7 @@ show_date_time();
     <footer id="footer" class="footer">
       <div class="footer-inner">
         <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-<div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+<div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>
@@ -946,7 +949,7 @@ show_date_time();
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">博客全站共231.7k字</span>
+  <span class="post-count">博客全站共314.1k字</span>
 </div>
         
 

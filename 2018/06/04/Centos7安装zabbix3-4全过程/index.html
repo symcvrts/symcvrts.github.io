@@ -99,7 +99,7 @@
 <meta property="og:image" content="http://yoursite.com/images/zabbix3.png">
 <meta property="og:image" content="http://yoursite.com/images/zabbix6.png">
 <meta property="og:image" content="http://yoursite.com/images/curry3p3.gif">
-<meta property="og:updated_time" content="2019-03-05T12:38:47.203Z">
+<meta property="og:updated_time" content="2019-10-21T14:12:30.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Centos7安装zabbix3.4全过程">
 <meta name="twitter:description" content="这一次要好好记录。">
@@ -429,7 +429,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  527
+                  526
                 </span>
               
 
@@ -474,8 +474,8 @@
 <p>然后就是在浏览器输入<code>外网IP/zabbix/</code>进行页面安装了，剩下的就不多写了。</p>
 <p>如果打开WEB网页是如下的样子：<br><img src="/images/zabbix3.png" alt="akb48"></p>
 <p>请检查php-fpm的版本。</p>
-<h2><span id="安装zabbix-agent-34">安装zabbix-agent 3.4</span></h2><p>如果是<code>centos 6</code>:<br>    <figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">rpm -Uvh http:<span class="comment">//repo.zabbix.com/zabbix/3.4/rhel/6/x86_64/zabbix-release-3.4-1.el6.noarch.rpm</span></span><br><span class="line">yum install -y zabbix-agent</span><br><span class="line">chkconfig zabbix-agent on;service zabbix-agent start	#如果不对就使使zabbix_agent</span><br></pre></td></tr></table></figure></p>
-<p>如果是<code>centos 7</code>:<br>    <figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">rpm -Uvh http:<span class="comment">//repo.zabbix.com/zabbix/3.4/rhel/7/x86_64/zabbix-agent-3.4.5-1.el7.x86_64.rpm</span></span><br><span class="line">yum install -y zabbix-agent</span><br><span class="line">chkconfig zabbix-agent on;service zabbix-agent start	#如果不对就使使zabbix_agent</span><br></pre></td></tr></table></figure></p>
+<h2><span id="安装zabbix-agent-40">安装zabbix-agent 4.0</span></h2><p>如果是<code>centos 6</code>:<br>    <figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">rpm -Uvh https:<span class="comment">//repo.zabbix.com/zabbix/4.0/rhel/6/x86_64/zabbix-release-4.0-2.el6.noarch.rpm</span></span><br><span class="line">yum install -y zabbix-agent</span><br><span class="line">chkconfig zabbix-agent on;service zabbix-agent start	#如果不对就使使zabbix_agent</span><br></pre></td></tr></table></figure></p>
+<p>如果是<code>centos 7</code>:<br>    <figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">rpm -Uvh https:<span class="comment">//repo.zabbix.com/zabbix/4.0/rhel/7/x86_64/zabbix-release-4.0-2.el7.noarch.rpm</span></span><br><span class="line">yum install -y zabbix-agent</span><br><span class="line">chkconfig zabbix-agent on;service zabbix-agent start	#如果不对就使使zabbix_agent</span><br></pre></td></tr></table></figure></p>
 <h2><span id="安装graphtree">安装Graphtree</span></h2><p>虽然官方说Graphtree只维护到3.2版本，但是经过我测试3.4依旧可用。安装方法如下：<br>    <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">首先进入到zabbix的html页面的文件夹</span><br><span class="line">yum install patch -y</span><br><span class="line">wget https://raw.githubusercontent.com/OneOaaS/graphtrees/master/graphtree3<span class="number">.0</span><span class="number">.4</span>.patch</span><br><span class="line">patch  -Np0 &lt;graphtree3<span class="number">.0</span><span class="number">.4</span>.patch</span><br><span class="line">chown -R apache.apache oneoaas	<span class="comment">#如果是nginx，那就是www.www</span></span><br></pre></td></tr></table></figure></p>
 <p>刷新一下zabbix-server即可发现Monitoring下面多了一个Graphtree，如图：<br><img src="/images/zabbix6.png" alt="akb48"></p>
 <p>点击即可查看。</p>
@@ -714,7 +714,7 @@ var jiathis_config={
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">225</span>
+                  <span class="site-state-item-count">284</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -736,7 +736,7 @@ var jiathis_config={
               
               <div class="site-state-item site-state-tags">
                 
-                  <span class="site-state-item-count">186</span>
+                  <span class="site-state-item-count">242</span>
                   <span class="site-state-item-name">标签</span>
                 
               </div>
@@ -876,7 +876,7 @@ show_date_time();
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text"><span id="&#x5B89;&#x88C5;zabbix-server-34">&#x5B89;&#x88C5;zabbix-server 3.4</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">2.</span> <span class="nav-text"><span id="&#x5B89;&#x88C5;zabbix-agent-34">&#x5B89;&#x88C5;zabbix-agent 3.4</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">3.</span> <span class="nav-text"><span id="&#x5B89;&#x88C5;graphtree">&#x5B89;&#x88C5;Graphtree</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">4.</span> <span class="nav-text"><span id="&#x5176;&#x4ED6;&#x8D44;&#x6599;">&#x5176;&#x4ED6;&#x8D44;&#x6599;</span></span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text"><span id="&#x5B89;&#x88C5;zabbix-server-34">&#x5B89;&#x88C5;zabbix-server 3.4</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">2.</span> <span class="nav-text"><span id="&#x5B89;&#x88C5;zabbix-agent-40">&#x5B89;&#x88C5;zabbix-agent 4.0</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">3.</span> <span class="nav-text"><span id="&#x5B89;&#x88C5;graphtree">&#x5B89;&#x88C5;Graphtree</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">4.</span> <span class="nav-text"><span id="&#x5176;&#x4ED6;&#x8D44;&#x6599;">&#x5176;&#x4ED6;&#x8D44;&#x6599;</span></span></a></li></ol></div>
             
 
           </div>
@@ -898,7 +898,7 @@ show_date_time();
     <footer id="footer" class="footer">
       <div class="footer-inner">
         <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-<div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+<div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>
@@ -929,7 +929,7 @@ show_date_time();
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">博客全站共231.7k字</span>
+  <span class="post-count">博客全站共314.1k字</span>
 </div>
         
 

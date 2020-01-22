@@ -88,19 +88,19 @@
 
 
 
-<meta name="description" content="什么是人，欲望满身。">
+<meta name="description" content="判断tls支持的语句是：nmap --script ssl-enum-ciphers -p 443 对应的域名">
 <meta name="keywords" content="nginx,https">
 <meta property="og:type" content="article">
 <meta property="og:title" content="记录一次处理https监听不正确的过程">
 <meta property="og:url" content="http://yoursite.com/2018/01/12/记录一次处理https监听不正确的过程/index.html">
 <meta property="og:site_name" content="Chris Chan&#39;s BLOG">
-<meta property="og:description" content="什么是人，欲望满身。">
+<meta property="og:description" content="判断tls支持的语句是：nmap --script ssl-enum-ciphers -p 443 对应的域名">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://yoursite.com/images/ksslb.png">
-<meta property="og:updated_time" content="2018-01-22T04:04:34.715Z">
+<meta property="og:updated_time" content="2019-09-25T09:23:36.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="记录一次处理https监听不正确的过程">
-<meta name="twitter:description" content="什么是人，欲望满身。">
+<meta name="twitter:description" content="判断tls支持的语句是：nmap --script ssl-enum-ciphers -p 443 对应的域名">
 <meta name="twitter:image" content="http://yoursite.com/images/ksslb.png">
 
 
@@ -427,7 +427,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  755
+                  763
                 </span>
               
 
@@ -451,7 +451,7 @@
 
           
               <div class="post-description">
-                  什么是人，欲望满身。
+                  判断tls支持的语句是：nmap --script ssl-enum-ciphers -p 443 对应的域名
               </div>
           
 
@@ -469,7 +469,7 @@
 
       
         <script src="\assets\js\APlayer.min.js"> </script><p>今天开发反馈在测试金山云设备的时候遇到了这样的一个现象：<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">wget https:<span class="comment">//funchlscdn.lechange.cn/LCLR/2K02135PAK01979/0/0/20170726085033/dev_20170726085033_lpxh73ezzb92xxa8.m3u8 </span></span><br><span class="line">-<span class="number">-2017</span><span class="number">-07</span><span class="number">-26</span> <span class="number">11</span>:<span class="number">49</span>:<span class="number">26</span>--  https:<span class="comment">//funchlscdn.lechange.cn/LCLR/2K02135PAK01979/0/0/20170726085033/dev_20170726085033_lpxh73ezzb92xxa8.m3u8  </span></span><br><span class="line">Resolving funchlscdn.lechange.cn... <span class="number">120.92</span><span class="number">.158</span><span class="number">.134</span> </span><br><span class="line">Connecting to funchlscdn.lechange.cn|<span class="number">120.92</span><span class="number">.158</span><span class="number">.134</span>|:<span class="number">443.</span>.. connected. </span><br><span class="line">OpenSSL: error:<span class="number">140770</span>FC:SSL routines:SSL23_GET_SERVER_HELLO:unknown protocol </span><br><span class="line">Unable to establish SSL connection.</span><br></pre></td></tr></table></figure></p>
-<p>爆“error:140770FC:SSL routines:SSL23_GET_SERVER_HELLO:unknown protocol”的错误，就是在当向只提供http的服务发送https请求造成的。</p>
+<p>爆<code>error:140770FC:SSL routines:SSL23_GET_SERVER_HELLO:unknown protocol</code>的错误，有两种可能，1）SSL证书没有配对；2）当向只提供http的服务发送https请求。</p>
 <p><code>ping funchlscdn.lechange.cn</code>，获得了这个域名对应的IP之后，返回到金山云的控制台查询这个IP，发现这个IP是一个负载均衡，但是这个负载均衡配置的时候对80端口是http协议，而对443端口还是http协议，于是更改成https，重新测试之后，发现错误变成了这样：<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[root@js-develop ~]# wget https://funchlscdn.lechange.cn/LCLR/2K02135PAK01979/0/0/20170726085033/dev_20170726085033_lpxh73ezzb92xxa8.m3u8 </span><br><span class="line">-<span class="number">-2017</span><span class="number">-07</span><span class="number">-26</span> <span class="number">16</span>:<span class="number">08</span>:<span class="number">15</span>--  https:<span class="comment">//funchlscdn.lechange.cn/LCLR/2K02135PAK01979/0/0/20170726085033/dev_20170726085033_lpxh73ezzb92xxa8.m3u8</span></span><br><span class="line">Resolving funchlscdn.lechange.cn... <span class="number">120.92</span><span class="number">.158</span><span class="number">.134</span></span><br><span class="line">Connecting to funchlscdn.lechange.cn|<span class="number">120.92</span><span class="number">.158</span><span class="number">.134</span>|:<span class="number">443.</span>.. connected.</span><br><span class="line">HTTP request sent, awaiting response... <span class="number">502</span> Bad Gateway</span><br><span class="line"><span class="number">2017</span><span class="number">-07</span><span class="number">-26</span> <span class="number">16</span>:<span class="number">08</span>:<span class="number">15</span> ERROR <span class="number">502</span>: Bad Gateway.</span><br></pre></td></tr></table></figure></p>
 <p>在浏览器打开效果如图：</p>
 <p>502 Bad Gateway<br>The proxy server received an invalid response from an upstream server. </p>
@@ -708,7 +708,7 @@ var jiathis_config={
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">225</span>
+                  <span class="site-state-item-count">284</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -730,7 +730,7 @@ var jiathis_config={
               
               <div class="site-state-item site-state-tags">
                 
-                  <span class="site-state-item-count">186</span>
+                  <span class="site-state-item-count">242</span>
                   <span class="site-state-item-name">标签</span>
                 
               </div>
@@ -876,7 +876,7 @@ show_date_time();
     <footer id="footer" class="footer">
       <div class="footer-inner">
         <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-<div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+<div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>
@@ -907,7 +907,7 @@ show_date_time();
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">博客全站共231.7k字</span>
+  <span class="post-count">博客全站共314.1k字</span>
 </div>
         
 

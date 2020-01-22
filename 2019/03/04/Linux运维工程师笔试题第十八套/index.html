@@ -96,10 +96,12 @@
 <meta property="og:site_name" content="Chris Chan&#39;s BLOG">
 <meta property="og:description" content="这次是跟docker相关的题">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-03-08T09:54:37.841Z">
+<meta property="og:image" content="http://yoursite.com/images/mysql-sock9.png">
+<meta property="og:updated_time" content="2019-06-10T07:02:02.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Linux运维工程师笔试题第十八套">
 <meta name="twitter:description" content="这次是跟docker相关的题">
+<meta name="twitter:image" content="http://yoursite.com/images/mysql-sock9.png">
 
 
 
@@ -425,7 +427,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  515
+                  1,585
                 </span>
               
 
@@ -441,7 +443,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  2
+                  6
                 </span>
               
             </div>
@@ -473,9 +475,21 @@
 <p>上面这个语句新建立一个叫BACKUP的容器，它与A容器挂载情况相同（即都是挂载/DATA），同时将本地的/tmp挂载到容器的/backup，在容器生成的时候，执行了<code>tar cvf /backup/A.tar /DATA</code>将DATA文件夹的内容进行了打包，又由于/tmp已经与/backup挂载，所以就可以直接从宿主机上的/tmp里得到A.tar了。</p>
 <p>4.linux里删除某个用户的所有进程的语句？<br>ps -u username | grep -v PID | awk ‘{print$1}’| xargs kill -9<br>或者killall -u username</p>
 <p>5.linux如何彻底删除一个用户？<br>userdel -r zhidao（前提是这个用户下已经没有程序运行了）</p>
-<p>6.ps -ef |grep 进程名|awk “{print $2}”|xargs kill -9 </p>
-<p>未完待续</p>
-<h2><span id="参考资料">参考资料</span></h2><p><a href="https://stackoverflow.com/questions/30960686/difference-between-docker-attach-and-docker-exec" target="_blank" rel="noopener">https://stackoverflow.com/questions/30960686/difference-between-docker-attach-and-docker-exec</a><br><a href="http://dockone.io/question/469" target="_blank" rel="noopener">http://dockone.io/question/469</a></p>
+<p>6.杀死某进程的命令？<br>ps -ef |grep 进程名 |grep -v grep|awk ‘{print $2}’|xargs kill -9<br>注意！这里awk后面是单引号不是双引号 </p>
+<p>7.普通用户如何访问docker?<br>使用<code>gpasswd -a lcshop docker</code>把该用户添加到docker组即可。</p>
+<p>8.输入ping IP后敲回车，发包前会发生什么？<br>首先要知道，ICMP协议是三层（网络层协议），因为不带端口所以肯定不是四层，又因为依赖IP地址所以肯定比2层高。</p>
+<p>其次ping可以帮我们了解到是否能够与对方连通，但是ping如果能不开就不开，因为网络上会有无聊的人给你发大量的ping包把你的带宽占满。</p>
+<p>回到题目中，假设是下图中的A在ping B:<br><img src="/images/mysql-sock9.png" alt="akb48"></p>
+<p>回车之后，主机A就要封装二层报文，它会先查自己的MAC地址表，如果没有B的MAC地址，就会向外发送一个ARP广播包。交换机会收到这个报文后，由于交换机有学习MAC地址的功能，所以他会检索自己有没有保存主机B的MAC，如果有，就直接返回给主机A；如果没有，就会向所有端口发送ARP广播，其它主机收到后，发现不是在找自己，就纷纷丢弃了该报文，不去理会。直到主机B收到了报文后，就立即响应，我的MAC地址是多少，同时它也学到主机A的MAC地址，并按同样的ARP报文格式返回给主机A，这时候主机A学到了主机B的MAC，就把B的MAC地址封装到ICMP包中，向主机B发送一个回显请求，主机B收到该报文后，知道是主机A的一个回显请求，就会返回一个相同格式的报文。这样就完成了同一个网段的Ping的过程。</p>
+<p>如果主机A要ping主机C，那么主机A发现主机C的IP和自己不是同一网段，它就去找网关转发，但是它也不知道网关的MAC情况下呢?就会像之前那个步骤一样：先发送一个ARP广播，学到网关的MAC，再发封装ICMP报文给网关路由器。当路由器收到主机A发过来的ICMP报文，发现自己的目的地址是其本身MAC地址，根据目的的IP2.1.1.1查路由表，发现2.1.1.1/24的路由表项，得到一个出口指针，去掉原来的MAC头部加上自己的MAC地址向主机C转发。如果网关也没有主机C的MAC地址,还是要向前面一个步骤一样,ARP广播一下即可相互学到。路由器2端口能学到主机D的MAC,主机D也能学到路由器2端口的MAC。最后，在主机C已学到路由器2端口MAC，路由器2端口转发给路由器1端口，路由1端口学到主机A的MAC的情况下，他们就不需要再做ARP解析，就将ICMP的回显请求回复过来。</p>
+<p>9.MySQL的数据如何恢复到任意时间点？</p>
+<p>10.假设有一个dockerfile内容如下：<br>    <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">FROM ubuntu</span><br><span class="line">ENTRYPOINT [&quot;top&quot;, &quot;-b&quot;]</span><br><span class="line">CMD [&quot;-c&quot;]</span><br></pre></td></tr></table></figure></p>
+<p>然后凭借此dockerfile创建一个镜像，然后<code>docker run -it --rm --name test 镜像名称 -H</code>的实际结果是什么？</p>
+<p>实际执行结果是相当于执行<code>top -b -H</code>，没有<code>-c</code>。因为使用exec格式（只能加双引号），在<code>docker run &lt;image&gt;</code>的所有参数，都会追加到<code>ENTRYPOINT</code>之后，并且会覆盖<code>CMD</code>所指定的参数。CMD与ENTRYPOINT一样，如果dockerfile有多个的话，只有最后一个生效。</p>
+<p>11.假设有一个dockerfile A内容如下：<br>    <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ENV name Cloud Man</span><br><span class="line">ENTRYPOINT [&quot;/bin/echo&quot;, &quot;Hello, $name&quot;]</span><br></pre></td></tr></table></figure></p>
+<p>还有一个B dockerfile内容如下：<br>    <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ENV name Cloud Man  </span><br><span class="line">ENTRYPOINT echo &quot;Hello, $name&quot;</span><br></pre></td></tr></table></figure></p>
+<p>请问两者分别运行容器结果是啥？<br>A是<code>Hello, $name</code>，B是<code>Hello, Cloud Man</code>。A的环境变量并没有达到效果，如果想要达到效果，应该改成如下：<br>    <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ENV name Cloud Man  </span><br><span class="line">ENTRYPOINT [&quot;/bin/sh&quot;, &quot;-c&quot;, &quot;echo Hello, $name&quot;]</span><br></pre></td></tr></table></figure></p>
+<h2><span id="参考资料">参考资料</span></h2><p><a href="https://stackoverflow.com/questions/30960686/difference-between-docker-attach-and-docker-exec" target="_blank" rel="noopener">https://stackoverflow.com/questions/30960686/difference-between-docker-attach-and-docker-exec</a><br><a href="http://dockone.io/question/469" target="_blank" rel="noopener">http://dockone.io/question/469</a><br><a href="https://www.ibm.com/developerworks/community/blogs/132cfa78-44b0-4376-85d0-d3096cd30d3f/entry/RUN_vs_CMD_vs_ENTRYPOINT_%E6%AF%8F%E5%A4%A95%E5%88%86%E9%92%9F%E7%8E%A9%E8%BD%AC_Docker_%E5%AE%B9%E5%99%A8%E6%8A%80%E6%9C%AF_17?lang=en" target="_blank" rel="noopener">https://www.ibm.com/developerworks/community/blogs/132cfa78-44b0-4376-85d0-d3096cd30d3f/entry/RUN_vs_CMD_vs_ENTRYPOINT_%E6%AF%8F%E5%A4%A95%E5%88%86%E9%92%9F%E7%8E%A9%E8%BD%AC_Docker_%E5%AE%B9%E5%99%A8%E6%8A%80%E6%9C%AF_17?lang=en</a><br><a href="https://c.isme.pub/2018/07/11/python-interview/" target="_blank" rel="noopener">https://c.isme.pub/2018/07/11/python-interview/</a></p>
 
       
     </div>
@@ -712,7 +726,7 @@ var jiathis_config={
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">225</span>
+                  <span class="site-state-item-count">284</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -734,7 +748,7 @@ var jiathis_config={
               
               <div class="site-state-item site-state-tags">
                 
-                  <span class="site-state-item-count">186</span>
+                  <span class="site-state-item-count">242</span>
                   <span class="site-state-item-name">标签</span>
                 
               </div>
@@ -896,7 +910,7 @@ show_date_time();
     <footer id="footer" class="footer">
       <div class="footer-inner">
         <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-<div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+<div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>
@@ -927,7 +941,7 @@ show_date_time();
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">博客全站共231.7k字</span>
+  <span class="post-count">博客全站共314.1k字</span>
 </div>
         
 

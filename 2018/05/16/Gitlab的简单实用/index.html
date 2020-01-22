@@ -102,7 +102,7 @@
 <meta property="og:image" content="http://yoursite.com/images/gitlab17.png">
 <meta property="og:image" content="http://yoursite.com/images/gitlab18.png">
 <meta property="og:image" content="http://yoursite.com/images/gitlab30.png">
-<meta property="og:updated_time" content="2019-04-09T12:01:07.029Z">
+<meta property="og:updated_time" content="2019-08-27T12:27:26.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Gitlab的简单应用">
 <meta name="twitter:description" content="docker + gitlab，这才是未来部署的方向">
@@ -432,7 +432,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  1,392
+                  1,819
                 </span>
               
 
@@ -448,7 +448,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  6
+                  7
                 </span>
               
             </div>
@@ -485,6 +485,7 @@
 <p>然后就是<code>create project</code>，就创建了这个jjfjj。如图:<br><img src="/images/gitlab15.png" alt="paradin"></p>
 <h2><span id="将本地代码上传">将本地代码上传</span></h2><p>建立好了gitlab，就要把开发的代码传进去，我在另外一个机器里，创建一个目录code，这个目录就是专门用来放置代码的，假设现在里面有一个文件叫<code>testcode.py</code>，如图：<br><img src="/images/gitlab16.png" alt="paradin"></p>
 <p>具体操作如下：<br><img src="/images/gitlab17.png" alt="paradin"></p>
+<p>注意！如果在创建project的时候勾选同时创建README.md的话，第一次提交本地代码需要是<code>git pull origin master</code>。</p>
 <p>如果在两个不同的文件夹里执行上面的过程，会传输到两个不同的project里。说明一下上面几个命令的意思：<br><code>git init</code>：初始化git仓库<br><code>git add .</code>：添加整个目录里的所有文件到仓库<br><code>git rm --cached 某个文件名</code>：将某个文件从gitlab上撤除，如果想当前文件夹恢复成一个普通的文件夹，那就把文件夹路径下的.git文件删除掉即可<br><code>git commit -m &#39;这里是要写的注释&#39;</code>：提交代码到仓库<br><code>git remote add origin +gitlab的地址(上上图里红色框的内容)</code>：链接到gitlab服务器<br><code>git push origin master</code>：push代码到服务器<br><code>git remote -v</code>：查看当前文件夹的目标project</p>
 <p>此时刷新一下gitlab的project页面，就看到刚刚的那个<code>testcode.py</code>已经传上来了。如图：<br><img src="/images/gitlab18.png" alt="paradin"></p>
 <p>如果代码有所更改或者出现<code>Everything up-to-date</code>，那么就按顺序执行<code>git add .</code>，<code>git commit -m &#39;这里是要写的注释&#39;</code>，<code>git push origin master</code>即可。</p>
@@ -499,6 +500,12 @@
 <p>而在部署的机器上，直接执行<code>git pull origin develop</code>，输入账号密码之后，就会把develop分支的内容全部垃取下来了。</p>
 <p>如果不想要这个develop分支了，就<code>git branch -d develop</code>，如果要删除远程的分支，就是<code>git push origin :develop</code>，注意这个冒号。</p>
 <p>如果gitlab的地址发生了改变，那么在<code>git pull</code>之前需要<code>git remote set-url origin 新的git地址</code>，不过设定完毕之后，免输账号密码的效果会消失。</p>
+<h2><span id="在windows里使用gitlab">在windows里使用gitlab</span></h2><p>首先先安装git，然后在目标文件夹里点击右键—<code>Git Bash Here</code>，在命令行里输入<code>git clone 远程目标.git</code>。同时在project页面里的develop分支（开发分支）里新开一个分支比如叫<code>feature/chenshuo</code>。待目标全部下载完毕之后，cd到代码文件夹里：<br>    <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">git branch -a		<span class="comment">#此时应该是master分支</span></span><br><span class="line">git checkout -b feature/chenshuo origin/feature/chenshuo		<span class="comment">#将本地的分支feature/chenshuo与远程的分支origin/feature/chenshuo关联</span></span><br><span class="line">git branch -a 		<span class="comment">#此时应该由master切换到了本地分支</span></span><br><span class="line">...修改代码...</span><br><span class="line">git add .</span><br><span class="line">   git commit -m <span class="string">"提交信息"</span>		<span class="comment">#将代码提交到本地分支</span></span><br><span class="line">   git push 		<span class="comment">#将本地分支push到远程</span></span><br></pre></td></tr></table></figure></p>
+<p>如果在git clone那一步密码输入错误了，可以在<code>我的电脑</code>–<code>控制面板</code>–<code>用户账户</code>–<code>管理您的凭据</code> 里面修改。</p>
+<h2><span id="普通用户访问docker">普通用户访问docker</span></h2><p>让普通用户访问docker的方法其实就是把该用户添加到docker组里即可。</p>
+<p>先切换root用户给予普通用户（比如叫lcshop）免sudo权限：使用<code>sudoedit /etc/sudoers</code>添加这样的语句：<br>    <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">lcshop  ALL=(ALL)       ALL</span><br></pre></td></tr></table></figure></p>
+<p>然后还是root状态下，执行<code>gpasswd -a lcshop docker</code>，将lcshop添加到docker组里，此时应该若反馈<code>Adding user lcshop to group docker</code>则添加成功。</p>
+<p>然后就是重启一下docker进程，同时lcshop也重新连接ssh，此时lcshop就可以正常使用<code>docker ps -a</code>等命令了。若要查看某个用户组下有哪些用户，可以通过<code>grep &#39;组名&#39; /etc/group</code>获取。</p>
 <h2><span id="参考资料">参考资料</span></h2><p><a href="https://blog.cnbluebox.com/blog/2014/04/15/gitlabde-shi-yong/" target="_blank" rel="noopener">https://blog.cnbluebox.com/blog/2014/04/15/gitlabde-shi-yong/</a><br><a href="https://zhang759740844.github.io/2016/08/27/git%E6%8A%80%E5%B7%A7/" target="_blank" rel="noopener">https://zhang759740844.github.io/2016/08/27/git%E6%8A%80%E5%B7%A7/</a><br><a href="https://www.restran.net/2016/02/23/git-and-gitlab-guide/" target="_blank" rel="noopener">https://www.restran.net/2016/02/23/git-and-gitlab-guide/</a><br><a href="https://www.jianshu.com/p/f54053afecf2" target="_blank" rel="noopener">https://www.jianshu.com/p/f54053afecf2</a></p>
 
       
@@ -734,7 +741,7 @@ var jiathis_config={
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">225</span>
+                  <span class="site-state-item-count">284</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -756,7 +763,7 @@ var jiathis_config={
               
               <div class="site-state-item site-state-tags">
                 
-                  <span class="site-state-item-count">186</span>
+                  <span class="site-state-item-count">242</span>
                   <span class="site-state-item-name">标签</span>
                 
               </div>
@@ -896,7 +903,7 @@ show_date_time();
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text"><span id="&#x5EFA;&#x7ACB;&#x4E00;&#x4E2A;project">&#x5EFA;&#x7ACB;&#x4E00;&#x4E2A;project</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">2.</span> <span class="nav-text"><span id="&#x5C06;&#x672C;&#x5730;&#x4EE3;&#x7801;&#x4E0A;&#x4F20;">&#x5C06;&#x672C;&#x5730;&#x4EE3;&#x7801;&#x4E0A;&#x4F20;</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">3.</span> <span class="nav-text"><span id="&#x514D;&#x5BC6;&#x7801;push&#x4EE3;&#x7801;">&#x514D;&#x5BC6;&#x7801;push&#x4EE3;&#x7801;</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">4.</span> <span class="nav-text"><span id="&#x4ECE;gitlab&#x4E0A;&#x5783;&#x53D6;&#x4EE3;&#x7801;">&#x4ECE;gitlab&#x4E0A;&#x5783;&#x53D6;&#x4EE3;&#x7801;</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">5.</span> <span class="nav-text"><span id="&#x5728;gitlab&#x4E0A;&#x5EFA;&#x7ACB;&#x5206;&#x652F;">&#x5728;gitlab&#x4E0A;&#x5EFA;&#x7ACB;&#x5206;&#x652F;</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">6.</span> <span class="nav-text"><span id="&#x53C2;&#x8003;&#x8D44;&#x6599;">&#x53C2;&#x8003;&#x8D44;&#x6599;</span></span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text"><span id="&#x5EFA;&#x7ACB;&#x4E00;&#x4E2A;project">&#x5EFA;&#x7ACB;&#x4E00;&#x4E2A;project</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">2.</span> <span class="nav-text"><span id="&#x5C06;&#x672C;&#x5730;&#x4EE3;&#x7801;&#x4E0A;&#x4F20;">&#x5C06;&#x672C;&#x5730;&#x4EE3;&#x7801;&#x4E0A;&#x4F20;</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">3.</span> <span class="nav-text"><span id="&#x514D;&#x5BC6;&#x7801;push&#x4EE3;&#x7801;">&#x514D;&#x5BC6;&#x7801;push&#x4EE3;&#x7801;</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">4.</span> <span class="nav-text"><span id="&#x4ECE;gitlab&#x4E0A;&#x5783;&#x53D6;&#x4EE3;&#x7801;">&#x4ECE;gitlab&#x4E0A;&#x5783;&#x53D6;&#x4EE3;&#x7801;</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">5.</span> <span class="nav-text"><span id="&#x5728;gitlab&#x4E0A;&#x5EFA;&#x7ACB;&#x5206;&#x652F;">&#x5728;gitlab&#x4E0A;&#x5EFA;&#x7ACB;&#x5206;&#x652F;</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">6.</span> <span class="nav-text"><span id="&#x5728;windows&#x91CC;&#x4F7F;&#x7528;gitlab">&#x5728;windows&#x91CC;&#x4F7F;&#x7528;gitlab</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">7.</span> <span class="nav-text"><span id="&#x666E;&#x901A;&#x7528;&#x6237;&#x8BBF;&#x95EE;docker">&#x666E;&#x901A;&#x7528;&#x6237;&#x8BBF;&#x95EE;docker</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">8.</span> <span class="nav-text"><span id="&#x53C2;&#x8003;&#x8D44;&#x6599;">&#x53C2;&#x8003;&#x8D44;&#x6599;</span></span></a></li></ol></div>
             
 
           </div>
@@ -918,7 +925,7 @@ show_date_time();
     <footer id="footer" class="footer">
       <div class="footer-inner">
         <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-<div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+<div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>
@@ -949,7 +956,7 @@ show_date_time();
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">博客全站共231.7k字</span>
+  <span class="post-count">博客全站共314.1k字</span>
 </div>
         
 

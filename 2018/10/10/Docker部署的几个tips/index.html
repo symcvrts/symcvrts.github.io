@@ -100,7 +100,7 @@
 <meta property="og:image" content="http://yoursite.com/images/docker17.png">
 <meta property="og:image" content="http://yoursite.com/images/docker15.png">
 <meta property="og:image" content="http://yoursite.com/images/docker16.png">
-<meta property="og:updated_time" content="2018-10-12T08:58:29.741Z">
+<meta property="og:updated_time" content="2019-05-29T09:22:24.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Docker部署的几个tips">
 <meta name="twitter:description" content="更加优雅的使用容器">
@@ -430,7 +430,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  949
+                  1,062
                 </span>
               
 
@@ -511,6 +511,10 @@
 </li>
 </ol>
 <p>在宿主机上看也是能看到这个进程的：<br><img src="/images/docker16.png" alt="akb48" title="容器与宿主机时差相差8小时"></p>
+<ol>
+<li>有时候是需要用一个脚本来启动镜像进程的，但是要知道容器只能管理一个主进程，当脚本执行完毕了，容器也会EXIT，所以我们需要在启动脚本后面添加<code>tail -f /dev/null</code>让这个启动脚本永远执行不结束。举个例子：<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run --name XXX -dit -v /data/httpd/yii_ecadmin/:/var/www -w /var/www --restart=always registry.cn-hangzhou.aliyuncs.com/lechangeshop/ecadmin:20190520 ./start.sh</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
 <h2><span id="参考资料">参考资料</span></h2><p><a href="http://blog.sina.com.cn/s/blog_5ff8e0a00102wmti.html" target="_blank" rel="noopener">http://blog.sina.com.cn/s/blog_5ff8e0a00102wmti.html</a><br><a href="https://outmanzzq.github.io/2018/01/11/docker-exit-without-stop/" target="_blank" rel="noopener">https://outmanzzq.github.io/2018/01/11/docker-exit-without-stop/</a><br><a href="http://dockone.io/article/128" target="_blank" rel="noopener">http://dockone.io/article/128</a><br><a href="https://blog.csdn.net/halcyonbaby/article/details/46884605" target="_blank" rel="noopener">https://blog.csdn.net/halcyonbaby/article/details/46884605</a><br><a href="https://stackoverflow.com/questions/30960686/difference-between-docker-attach-and-docker-exec" target="_blank" rel="noopener">https://stackoverflow.com/questions/30960686/difference-between-docker-attach-and-docker-exec</a><br><a href="https://www.binss.me/blog/learn-docker-with-me-about-volume/" target="_blank" rel="noopener">https://www.binss.me/blog/learn-docker-with-me-about-volume/</a></p>
 
       
@@ -748,7 +752,7 @@ var jiathis_config={
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">225</span>
+                  <span class="site-state-item-count">284</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -770,7 +774,7 @@ var jiathis_config={
               
               <div class="site-state-item site-state-tags">
                 
-                  <span class="site-state-item-count">186</span>
+                  <span class="site-state-item-count">242</span>
                   <span class="site-state-item-name">标签</span>
                 
               </div>
@@ -932,7 +936,7 @@ show_date_time();
     <footer id="footer" class="footer">
       <div class="footer-inner">
         <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-<div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+<div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>
@@ -963,7 +967,7 @@ show_date_time();
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">博客全站共231.7k字</span>
+  <span class="post-count">博客全站共314.1k字</span>
 </div>
         
 

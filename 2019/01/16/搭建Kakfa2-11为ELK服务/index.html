@@ -88,20 +88,21 @@
 
 
 
-<meta name="description" content="就是单纯的部署和启动">
+<meta name="description" content="使用curl http://ip.taobao.com/service/getIpInfo.php?ip=目标IP地址，可以获取到目标地址的地理位置和运营商信息。">
 <meta name="keywords" content="kafka">
 <meta property="og:type" content="article">
 <meta property="og:title" content="搭建Kakfa2.11为ELK服务">
 <meta property="og:url" content="http://yoursite.com/2019/01/16/搭建Kakfa2-11为ELK服务/index.html">
 <meta property="og:site_name" content="Chris Chan&#39;s BLOG">
-<meta property="og:description" content="就是单纯的部署和启动">
+<meta property="og:description" content="使用curl http://ip.taobao.com/service/getIpInfo.php?ip=目标IP地址，可以获取到目标地址的地理位置和运营商信息。">
 <meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://yoursite.com/images/elk24.png">
 <meta property="og:image" content="http://yoursite.com/images/企鹅.gif">
-<meta property="og:updated_time" content="2019-01-17T03:53:53.646Z">
+<meta property="og:updated_time" content="2019-05-23T09:26:26.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="搭建Kakfa2.11为ELK服务">
-<meta name="twitter:description" content="就是单纯的部署和启动">
-<meta name="twitter:image" content="http://yoursite.com/images/企鹅.gif">
+<meta name="twitter:description" content="使用curl http://ip.taobao.com/service/getIpInfo.php?ip=目标IP地址，可以获取到目标地址的地理位置和运营商信息。">
+<meta name="twitter:image" content="http://yoursite.com/images/elk24.png">
 
 
 
@@ -427,7 +428,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  842
+                  1,081
                 </span>
               
 
@@ -443,7 +444,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  4
+                  5
                 </span>
               
             </div>
@@ -451,7 +452,7 @@
 
           
               <div class="post-description">
-                  就是单纯的部署和启动
+                  使用curl http://ip.taobao.com/service/getIpInfo.php?ip=目标IP地址，可以获取到目标地址的地理位置和运营商信息。
               </div>
           
 
@@ -478,8 +479,17 @@
 <h2><span id="启动kafka">启动kafka</span></h2><p>同zookeeper一样，先去kafka的conf文件夹<code>/opt/kafka_2.11-2.1.0/config</code>里，在配置文件<code>zookeeper.properties</code>最下面加上如下几句话:<br>    <figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">tickTime=<span class="number">2000</span></span><br><span class="line">initLimit=<span class="number">20</span></span><br><span class="line">syncLimit=<span class="number">10</span></span><br><span class="line">server.1=172.31.0.84:2888:3888	#zookeeper的地址，也就是本机地址</span><br></pre></td></tr></table></figure></p>
 <p>tickTime:这个时间是作为Zookeeper服务器之间或客户端与服务器之间维持心跳的时间间隔，也就是每个tickTime时间就会发送一个心跳。</p>
 <p>修改好了<code>zookeeper.properties</code>之后，才是正式的kafka配置文件<code>server.properties</code>：<br>    <figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">broker.id=<span class="number">1</span></span><br><span class="line">port=9092	#broker监听的端口</span><br><span class="line">host.name=172.31.0.84	#填服务器 IP</span><br><span class="line">log.dir = / data / kafka - logs    #  该目录可以不用提前创建，在启动时自己会创建</span><br><span class="line">zookeeper.connect = 172.31.0.84:2181  # 这个就是zookeeper的ip及端口</span><br><span class="line">num.partitions = 16          	# 需要配置较大 分片影响读写速度</span><br><span class="line">log.dirs = /data/kafka-logs 	# 数据目录也要单独配置磁盘较大的地方</span><br><span class="line">log.retention.hours = 168    	# 时间按需求保留过期时间,避免磁盘满</span><br></pre></td></tr></table></figure></p>
-<p>确认zookeeper状态是启动之后，<code>./bin/kafka-server-start.sh ./config/server.properties &amp;</code>来启动Kafka服务，然后检查一下端口9092是否正常打开</p>
-<h2><span id="kafka简单操作语句">kafka简单操作语句</span></h2><p>一些常用的操作语句如下：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">#创建topic</span><br><span class="line">./kafka-topics.sh --create --zookeeper 172.31.0.84:2181 --replication-factor 1 --partitions 1 --topic chenshuotest	#factor大小不能超过broker的个数</span><br><span class="line">#查看topic</span><br><span class="line">./kafka-topics.sh --list --zookeeper <span class="number">172.31</span><span class="number">.0</span><span class="number">.84</span>:<span class="number">2181</span></span><br><span class="line">#在topic里增加信息</span><br><span class="line">./kafka-<span class="built_in">console</span>-producer.sh --broker-list <span class="number">172.31</span><span class="number">.0</span><span class="number">.84</span>:<span class="number">9092</span> --topic chenshuotest</span><br><span class="line">#消费掉topic里的信息，需要在另外一个xshell窗口界面操作</span><br><span class="line">./kafka-<span class="built_in">console</span>-consumer.sh --bootstrap-server  <span class="number">172.31</span><span class="number">.0</span><span class="number">.84</span>:<span class="number">9092</span> --topic chenshuotest --<span class="keyword">from</span>-beginning</span><br></pre></td></tr></table></figure></p>
+<p>确认zookeeper状态是启动之后，<code>./bin/kafka-server-start.sh ./config/server.properties &amp;</code>来启动Kafka服务，然后检查一下端口9092是否正常打开(9092端口不会立即启动，需要等待一会时间)。</p>
+<h2><span id="kafka简单操作语句">kafka简单操作语句</span></h2><p>一些常用的操作语句（前提是你在kafka的bin文件夹内）如下：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">#创建topic</span><br><span class="line">./kafka-topics.sh --create --zookeeper zookeeperIP地址:2181 --replication-factor 1 --partitions 1 --topic chenshuotest	#factor大小不能超过broker的个数</span><br><span class="line">#查看topic</span><br><span class="line">./kafka-topics.sh --list --zookeeper zookeeperIP地址:<span class="number">2181</span></span><br><span class="line">#在topic里增加信息</span><br><span class="line">./kafka-<span class="built_in">console</span>-producer.sh --broker-list kafkaIP地址：<span class="number">9092</span> --topic chenshuotest</span><br><span class="line">#消费掉topic里的信息，需要在另外一个xshell窗口界面操作</span><br><span class="line">./kafka-<span class="built_in">console</span>-consumer.sh --bootstrap-server  kafkaIP地址<span class="number">9092</span> --topic chenshuotest --<span class="keyword">from</span>-beginning</span><br><span class="line">#查看group</span><br><span class="line">./kafka-consumer-groups.sh --bootstrap-server kafkaIP地址:<span class="number">9092</span> --list</span><br><span class="line">#查看消费情况</span><br><span class="line">./kafka-consumer-groups.sh --bootstrap-server kafkaIP地址:<span class="number">9092</span> --describe --group logstash</span><br></pre></td></tr></table></figure></p>
+<p>kafka与mq类似，都有一个“入队”、“出队”、“堆积值”的展示，如下：<br><img src="/images/elk24.png" alt="akb48"></p>
+<p>简单说一下上面这个图：</p>
+<ol>
+<li>PARTITION：分区编号，它与<code>server.properties</code>里的<code>num.partitions</code>是一致的，这个值不是越大越好，会增加不可用的风险，而且过多的分区意味要打开过多的句柄，增加点对点的延迟；</li>
+<li>CURRENT-OFFSET：表示消费者组最新消费的位移值；</li>
+<li>LOG-END-OFFSET：表示topic所有分区当前的日志终端位移值，即总生产值；</li>
+<li>LAG：表示有多少条message没有被消费；</li>
+</ol>
+<p>如果想用zabbix监控LAG值，很简单：<br>    <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./kafka-consumer-groups.sh --bootstrap-server kafkaIP地址:<span class="number">9092</span> --describe --group logstash | grep 目标topic |awk  <span class="string">'&#123;print $5&#125;'</span></span><br></pre></td></tr></table></figure></p>
 <h2><span id="参考文档">参考文档</span></h2><p><a href="http://www.cnblogs.com/JetpropelledSnake/p/10057545.html" target="_blank" rel="noopener">http://www.cnblogs.com/JetpropelledSnake/p/10057545.html</a> （zookeeper+kafka集群的配置，请看这里）</p>
 <p><img src="/images/企鹅.gif" alt="akb48"></p>
 
@@ -716,7 +726,7 @@ var jiathis_config={
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">225</span>
+                  <span class="site-state-item-count">284</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -738,7 +748,7 @@ var jiathis_config={
               
               <div class="site-state-item site-state-tags">
                 
-                  <span class="site-state-item-count">186</span>
+                  <span class="site-state-item-count">242</span>
                   <span class="site-state-item-name">标签</span>
                 
               </div>
@@ -900,7 +910,7 @@ show_date_time();
     <footer id="footer" class="footer">
       <div class="footer-inner">
         <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-<div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+<div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>
@@ -931,7 +941,7 @@ show_date_time();
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">博客全站共231.7k字</span>
+  <span class="post-count">博客全站共314.1k字</span>
 </div>
         
 

@@ -75,7 +75,7 @@
 
 
 
-  <meta name="keywords" content="云原生,k8s," />
+  <meta name="keywords" content="k8s,云原生," />
 
 
 
@@ -89,7 +89,7 @@
 
 
 <meta name="description" content="在已有的worker上再扩容一个worker!">
-<meta name="keywords" content="云原生,k8s">
+<meta name="keywords" content="k8s,云原生">
 <meta property="og:type" content="article">
 <meta property="og:title" content="从limit和request来理解k8s的资源调配">
 <meta property="og:url" content="http://yoursite.com/2019/03/13/从limit和request来理解k8s的资源调配/index.html">
@@ -102,7 +102,8 @@
 <meta property="og:image" content="http://yoursite.com/images/k8s29.png">
 <meta property="og:image" content="http://yoursite.com/images/k8s30.png">
 <meta property="og:image" content="http://yoursite.com/images/k8s31.png">
-<meta property="og:updated_time" content="2019-03-15T08:12:31.155Z">
+<meta property="og:image" content="http://yoursite.com/images/女子对打.gif">
+<meta property="og:updated_time" content="2019-09-23T03:58:42.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="从limit和request来理解k8s的资源调配">
 <meta name="twitter:description" content="在已有的worker上再扩容一个worker!">
@@ -432,7 +433,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  1,093
+                  1,598
                 </span>
               
 
@@ -448,7 +449,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  4
+                  6
                 </span>
               
             </div>
@@ -492,7 +493,12 @@
 <p>在master上默认是<code>不会将Pod调度到具有该污点的Node上</code>，也就是说所有pod都是在worker这个节点上的。worker上只有4G，而我生成了5个limit=512Mi的pod，需要2.5G的内存空间。然而worker这个pod现在有多少可用的内存呢？<code>kubectl describe node worker名称</code>可见剩余的memory已经不足，如图:<br>    <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Allocated resources:</span><br><span class="line">  (Total limits may be over <span class="number">100</span> percent, i.e., overcommitted.)</span><br><span class="line">  Resource  Requests      Limits</span><br><span class="line">  --------  --------      ------</span><br><span class="line">  cpu       <span class="number">200</span>m (<span class="number">10</span>%)    <span class="number">0</span> (<span class="number">0</span>%)</span><br><span class="line">  memory    <span class="number">1736</span>Mi (<span class="number">62</span>%)  <span class="number">2248</span>Mi (<span class="number">80</span>%)</span><br><span class="line">Events:     &lt;none&gt;</span><br></pre></td></tr></table></figure></p>
 <p>现在剩余的内存值仅有20%，所以由于内存不够而生成失败，需要在<code>kubectl run</code>里适当调小内存的limit值，或者干脆扩容一个worker，让它在另一个worker里出现。</p>
 <p>如果想要查看某个pod是具体落在哪个node里，使用命令：<code>kubectl get pods -o wide</code>即可。</p>
-<h2><span id="参考资料">参考资料</span></h2><p><a href="https://www.qikqiak.com/post/understand-kubernetes-affinity/" target="_blank" rel="noopener">https://www.qikqiak.com/post/understand-kubernetes-affinity/</a><br><a href="https://blog.frognew.com/2018/05/taint-and-toleration.html" target="_blank" rel="noopener">https://blog.frognew.com/2018/05/taint-and-toleration.html</a><br><a href="https://jimmysong.io/kubernetes-handbook/concepts/taint-and-toleration.html" target="_blank" rel="noopener">https://jimmysong.io/kubernetes-handbook/concepts/taint-and-toleration.html</a><br><a href="https://stackoverflow.com/questions/53192999/pod-dont-run-insufficient-resources" target="_blank" rel="noopener">https://stackoverflow.com/questions/53192999/pod-dont-run-insufficient-resources</a><br><a href="http://dockone.io/article/2509" target="_blank" rel="noopener">http://dockone.io/article/2509</a><br><a href="https://www.yangcs.net/posts/understanding-resource-limits-in-kubernetes-cpu-time/" target="_blank" rel="noopener">https://www.yangcs.net/posts/understanding-resource-limits-in-kubernetes-cpu-time/</a><br><a href="http://blog.whysdomain.com/blog/171/" target="_blank" rel="noopener">http://blog.whysdomain.com/blog/171/</a></p>
+<h2><span id="关于docker的资源调配">关于Docker的资源调配</span></h2><p>docker默认情况对cpu和内存都是无限制的，如果cpu跑爆了，那么容器也不会死掉，而是慢慢的跑。但是如果内存跑爆了，容器会被oom，不过可以通过设置oom的值让容器被干掉的几率低一点。</p>
+<p>如果在一个四核的服务器里通过<code>docker run -it --rm --cpus=2 镜像:latest /bin/bash</code>启动了一个容器，那么这个进程跑到200%就到顶了，而且这200%是平均分配到4个核上，每个核50%，而不是把1和2核跑100%，剩下3和4是空着的。</p>
+<p>如果想要把某一个CPU跑满，命令是<code>docker run -it --rm --cpuset-cpus=&quot;1，3&quot; 镜像名:latest /bin/bash</code>，这样的话就会只在第一个和第三个CPU上跑，而不会动用其他的CPU。</p>
+<p>前面说的是CPU，现在说内存。如果是想要限制某个docker的内存最大是300M:<code>docker run -it -m 300M --memory-swap -1 --name con1 镜像名 /bin/bash</code>，设置 memory-swap 值为 -1，它表示容器程序使用内存的受限，而可以使用的 swap 空间使用不受限制(宿主机有多少 swap 容器就可以使用多少)。</p>
+<p>如果这个容器大于300M了，那它就直接被OOM kill了。如果有足够的 swap，程序至少还可以正常的运行。当然，我们也可以通过<code>--oom-kill-disable</code>选项强行阻止<code>OOM kill</code>的发生。限制内存上限虽然能保护主机，但是也可能会伤害到容器里的服务：如果为服务设置的内存上限太小，会导致服务还在正常工作的时候就被 OOM 杀死；如果设置的过大，会因为调度器算法浪费内存。所以内存压力测试是不可避免的，而且也尽量不要使用swap，因为swap的使用会导致内存计算复杂，对调度器非常不友好。<br><img src="/images/女子对打.gif" alt="akb48"></p>
+<h2><span id="参考资料">参考资料</span></h2><p><a href="https://www.qikqiak.com/post/understand-kubernetes-affinity/" target="_blank" rel="noopener">https://www.qikqiak.com/post/understand-kubernetes-affinity/</a><br><a href="https://blog.frognew.com/2018/05/taint-and-toleration.html" target="_blank" rel="noopener">https://blog.frognew.com/2018/05/taint-and-toleration.html</a><br><a href="https://jimmysong.io/kubernetes-handbook/concepts/taint-and-toleration.html" target="_blank" rel="noopener">https://jimmysong.io/kubernetes-handbook/concepts/taint-and-toleration.html</a><br><a href="https://stackoverflow.com/questions/53192999/pod-dont-run-insufficient-resources" target="_blank" rel="noopener">https://stackoverflow.com/questions/53192999/pod-dont-run-insufficient-resources</a><br><a href="http://dockone.io/article/2509" target="_blank" rel="noopener">http://dockone.io/article/2509</a><br><a href="https://www.yangcs.net/posts/understanding-resource-limits-in-kubernetes-cpu-time/" target="_blank" rel="noopener">https://www.yangcs.net/posts/understanding-resource-limits-in-kubernetes-cpu-time/</a><br><a href="http://blog.whysdomain.com/blog/171/" target="_blank" rel="noopener">http://blog.whysdomain.com/blog/171/</a><br><a href="https://www.cnblogs.com/sparkdev/p/8052522.html" target="_blank" rel="noopener">https://www.cnblogs.com/sparkdev/p/8052522.html</a></p>
 
       
     </div>
@@ -575,9 +581,9 @@
       
         <div class="post-tags">
           
-            <a href="/tags/云原生/" rel="tag"><i class="fa fa-tag"></i> 云原生</a>
-          
             <a href="/tags/k8s/" rel="tag"><i class="fa fa-tag"></i> k8s</a>
+          
+            <a href="/tags/云原生/" rel="tag"><i class="fa fa-tag"></i> 云原生</a>
           
         </div>
       
@@ -729,7 +735,7 @@ var jiathis_config={
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">225</span>
+                  <span class="site-state-item-count">284</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -751,7 +757,7 @@ var jiathis_config={
               
               <div class="site-state-item site-state-tags">
                 
-                  <span class="site-state-item-count">186</span>
+                  <span class="site-state-item-count">242</span>
                   <span class="site-state-item-name">标签</span>
                 
               </div>
@@ -891,7 +897,7 @@ show_date_time();
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text"><span id="&#x80CC;&#x666F;&#x4EA4;&#x4EE3;">&#x80CC;&#x666F;&#x4EA4;&#x4EE3;</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">2.</span> <span class="nav-text"><span id="limit&#x548C;request&#x7684;&#x4E0D;&#x540C;">limit&#x548C;request&#x7684;&#x4E0D;&#x540C;</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">3.</span> <span class="nav-text"><span id="&#x91CD;&#x65B0;&#x8BF4;&#x56DE;&#x6765;">&#x91CD;&#x65B0;&#x8BF4;&#x56DE;&#x6765;</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">4.</span> <span class="nav-text"><span id="&#x53C2;&#x8003;&#x8D44;&#x6599;">&#x53C2;&#x8003;&#x8D44;&#x6599;</span></span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text"><span id="&#x80CC;&#x666F;&#x4EA4;&#x4EE3;">&#x80CC;&#x666F;&#x4EA4;&#x4EE3;</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">2.</span> <span class="nav-text"><span id="limit&#x548C;request&#x7684;&#x4E0D;&#x540C;">limit&#x548C;request&#x7684;&#x4E0D;&#x540C;</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">3.</span> <span class="nav-text"><span id="&#x91CD;&#x65B0;&#x8BF4;&#x56DE;&#x6765;">&#x91CD;&#x65B0;&#x8BF4;&#x56DE;&#x6765;</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">4.</span> <span class="nav-text"><span id="&#x5173;&#x4E8E;docker&#x7684;&#x8D44;&#x6E90;&#x8C03;&#x914D;">&#x5173;&#x4E8E;Docker&#x7684;&#x8D44;&#x6E90;&#x8C03;&#x914D;</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">5.</span> <span class="nav-text"><span id="&#x53C2;&#x8003;&#x8D44;&#x6599;">&#x53C2;&#x8003;&#x8D44;&#x6599;</span></span></a></li></ol></div>
             
 
           </div>
@@ -913,7 +919,7 @@ show_date_time();
     <footer id="footer" class="footer">
       <div class="footer-inner">
         <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-<div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+<div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>
@@ -944,7 +950,7 @@ show_date_time();
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">博客全站共231.7k字</span>
+  <span class="post-count">博客全站共314.1k字</span>
 </div>
         
 

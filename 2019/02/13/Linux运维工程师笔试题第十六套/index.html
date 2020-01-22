@@ -98,7 +98,7 @@
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://yoursite.com/images/mysql-sock9.png">
 <meta property="og:image" content="http://yoursite.com/images/赌博默示录.jpg">
-<meta property="og:updated_time" content="2019-02-27T02:02:41.080Z">
+<meta property="og:updated_time" content="2019-06-10T06:52:28.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Linux运维工程师笔试题第十六套">
 <meta name="twitter:description" content="都是与数据库mysql相关的问题">
@@ -428,7 +428,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  2,504
+                  2,634
                 </span>
               
 
@@ -444,7 +444,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  9
+                  10
                 </span>
               
             </div>
@@ -485,6 +485,9 @@
 
 <p>12.数据表student有id,name,score,city字段，其中name中的名字可有重复，需要消除重复行,请写sql语句<br>语句如下：<br>    <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select distinct name <span class="keyword">from</span> student</span><br></pre></td></tr></table></figure></p>
 <p><font color="red">注意！</font>单独的<code>distinct</code>只能放在开头，否则就报语法错误。</p>
+<ol>
+<li><code>select * from table limit 2,1;</code>、<code>select * from table limit 2 offset 1;</code>和<code>select * from employee limit 3;</code>这三个sql有什么区别？<br>第一个sql含义是跳过2条取出1条数据，limit后面是从第2条开始读，读取1条信息，即读取第3条数据；<br>第二个sql含义是从第1条（不包括）数据开始取出2条数据，limit后面跟的是2条数据，offset后面是从第1条开始读取，即读取第2,3条；<br>第三个sql含义是返回前三行；</li>
+</ol>
 <h2><span id="参考资料">参考资料</span></h2><p><a href="https://www.cnblogs.com/wajika/p/6718552.html" target="_blank" rel="noopener">https://www.cnblogs.com/wajika/p/6718552.html</a><br><a href="https://www.hollischuang.com/archives/898" target="_blank" rel="noopener">https://www.hollischuang.com/archives/898</a><br><a href="https://zhuanlan.zhihu.com/p/50597960" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/50597960</a><br><a href="https://segmentfault.com/a/1190000008663001" target="_blank" rel="noopener">https://segmentfault.com/a/1190000008663001</a><br><a href="https://segmentfault.com/a/1190000000616820" target="_blank" rel="noopener">https://segmentfault.com/a/1190000000616820</a><br><a href="http://seanlook.com/2014/12/05/mysql_mysqldump_options_examples/" target="_blank" rel="noopener">http://seanlook.com/2014/12/05/mysql_mysqldump_options_examples/</a><br><img src="/images/赌博默示录.jpg" alt="akb48"></p>
 
       
@@ -722,7 +725,7 @@ var jiathis_config={
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">225</span>
+                  <span class="site-state-item-count">284</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -744,7 +747,7 @@ var jiathis_config={
               
               <div class="site-state-item site-state-tags">
                 
-                  <span class="site-state-item-count">186</span>
+                  <span class="site-state-item-count">242</span>
                   <span class="site-state-item-name">标签</span>
                 
               </div>
@@ -906,7 +909,7 @@ show_date_time();
     <footer id="footer" class="footer">
       <div class="footer-inner">
         <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-<div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+<div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>
@@ -937,7 +940,7 @@ show_date_time();
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">博客全站共231.7k字</span>
+  <span class="post-count">博客全站共314.1k字</span>
 </div>
         
 
