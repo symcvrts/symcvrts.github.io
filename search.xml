@@ -1,6 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[纪念我的姥姥]]></title>
+    <url>%2F2020%2F01%2F22%2F%E7%BA%AA%E5%BF%B5%E6%88%91%E7%9A%84%E5%A7%A5%E5%A7%A5%2F</url>
+    <content type="text"><![CDATA[]]></content>
+      <categories>
+        <category>坠乱花天</category>
+      </categories>
+      <tags>
+        <tag>亲情</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[Python调用另一个py变量失败的问题]]></title>
     <url>%2F2019%2F12%2F31%2FPython%E8%B0%83%E7%94%A8%E5%8F%A6%E4%B8%80%E4%B8%AApy%E5%8F%98%E9%87%8F%E5%A4%B1%E8%B4%A5%E7%9A%84%E9%97%AE%E9%A2%98%2F</url>
     <content type="text"><![CDATA[举个栗子我有两个文件，第一个文件a.py的内容如下： 1234567891011121314151617181920212223242526#!/usr/bin/env python# coding=utf-8CHOOSE = input (''' \033[1;35m choose 1 or 2:\033[0m 1)tom 2)jack''')a = 666b = "bbb"def f(): print("this is a test") return "function"if __name__ == '__main__': if CHOOSE == '1': username = 'tom' print(username) elif CHOOSE == '2': username = 'jack' print(username) else: print('wrong choice,script is exit...') 拎一个脚本，b.py的内容如下： 123456789#!/usr/bin/env python# coding=utf-8import afrom a import b,f,CHOOSE,usernamea = a.af()print(b,a,CHOOSE,username) 可以看出b.py的内容就是调用同目录下a.py的变量，但是执行b.py是会报错的。 可见b.py已经成功读取到了b,f,CHOOSE这些变量，但是username却引入失败，为啥呢？ 因为a.py里有一个if __name__ == &#39;__main__&#39;，他的意思是当.py文件被直接运行时，if name == ‘main‘之下的代码块将被运行；当.py文件以模块形式被导入时，if name == ‘main‘之下的代码块不被运行。 举个例子解释一下：假设你是小明.py，在朋友眼中你是小明(name == ‘小明’), 你自己眼中你是你自己(name == ‘main‘)。 你编程很好, 朋友调你去帮他写程序(import 小明, 这时你在朋友眼中: name == ‘小明’),但你晚上也会打开xx网站, 做一些自己的事情(直接运行小明.py, name == ‘main‘)—摘自知乎网友回答。 既然知道了原因，解决方法也很简单：把a.py里的if __name__ == &#39;__main__&#39;段落拆掉，把相应内容改成一个函数，比如a.py改成如下的样子： 12345678910111213上面内容略def foo(CHOOSE): if CHOOSE == '1': username = 'tom' elif CHOOSE == '2': username = 'jack' else: username = None return username b.py改成如下样子(其他可读取的变量不考虑)： 123456789101112from a import fooCHOOSE = input (''' \033[1;35m choose 1 or 2:\033[0m 1)tom 2)jack''')username = foo(CHOOSE)if username: print(username)else: print('Wrong choice') 这样问题就解决了，记住if __name__ == &#39;__main__&#39;更适合放在脚本的入口点。 上面说了，if __name__ == &#39;__main__&#39;更适合放在脚本的入口点，到底哪个程序入口被选中，这取决于__name__的值，__name__是内置变量，可用于表示当前模块的名字。如果一个.py文件（模块）被直接运行时，则其没有包结构，其__name__值为__main__，即模块名为__main__。 所以，if __name__ == &#39;__main__&#39;的意思是：当.py文件被直接运行时，if __name__ == &#39;__main__&#39;之下的代码块将被运行；当.py文件以模块形式被导入时，if __name__ == &#39;__main__&#39;之下的代码块不被运行。 上面的话，可以做一个小实验来理解，我们在a.py里if __name__ == &#39;__main__&#39;之前加入print __name__，即将__name__打印出来，那么执行a.py会看到__name__输出是__main__。 但是此时a.py不动，直接执行b.py，会发现__name__变量值为b,不满足__name__==&quot;__main__&quot;的条件，因此，无法执行其后的代码: 参考资料https://zhuanlan.zhihu.com/p/34112508http://blog.konghy.cn/2017/04/24/python-entry-program/https://stackoverflow.com/questions/419163/what-does-if-name-main-dohttps://www.zhihu.com/question/49136398 （里面有很多例子）]]></content>
@@ -31,8 +42,8 @@
         <category>坠乱花天</category>
       </categories>
       <tags>
-        <tag>日本</tag>
         <tag>旅游</tag>
+        <tag>日本</tag>
       </tags>
   </entry>
   <entry>
@@ -43,8 +54,8 @@
         <category>工作与技术</category>
       </categories>
       <tags>
-        <tag>zabbix</tag>
         <tag>监控</tag>
+        <tag>zabbix</tag>
       </tags>
   </entry>
   <entry>
@@ -80,8 +91,8 @@
         <category>工作与技术</category>
       </categories>
       <tags>
-        <tag>运维</tag>
         <tag>aws</tag>
+        <tag>运维</tag>
       </tags>
   </entry>
   <entry>
@@ -143,9 +154,9 @@
         <category>工作与技术</category>
       </categories>
       <tags>
-        <tag>docker</tag>
         <tag>监控</tag>
         <tag>Prometheus</tag>
+        <tag>docker</tag>
       </tags>
   </entry>
   <entry>
@@ -204,9 +215,9 @@
         <category>工作与技术</category>
       </categories>
       <tags>
+        <tag>AWS</tag>
         <tag>mysql</tag>
         <tag>主从同步</tag>
-        <tag>AWS</tag>
       </tags>
   </entry>
   <entry>
@@ -241,9 +252,9 @@
         <category>工作与技术</category>
       </categories>
       <tags>
+        <tag>监控</tag>
         <tag>docker</tag>
         <tag>grafana</tag>
-        <tag>监控</tag>
       </tags>
   </entry>
   <entry>
@@ -354,8 +365,8 @@
         <category>工作与技术</category>
       </categories>
       <tags>
-        <tag>https证书</tag>
         <tag>python3</tag>
+        <tag>https证书</tag>
       </tags>
   </entry>
   <entry>
@@ -522,8 +533,8 @@
         <category>工作与技术</category>
       </categories>
       <tags>
-        <tag>zabbix</tag>
         <tag>监控</tag>
+        <tag>zabbix</tag>
       </tags>
   </entry>
   <entry>
@@ -534,8 +545,8 @@
         <category>工作与技术</category>
       </categories>
       <tags>
-        <tag>面试</tag>
         <tag>大牛之路</tag>
+        <tag>面试</tag>
       </tags>
   </entry>
   <entry>
@@ -793,8 +804,8 @@
         <category>工作与技术</category>
       </categories>
       <tags>
-        <tag>atlas</tag>
         <tag>mysql</tag>
+        <tag>atlas</tag>
         <tag>读写分离</tag>
       </tags>
   </entry>
@@ -1098,8 +1109,8 @@
         <category>工作与技术</category>
       </categories>
       <tags>
-        <tag>python</tag>
         <tag>zabbix</tag>
+        <tag>python</tag>
         <tag>api</tag>
       </tags>
   </entry>
@@ -1173,8 +1184,8 @@
         <category>工作与技术</category>
       </categories>
       <tags>
-        <tag>python</tag>
         <tag>django</tag>
+        <tag>python</tag>
       </tags>
   </entry>
   <entry>
@@ -1283,8 +1294,8 @@
         <category>工作与技术</category>
       </categories>
       <tags>
-        <tag>python</tag>
         <tag>django</tag>
+        <tag>python</tag>
       </tags>
   </entry>
   <entry>
@@ -1414,8 +1425,8 @@
         <category>工作与技术</category>
       </categories>
       <tags>
-        <tag>python</tag>
         <tag>django</tag>
+        <tag>python</tag>
       </tags>
   </entry>
   <entry>
@@ -1426,8 +1437,8 @@
         <category>工作与技术</category>
       </categories>
       <tags>
-        <tag>python</tag>
         <tag>django</tag>
+        <tag>python</tag>
       </tags>
   </entry>
   <entry>
@@ -1438,8 +1449,8 @@
         <category>工作与技术</category>
       </categories>
       <tags>
-        <tag>python</tag>
         <tag>django</tag>
+        <tag>python</tag>
         <tag>html</tag>
       </tags>
   </entry>
@@ -1463,8 +1474,8 @@
         <category>工作与技术</category>
       </categories>
       <tags>
-        <tag>python</tag>
         <tag>django</tag>
+        <tag>python</tag>
       </tags>
   </entry>
   <entry>
@@ -1486,8 +1497,8 @@
         <category>工作与技术</category>
       </categories>
       <tags>
-        <tag>python</tag>
         <tag>django</tag>
+        <tag>python</tag>
       </tags>
   </entry>
   <entry>
@@ -1548,9 +1559,9 @@
         <category>工作与技术</category>
       </categories>
       <tags>
+        <tag>gitlab</tag>
         <tag>持续集成</tag>
         <tag>阿里云</tag>
-        <tag>gitlab</tag>
         <tag>docker镜像</tag>
       </tags>
   </entry>
@@ -1862,8 +1873,8 @@
         <category>坠乱花天</category>
       </categories>
       <tags>
-        <tag>日本</tag>
         <tag>旅游</tag>
+        <tag>日本</tag>
       </tags>
   </entry>
   <entry>
@@ -1874,8 +1885,8 @@
         <category>工作与技术</category>
       </categories>
       <tags>
-        <tag>jenkins</tag>
         <tag>git</tag>
+        <tag>jenkins</tag>
       </tags>
   </entry>
   <entry>
@@ -2106,8 +2117,8 @@
         <category>工作与技术</category>
       </categories>
       <tags>
-        <tag>docker</tag>
         <tag>redis</tag>
+        <tag>docker</tag>
         <tag>主从同步</tag>
       </tags>
   </entry>
@@ -2156,8 +2167,8 @@
         <category>工作与技术</category>
       </categories>
       <tags>
-        <tag>nginx</tag>
         <tag>zabbix</tag>
+        <tag>nginx</tag>
       </tags>
   </entry>
   <entry>
@@ -2404,8 +2415,8 @@
         <category>工作与技术</category>
       </categories>
       <tags>
-        <tag>面试经验</tag>
         <tag>大牛之路</tag>
+        <tag>面试经验</tag>
       </tags>
   </entry>
   <entry>
@@ -2507,8 +2518,8 @@
         <category>工作与技术</category>
       </categories>
       <tags>
-        <tag>atlas</tag>
         <tag>mysql</tag>
+        <tag>atlas</tag>
         <tag>读写分离</tag>
       </tags>
   </entry>
@@ -2566,8 +2577,8 @@
         <category>工作与技术</category>
       </categories>
       <tags>
-        <tag>运维技术</tag>
         <tag>linux</tag>
+        <tag>运维技术</tag>
       </tags>
   </entry>
   <entry>
@@ -2602,8 +2613,8 @@
       </categories>
       <tags>
         <tag>redis</tag>
-        <tag>大数据分析</tag>
         <tag>elk</tag>
+        <tag>大数据分析</tag>
       </tags>
   </entry>
   <entry>
@@ -2626,8 +2637,8 @@
         <category>工作与技术</category>
       </categories>
       <tags>
-        <tag>crontab</tag>
         <tag>linux</tag>
+        <tag>crontab</tag>
       </tags>
   </entry>
   <entry>
@@ -2754,8 +2765,8 @@
         <category>工作与技术</category>
       </categories>
       <tags>
-        <tag>python</tag>
         <tag>django</tag>
+        <tag>python</tag>
         <tag>uwsgi</tag>
       </tags>
   </entry>
@@ -3099,8 +3110,8 @@
         <category>工作与技术</category>
       </categories>
       <tags>
-        <tag>elk</tag>
         <tag>大数据</tag>
+        <tag>elk</tag>
       </tags>
   </entry>
   <entry>
@@ -3171,8 +3182,8 @@
         <category>工作与技术</category>
       </categories>
       <tags>
-        <tag>Linux</tag>
         <tag>运维</tag>
+        <tag>Linux</tag>
       </tags>
   </entry>
   <entry>
@@ -3183,8 +3194,8 @@
         <category>工作与技术</category>
       </categories>
       <tags>
-        <tag>Linux</tag>
         <tag>运维</tag>
+        <tag>Linux</tag>
       </tags>
   </entry>
   <entry>
@@ -3244,8 +3255,8 @@
         <category>工作与技术</category>
       </categories>
       <tags>
-        <tag>redis</tag>
         <tag>zabbix</tag>
+        <tag>redis</tag>
       </tags>
   </entry>
   <entry>
@@ -3268,8 +3279,8 @@
         <category>工作与技术</category>
       </categories>
       <tags>
-        <tag>python</tag>
         <tag>django</tag>
+        <tag>python</tag>
       </tags>
   </entry>
   <entry>
@@ -3304,9 +3315,9 @@
         <category>博客搭建</category>
       </categories>
       <tags>
-        <tag>github</tag>
         <tag>hexo</tag>
         <tag>博客搭建</tag>
+        <tag>github</tag>
       </tags>
   </entry>
   <entry>
@@ -3317,8 +3328,8 @@
         <category>工作与技术</category>
       </categories>
       <tags>
-        <tag>Nginx</tag>
         <tag>运维</tag>
+        <tag>Nginx</tag>
       </tags>
   </entry>
   <entry>
@@ -3329,8 +3340,8 @@
         <category>工作与技术</category>
       </categories>
       <tags>
-        <tag>Nginx</tag>
         <tag>运维</tag>
+        <tag>Nginx</tag>
       </tags>
   </entry>
   <entry>
@@ -3353,8 +3364,8 @@
         <category>工作与技术</category>
       </categories>
       <tags>
-        <tag>nginx</tag>
         <tag>git</tag>
+        <tag>nginx</tag>
       </tags>
   </entry>
   <entry>
@@ -3365,8 +3376,8 @@
         <category>工作与技术</category>
       </categories>
       <tags>
-        <tag>Linux</tag>
         <tag>运维</tag>
+        <tag>Linux</tag>
       </tags>
   </entry>
   <entry>
